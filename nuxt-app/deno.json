@@ -1,3 +1,0 @@
-{
-  "allowScripts": ["npm:@parcel/watcher@2.5.6", "npm:esbuild@0.27.4", "npm:vue-demi@0.14.10"]
-}
