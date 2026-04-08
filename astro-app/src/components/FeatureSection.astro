@@ -1,0 +1,43 @@
+---
+import FeatureCard from "./FeatureCard.astro";
+---
+
+<section id="核心功能" class="py-16 md:py-24 bg-background">
+  <div class="mx-auto max-w-7xl px-6 lg:px-12">
+    <div class="text-center mb-12">
+      <h2 class="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-4">核心功能</h2>
+      <p class="text-lg text-muted-foreground max-w-2xl mx-auto">为非遗传承人、爱好者和文化探索者打造的三大核心入口</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+      <FeatureCard 
+        title="作品上传保存"
+        description="上传您的非遗作品图片和视频，永久保存珍贵技艺记录，支持高清原图存储"
+        icon="upload"
+        href="#记录"
+      />
+      
+      <FeatureCard 
+        title="非遗知识科普"
+        description="系统整理的传统技艺知识库，从历史渊源到制作流程，深入浅出了解非遗文化"
+        icon="book"
+        href="#传承"
+      />
+      
+      <FeatureCard 
+        title="社区动态"
+        description="与志同道合的传承人和爱好者交流，分享心得，讨论技艺，连接文化圈层"
+        icon="users"
+        href="#连接"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  section {
+    background-image: 
+      radial-gradient(circle at 20% 20%, oklch(0.88 0.04 140 / 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, oklch(0.88 0.03 240 / 0.05) 0%, transparent 50%);
+  }
+</style>

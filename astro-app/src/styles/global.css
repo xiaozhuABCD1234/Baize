@@ -1,131 +1,200 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/jetbrains-mono";
-@import "@fontsource-variable/noto-serif";
+@import "@fontsource-variable/noto-serif-sc";
+@import "@chinese-fonts/lxgwwenkai/dist/LXGWWenKai-Regular/result.css";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.153 0.006 107.1);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.153 0.006 107.1);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.153 0.006 107.1);
-    --primary: oklch(0.52 0.105 223.128);
-    --primary-foreground: oklch(0.984 0.019 200.873);
-    --secondary: oklch(0.967 0.001 286.375);
-    --secondary-foreground: oklch(0.21 0.006 285.885);
-    --muted: oklch(0.966 0.005 106.5);
-    --muted-foreground: oklch(0.58 0.031 107.3);
-    --accent: oklch(0.966 0.005 106.5);
-    --accent-foreground: oklch(0.228 0.013 107.4);
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.93 0.007 106.5);
-    --input: oklch(0.93 0.007 106.5);
-    --ring: oklch(0.737 0.021 106.9);
-    --chart-1: oklch(0.855 0.138 181.071);
-    --chart-2: oklch(0.704 0.14 182.503);
-    --chart-3: oklch(0.6 0.118 184.704);
-    --chart-4: oklch(0.511 0.096 186.391);
-    --chart-5: oklch(0.437 0.078 188.216);
-    --radius: 0.875rem;
-    --sidebar: oklch(0.988 0.003 106.5);
-    --sidebar-foreground: oklch(0.153 0.006 107.1);
-    --sidebar-primary: oklch(0.609 0.126 221.723);
-    --sidebar-primary-foreground: oklch(0.984 0.019 200.873);
-    --sidebar-accent: oklch(0.966 0.005 106.5);
-    --sidebar-accent-foreground: oklch(0.228 0.013 107.4);
-    --sidebar-border: oklch(0.93 0.007 106.5);
-    --sidebar-ring: oklch(0.737 0.021 106.9);
+	/* 宣纸底色 - 温润的牙白 */
+	--background: oklch(0.96 0.015 95);
+	--foreground: oklch(0.2 0.02 25);
+
+	/* 卡片 - 略深的宣纸质感 */
+	--card: oklch(0.94 0.012 90);
+	--card-foreground: oklch(0.2 0.02 25);
+
+	/* 弹出层 */
+	--popover: oklch(0.96 0.015 95);
+	--popover-foreground: oklch(0.2 0.02 25);
+
+	/* 主色 - 朱砂红（非遗传统色） */
+	--primary: oklch(0.55 0.18 25);
+	--primary-foreground: oklch(0.98 0.01 95);
+
+	/* 次要色 - 黛蓝/靛青 */
+	--secondary: oklch(0.88 0.03 240);
+	--secondary-foreground: oklch(0.25 0.05 240);
+
+	/* 静音色 - 竹青/灰绿 */
+	--muted: oklch(0.88 0.04 140);
+	--muted-foreground: oklch(0.5 0.08 140);
+
+	/* 强调色 - 赭石/琥珀 */
+	--accent: oklch(0.75 0.12 55);
+	--accent-foreground: oklch(0.2 0.05 55);
+
+	/* 危险/警示 - 胭脂 */
+	--destructive: oklch(0.5 0.2 20);
+
+	/* 边框 - 水墨灰 */
+	--border: oklch(0.75 0.02 90);
+	--input: oklch(0.8 0.025 95);
+	--ring: oklch(0.55 0.18 25);
+
+	/* 图表色 - 传统五色系列 */
+	--chart-1: oklch(0.55 0.18 25); /* 朱砂 */
+	--chart-2: oklch(0.45 0.12 240); /* 黛蓝 */
+	--chart-3: oklch(0.7 0.1 140); /* 竹青 */
+	--chart-4: oklch(0.75 0.12 55); /* 赭石 */
+	--chart-5: oklch(0.6 0.15 280); /* 紫棠 */
+
+	/* 圆角 - 略微减小，更方正典雅 */
+	--radius: 0.5rem;
+
+	/* 侧边栏 - 黛色基调 */
+	--sidebar: oklch(0.92 0.02 85);
+	--sidebar-foreground: oklch(0.2 0.02 25);
+	--sidebar-primary: oklch(0.55 0.18 25);
+	--sidebar-primary-foreground: oklch(0.98 0.01 95);
+	--sidebar-accent: oklch(0.88 0.04 140);
+	--sidebar-accent-foreground: oklch(0.2 0.05 55);
+	--sidebar-border: oklch(0.75 0.02 90);
+	--sidebar-ring: oklch(0.55 0.18 25);
 }
 
 .dark {
-    --background: oklch(0.153 0.006 107.1);
-    --foreground: oklch(0.988 0.003 106.5);
-    --card: oklch(0.228 0.013 107.4);
-    --card-foreground: oklch(0.988 0.003 106.5);
-    --popover: oklch(0.228 0.013 107.4);
-    --popover-foreground: oklch(0.988 0.003 106.5);
-    --primary: oklch(0.45 0.085 224.283);
-    --primary-foreground: oklch(0.984 0.019 200.873);
-    --secondary: oklch(0.274 0.006 286.033);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.286 0.016 107.4);
-    --muted-foreground: oklch(0.737 0.021 106.9);
-    --accent: oklch(0.286 0.016 107.4);
-    --accent-foreground: oklch(0.988 0.003 106.5);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.58 0.031 107.3);
-    --chart-1: oklch(0.855 0.138 181.071);
-    --chart-2: oklch(0.704 0.14 182.503);
-    --chart-3: oklch(0.6 0.118 184.704);
-    --chart-4: oklch(0.511 0.096 186.391);
-    --chart-5: oklch(0.437 0.078 188.216);
-    --sidebar: oklch(0.228 0.013 107.4);
-    --sidebar-foreground: oklch(0.988 0.003 106.5);
-    --sidebar-primary: oklch(0.715 0.143 215.221);
-    --sidebar-primary-foreground: oklch(0.302 0.056 229.695);
-    --sidebar-accent: oklch(0.286 0.016 107.4);
-    --sidebar-accent-foreground: oklch(0.988 0.003 106.5);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.58 0.031 107.3);
+	/* 深色模式 - 墨色背景 */
+	--background: oklch(0.18 0.02 25);
+	--foreground: oklch(0.9 0.015 95);
+
+	/* 卡片 - 深褐/墨色 */
+	--card: oklch(0.22 0.03 30);
+	--card-foreground: oklch(0.9 0.015 95);
+
+	/* 弹出层 */
+	--popover: oklch(0.2 0.025 25);
+	--popover-foreground: oklch(0.9 0.015 95);
+
+	/* 主色 - 暗红/朱砂 */
+	--primary: oklch(0.6 0.16 25);
+	--primary-foreground: oklch(0.98 0.01 95);
+
+	/* 次要色 - 深黛蓝 */
+	--secondary: oklch(0.25 0.05 240);
+	--secondary-foreground: oklch(0.9 0.03 240);
+
+	/* 静音色 - 墨绿 */
+	--muted: oklch(0.25 0.04 140);
+	--muted-foreground: oklch(0.65 0.06 140);
+
+	/* 强调色 - 暗赭石 */
+	--accent: oklch(0.35 0.08 55);
+	--accent-foreground: oklch(0.9 0.03 55);
+
+	/* 危险色 - 深胭脂 */
+	--destructive: oklch(0.4 0.18 20);
+
+	/* 边框 - 淡墨 */
+	--border: oklch(0.3 0.03 90);
+	--input: oklch(0.28 0.04 95);
+	--ring: oklch(0.6 0.16 25);
+
+	/* 侧边栏 */
+	--sidebar: oklch(0.15 0.02 30);
+	--sidebar-foreground: oklch(0.9 0.015 95);
+	--sidebar-primary: oklch(0.6 0.16 25);
+	--sidebar-primary-foreground: oklch(0.2 0.02 25);
+	--sidebar-accent: oklch(0.25 0.04 140);
+	--sidebar-accent-foreground: oklch(0.9 0.03 55);
+	--sidebar-border: oklch(0.3 0.03 90);
+	--sidebar-ring: oklch(0.6 0.16 25);
 }
 
 @theme inline {
-    --font-mono: 'JetBrains Mono Variable', monospace;
-    --font-heading: 'Noto Serif Variable', serif;
-    --color-sidebar-ring: var(--sidebar-ring);
-    --color-sidebar-border: var(--sidebar-border);
-    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-    --color-sidebar-accent: var(--sidebar-accent);
-    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-    --color-sidebar-primary: var(--sidebar-primary);
-    --color-sidebar-foreground: var(--sidebar-foreground);
-    --color-sidebar: var(--sidebar);
-    --color-chart-5: var(--chart-5);
-    --color-chart-4: var(--chart-4);
-    --color-chart-3: var(--chart-3);
-    --color-chart-2: var(--chart-2);
-    --color-chart-1: var(--chart-1);
-    --color-ring: var(--ring);
-    --color-input: var(--input);
-    --color-border: var(--border);
-    --color-destructive: var(--destructive);
-    --color-accent-foreground: var(--accent-foreground);
-    --color-accent: var(--accent);
-    --color-muted-foreground: var(--muted-foreground);
-    --color-muted: var(--muted);
-    --color-secondary-foreground: var(--secondary-foreground);
-    --color-secondary: var(--secondary);
-    --color-primary-foreground: var(--primary-foreground);
-    --color-primary: var(--primary);
-    --color-popover-foreground: var(--popover-foreground);
-    --color-popover: var(--popover);
-    --color-card-foreground: var(--card-foreground);
-    --color-card: var(--card);
-    --color-foreground: var(--foreground);
-    --color-background: var(--background);
-    --radius-sm: calc(var(--radius) * 0.6);
-    --radius-md: calc(var(--radius) * 0.8);
-    --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius) * 1.4);
-    --radius-2xl: calc(var(--radius) * 1.8);
-    --radius-3xl: calc(var(--radius) * 2.2);
-    --radius-4xl: calc(var(--radius) * 2.6);
+	/* 统一使用思源宋体 */
+	--font-mono: "LXGW WenKai", "Noto Serif SC", serif;
+	--font-heading: "LXGW WenKai", "Noto Serif SC", serif;
+	--font-body: "LXGW WenKai", "Noto Serif SC", serif;
+
+	--color-sidebar-ring: var(--sidebar-ring);
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+	--color-sidebar-accent: var(--sidebar-accent);
+	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+	--color-sidebar-primary: var(--sidebar-primary);
+	--color-sidebar-foreground: var(--sidebar-foreground);
+	--color-sidebar: var(--sidebar);
+	--color-chart-5: var(--chart-5);
+	--color-chart-4: var(--chart-4);
+	--color-chart-3: var(--chart-3);
+	--color-chart-2: var(--chart-2);
+	--color-chart-1: var(--chart-1);
+	--color-ring: var(--ring);
+	--color-input: var(--input);
+	--color-border: var(--border);
+	--color-destructive: var(--destructive);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-accent: var(--accent);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-muted: var(--muted);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-secondary: var(--secondary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-primary: var(--primary);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-popover: var(--popover);
+	--color-card-foreground: var(--card-foreground);
+	--color-card: var(--card);
+	--color-foreground: var(--foreground);
+	--color-background: var(--background);
+	--radius-sm: calc(var(--radius) * 0.5);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.5);
+	--radius-2xl: calc(var(--radius) * 2);
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-    }
-  body {
-    @apply bg-background text-foreground;
-    }
-  html {
-    @apply font-mono;
-    }
+	* {
+		border-color: var(--border);
+		outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
+	}
+
+	body {
+		background-color: var(--background);
+		color: var(--foreground);
+		font-family: var(--font-body);
+		/* 添加细微的宣纸纹理感 */
+		background-image:
+			radial-gradient(
+				circle at 20% 50%,
+				oklch(0.9 0.02 80 / 0.03) 0%,
+				transparent 50%
+			),
+			radial-gradient(
+				circle at 80% 80%,
+				oklch(0.85 0.03 100 / 0.03) 0%,
+				transparent 50%
+			);
+	}
+
+	html {
+		font-family: var(--font-body);
+		/* 传统色彩 scrollbars */
+		scrollbar-color: oklch(0.55 0.18 25 / 0.3) transparent;
+	}
+
+	/* 标题同样使用思源宋体 */
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var(--font-heading);
+		font-weight: 600;
+		letter-spacing: 0.05em;
+	}
 }

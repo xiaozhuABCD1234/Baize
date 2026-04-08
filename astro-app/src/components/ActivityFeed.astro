@@ -1,0 +1,81 @@
+---
+import ActivityCard from "./ActivityCard.astro";
+
+const activities = [
+  {
+    id: "1",
+    user: {
+      name: "蜀绣艺人小李",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
+    },
+    type: "upload",
+    content: "刚完成一幅双面绣《荷塘月色》，历时三个月，终于和大家见面了！",
+    time: "2小时前",
+    imageUrl: "https://images.unsplash.com/photo-1604881991720-f91add269bed?w=200&h=200&fit=crop",
+    likes: 89,
+    comments: 23
+  },
+  {
+    id: "2",
+    user: {
+      name: "古琴爱好者",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face"
+    },
+    type: "comment",
+    content: "学习了！请问蜀绣的针法有哪些入门级的基础针法推荐？",
+    time: "4小时前",
+    likes: 12,
+    comments: 8
+  },
+  {
+    id: "3",
+    user: {
+      name: "景德镇陶瓷艺术馆",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
+    },
+    type: "upload",
+    content: "本周六举办青瓷鉴赏会，欢迎各位爱好者报名参加，现场感受瓷器之美。",
+    time: "6小时前",
+    imageUrl: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=200&h=200&fit=crop",
+    likes: 156,
+    comments: 45
+  },
+  {
+    id: "4",
+    user: {
+      name: "皮影戏传承人",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face"
+    },
+    type: "like",
+    content: "分享了皮影戏《孙悟空三打白骨精》的制作过程，传统艺术的魅力无穷！",
+    time: "昨天",
+    likes: 234,
+    comments: 67
+  }
+];
+---
+
+<section id="社区动态" class="py-16 md:py-24 bg-background">
+  <div class="mx-auto max-w-7xl px-6 lg:px-12">
+    <div class="text-center mb-12">
+      <h2 class="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-4">社区动态</h2>
+      <p class="text-lg text-muted-foreground">看看传承人和爱好者们最近在做什么</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+      {activities.map(activity => (
+        <ActivityCard activity={activity} />
+      ))}
+    </div>
+
+    <div class="text-center mt-10">
+      <a href="#" class="inline-flex items-center gap-2 text-lg text-primary hover:underline font-medium">
+        查看全部动态
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14"/>
+          <path d="m12 5 7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>

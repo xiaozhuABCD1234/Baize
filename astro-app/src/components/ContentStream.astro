@@ -1,0 +1,114 @@
+---
+import ContentCard from "./ContentCard.astro";
+
+const works = [
+  {
+    id: "1",
+    title: "蜀绣·熊猫",
+    author: "李秀英",
+    imageUrl: "https://images.unsplash.com/photo-1604881991720-f91add269bed?w=400&h=300&fit=crop",
+    likes: 328,
+    category: "刺绣"
+  },
+  {
+    id: "2",
+    title: "景德镇青花瓷瓶",
+    author: "张建国",
+    imageUrl: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=400&h=300&fit=crop",
+    likes: 256,
+    category: "陶瓷"
+  },
+  {
+    id: "3",
+    title: "皮影戏《西游记》",
+    author: "王老班",
+    imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop",
+    likes: 189,
+    category: "戏曲"
+  },
+  {
+    id: "4",
+    title: "苏州缂丝挂件",
+    author: "陈阿姨",
+    imageUrl: "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=400&h=300&fit=crop",
+    likes: 412,
+    category: "织锦"
+  }
+];
+
+const articles = [
+  {
+    id: "1",
+    title: "走进蜀绣：四大名绣之首",
+    category: "传统技艺",
+    summary: "蜀绣历史悠久，以其精湛的针法和绚丽的色彩著称于世...",
+    coverUrl: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?w=400&h=300&fit=crop",
+    readTime: "5分钟"
+  },
+  {
+    id: "2",
+    title: "青瓷烧制技艺的秘密",
+    category: "陶瓷艺术",
+    summary: "从釉料到窑火，揭秘龙泉青瓷千年传承的烧制奥秘...",
+    coverUrl: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=400&h=300&fit=crop",
+    readTime: "8分钟"
+  },
+  {
+    id: "3",
+    title: "古琴斫制：匠人的修行",
+    category: "音乐艺术",
+    summary: "一张好琴的诞生，需要经过选材、制胎、髹漆等上百道工序...",
+    coverUrl: "https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=400&h=300&fit=crop",
+    readTime: "6分钟"
+  },
+  {
+    id: "4",
+    title: "端午节：艾草与粽香",
+    category: "民俗文化",
+    summary: "追溯端午节的起源，了解艾草、粽子背后的文化含义...",
+    coverUrl: "https://images.unsplash.com/photo-1622627660256-69c8d6c89338?w=400&h=300&fit=crop",
+    readTime: "4分钟"
+  }
+];
+---
+
+<section id="内容推荐" class="py-16 md:py-24 bg-muted/20">
+  <div class="mx-auto max-w-7xl px-6 lg:px-12">
+    <div class="text-center mb-12">
+      <h2 class="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-4">内容推荐</h2>
+      <p class="text-lg text-muted-foreground">精选非遗作品与知识科普，品味传统文化之美</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+      <div>
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="font-heading text-2xl font-semibold text-foreground flex items-center gap-3">
+            <span class="w-1.5 h-8 bg-primary rounded-full"></span>
+            精选作品
+          </h3>
+          <a href="#" class="text-base text-primary hover:underline font-medium">查看更多 →</a>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          {works.map(work => (
+            <ContentCard type="work" data={work} />
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="font-heading text-2xl font-semibold text-foreground flex items-center gap-3">
+            <span class="w-1.5 h-8 bg-secondary rounded-full"></span>
+            知识科普
+          </h3>
+          <a href="#" class="text-base text-secondary hover:underline font-medium">查看更多 →</a>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          {articles.map(article => (
+            <ContentCard type="article" data={article} />
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

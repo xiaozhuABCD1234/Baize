@@ -1,3 +1,28 @@
 ---
 import "../styles/global.css";
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const { 
+	title = "非遗记 - 守望非遗，传承之美", 
+	description = "记录非遗技艺，连接文化传承。为非遗爱好者、传承人和文化探索者打造的传统文化传播平台。" 
+} = Astro.props;
 ---
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5">
+	<meta name="description" content={description}>
+	<meta name="theme-color" content="#e84a5f">
+	<title>{title}</title>
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+</head>
+<body class="min-h-screen bg-background text-foreground antialiased">
+	<slot />
+</body>
+</html>

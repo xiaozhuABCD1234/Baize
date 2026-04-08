@@ -1,0 +1,104 @@
+---
+interface Activity {
+	id: string;
+	user: {
+		name: string;
+		avatar: string;
+	};
+	type: "upload" | "comment" | "like";
+	content: string;
+	time: string;
+	imageUrl?: string;
+	likes: number;
+	comments: number;
+}
+
+interface Props {
+	activity: Activity;
+}
+
+const { activity } = Astro.props;
+
+const typeLabels = {
+	upload: "发布了作品",
+	comment: "发表了评论",
+	like: "点赞了作品",
+};
+---
+
+<div
+	class="rounded-xl bg-card border border-border/50 p-5 hover:border-primary/20 transition-colors"
+>
+	<div class="flex items-start gap-4">
+		<img
+			src={activity.user.avatar}
+			alt={activity.user.name}
+			class="w-12 h-12 rounded-full object-cover shrink-0"
+			loading="lazy"
+		/>
+
+		<div class="flex-1 min-w-0">
+			<div class="flex items-center gap-2 mb-1">
+				<span class="font-medium text-foreground">{activity.user.name}</span>
+				<span class="text-sm text-muted-foreground"
+					>{typeLabels[activity.type]}</span
+				>
+			</div>
+
+			<p class="text-base text-foreground/80 mb-3 leading-relaxed">
+				{activity.content}
+			</p>
+
+			{
+				activity.imageUrl && (
+					<div class="mb-3">
+						<img
+							src={activity.imageUrl}
+							alt="动态配图"
+							class="w-32 h-32 rounded-lg object-cover"
+							loading="lazy"
+						/>
+					</div>
+				)
+			}
+
+			<div class="flex items-center gap-4 text-sm text-muted-foreground">
+				<span class="text-xs">{activity.time}</span>
+				<div class="flex items-center gap-1">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="14"
+						height="14"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path
+							d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+						></path>
+					</svg>
+					<span>{activity.likes}</span>
+				</div>
+				<div class="flex items-center gap-1">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="14"
+						height="14"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
+					</svg>
+					<span>{activity.comments}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

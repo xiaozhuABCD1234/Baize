@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 400" fill="none">
+  <defs>
+    <linearGradient id="mountain1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="oklch(0.75 0.02 90 / 0.15)"/>
+      <stop offset="100%" stop-color="oklch(0.75 0.02 90 / 0.05)"/>
+    </linearGradient>
+    <linearGradient id="mountain2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="oklch(0.7 0.03 80 / 0.12)"/>
+      <stop offset="100%" stop-color="oklch(0.7 0.03 80 / 0.03)"/>
+    </linearGradient>
+    <linearGradient id="mountain3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="oklch(0.65 0.04 70 / 0.1)"/>
+      <stop offset="100%" stop-color="oklch(0.65 0.04 70 / 0.02)"/>
+    </linearGradient>
+  </defs>
+  
+  <path d="M0 400 L0 280 Q120 200 240 260 Q360 180 480 220 Q600 160 720 200 Q840 140 960 180 Q1080 120 1200 160 Q1320 100 1440 140 L1440 400 Z" fill="url(#mountain1)"/>
+  
+  <path d="M0 400 L0 320 Q180 240 360 300 Q540 220 720 280 Q900 200 1080 250 Q1260 190 1440 230 L1440 400 Z" fill="url(#mountain2)"/>
+  
+  <path d="M0 400 L0 350 Q240 280 480 330 Q720 260 960 310 Q1200 250 1440 290 L1440 400 Z" fill="url(#mountain3)"/>
+  
+  <circle cx="1200" cy="80" r="40" fill="oklch(0.55 0.18 25 / 0.08)"/>
+  <circle cx="1240" cy="100" r="25" fill="oklch(0.55 0.18 25 / 0.05)"/>
+</svg>
