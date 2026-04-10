@@ -9,15 +9,16 @@ import (
 
 	"backend/internal/models"
 	"backend/internal/repository"
+	"backend/pkg/utils"
 )
 
 // 定义业务错误
 var (
-	ErrEmailExists      = errors.New("邮箱已被注册")
-	ErrUserNotFound     = errors.New("用户不存在")
-	ErrInvalidPassword  = errors.New("密码错误")
-	ErrEmailNotChanged  = errors.New("新邮箱与当前邮箱相同")
-	ErrSamePassword     = errors.New("新密码不能与旧密码相同")
+	ErrEmailExists     = errors.New("邮箱已被注册")
+	ErrUserNotFound    = errors.New("用户不存在")
+	ErrInvalidPassword = errors.New("密码错误")
+	ErrEmailNotChanged = errors.New("新邮箱与当前邮箱相同")
+	ErrSamePassword    = errors.New("新密码不能与旧密码相同")
 )
 
 // UserService 用户业务逻辑层
@@ -89,7 +90,7 @@ type LoginRequest struct {
 type LoginResponse struct {
 	ID    uint   `json:"id"`
 	Email string `json:"email"`
-	// Token  string `json:"token"` // JWT Token，需要时添加
+	Token string `json:"token"`
 }
 
 // Login 用户登录
@@ -108,10 +109,16 @@ func (s *UserService) Login(ctx context.Context, req LoginRequest) (*LoginRespon
 		return nil, ErrInvalidPassword
 	}
 
+	// 3. 生成 JWT Token
+	tokenPair, err := utils.GenerateTokenPair(user.ID, user.Email)
+	if err != nil {
+		return nil, fmt.Errorf("生成Token失败: %w", err)
+	}
+
 	return &LoginResponse{
 		ID:    user.ID,
 		Email: user.Email,
-		// Token: generateJWT(user), // 实现 JWT 生成
+		Token: tokenPair.AccessToken,
 	}, nil
 }
 
