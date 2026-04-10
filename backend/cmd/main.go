@@ -7,6 +7,7 @@ import (
 
 	"backend/internal/api/handlers"
 	"backend/internal/api/routes"
+	"backend/internal/models"
 	"backend/internal/repository"
 	svc "backend/internal/services"
 	"backend/pkg/utils"
@@ -20,6 +21,7 @@ import (
 )
 
 func main() {
+	e := echo.New()
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai",
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_USER"),
@@ -31,6 +33,7 @@ func main() {
 	if err != nil {
 		panic(fmt.Sprintf("failed to connect to database: %v", err))
 	}
+	db.AutoMigrate(&models.User{})
 
 	userRepo := repository.NewUserRepository(db)
 	userSvc := svc.NewUserService(userRepo)
@@ -38,13 +41,13 @@ func main() {
 
 	_ = utils.GetEnv("JWT_SECRET_KEY", "default_secret")
 
-	e := routes.SetupRouter(userHandler)
+	routes.SetupRouter(e, userHandler)
 
 	e.Use(middleware.RequestLogger())
 
-	e.GET("/", func(c *echo.Context) error {
-		return c.String(200, "Hello, World!")
-	})
+	// e.GET("/", func(c *echo.Context) error {
+	// 	return c.String(200, "Hello, World!")
+	// })
 
 	f, err := os.OpenFile("log/server.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
