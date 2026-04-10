@@ -21,13 +21,26 @@ var (
 	ErrSamePassword    = errors.New("新密码不能与旧密码相同")
 )
 
-// UserService 用户业务逻辑层
-type UserService struct {
-	repo *repository.UserRepository
+type UserServiceInterface interface {
+	Register(ctx context.Context, req RegisterRequest) (*RegisterResponse, error)
+	Login(ctx context.Context, req LoginRequest) (*LoginResponse, error)
+	GetUserByID(ctx context.Context, id uint) (*models.User, error)
+	GetUserByEmail(ctx context.Context, email string) (*models.User, error)
+	ListUsers(ctx context.Context) ([]models.User, error)
+	ListUsersWithPagination(ctx context.Context, page, pageSize int) ([]models.User, int64, error)
+	UpdateUser(ctx context.Context, req UpdateUserRequest) error
+	ChangePassword(ctx context.Context, req ChangePasswordRequest) error
+	ResetPassword(ctx context.Context, userID uint, newPassword string) error
+	UpdateEmail(ctx context.Context, userID uint, newEmail string) error
+	DeleteUser(ctx context.Context, id uint) error
+	ForceDeleteUser(ctx context.Context, id uint) error
 }
 
-// NewUserService 创建 UserService 实例
-func NewUserService(repo *repository.UserRepository) *UserService {
+type UserService struct {
+	repo repository.UserRepositoryInterface
+}
+
+func NewUserService(repo repository.UserRepositoryInterface) *UserService {
 	return &UserService{repo: repo}
 }
 

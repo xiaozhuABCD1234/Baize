@@ -9,6 +9,19 @@ import (
 	"gorm.io/gorm"
 )
 
+type UserRepositoryInterface interface {
+	Create(ctx context.Context, user *model.User) error
+	GetByID(ctx context.Context, id uint) (*model.User, error)
+	GetByEmail(ctx context.Context, email string) (*model.User, error)
+	List(ctx context.Context) ([]model.User, error)
+	ListWithPagination(ctx context.Context, page, pageSize int) ([]model.User, int64, error)
+	Update(ctx context.Context, user *model.User) error
+	UpdatePassword(ctx context.Context, id uint, hashedPassword string) error
+	UpdateEmail(ctx context.Context, id uint, email string) error
+	Delete(ctx context.Context, id uint) error
+	ForceDelete(ctx context.Context, id uint) error
+}
+
 type UserRepository struct {
 	db *gorm.DB
 }
