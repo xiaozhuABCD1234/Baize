@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import "@/styles/global.css";
 import Header from "@/components/Header.astro";
+import Sidebar from "@/components/Sidebar.astro";
 import Hero from "@/components/Hero.astro";
 import FeatureSection from "@/components/FeatureSection.astro";
 import ContentStream from "@/components/ContentStream.astro";
@@ -11,16 +12,158 @@ import Footer from "@/components/Footer.astro";
 
 <Layout>
 	<Header />
-	<main>
-		<Hero />
-		<FeatureSection />
-		<ContentStream />
-		<ActivityFeed />
+	<Sidebar />
+	<aside id="activity-sidebar" class="fixed -right-80 top-[72px] h-[calc(100vh-72px)] w-80 bg-background border-l border-border/50 transition-all duration-300 ease-in-out hover:right-0 z-40">
+		<div class="p-4 h-full overflow-y-auto">
+			<ActivityFeed />
+		</div>
+	</aside>
+	<main class="pt-4 w-full max-w-[1800px] mx-auto px-4 lg:px-6">
+		<div id="hero-container" class="collapsed relative cursor-pointer">
+			<Hero />
+			<button id="collapse-button" class="hero-collapse-button hidden absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-background/90 px-5 py-2 text-sm font-medium text-foreground shadow-lg transition-opacity duration-300 hover:bg-background">
+				收起
+			</button>
+		</div>
+		<div class="flex">
+			<div class="flex-1">
+				<FeatureSection />
+				<ContentStream />
+			</div>
+		</div>
 	</main>
 	<Footer />
 </Layout>
 
+<script>
+	const heroContainer = document.getElementById('hero-container');
+	const heroContent = document.getElementById('hero-content');
+	const collapseButton = document.getElementById('collapse-button');
+	const main = document.querySelector('main');
+
+	let isExpanded = false;
+
+	const collapseHero = () => {
+		heroContainer.classList.add('collapsed');
+		heroContainer.classList.remove('expanded');
+		heroContainer.style.position = 'fixed';
+		heroContainer.style.top = '68px';
+		heroContainer.style.left = '0';
+		heroContainer.style.right = '0';
+		heroContainer.style.zIndex = '30';
+		heroContainer.style.background = 'rgba(249, 250, 251, 0.8)';
+		heroContainer.style.backdropFilter = 'blur(8px)';
+		heroContainer.style.maxHeight = '110px';
+		heroContainer.style.overflow = 'hidden';
+		heroContent.style.maxHeight = '0';
+		heroContent.style.opacity = '0';
+		if (collapseButton) collapseButton.classList.add('hidden');
+		if (main) main.style.paddingTop = '178px';
+		document.removeEventListener('click', handleOutsideClick);
+		isExpanded = false;
+	};
+
+	const expandHero = () => {
+		heroContainer.classList.remove('collapsed');
+		heroContainer.classList.add('expanded');
+		heroContainer.style.position = 'relative';
+		heroContainer.style.top = 'auto';
+		heroContainer.style.maxHeight = '100vh';
+		heroContainer.style.overflow = 'hidden';
+		heroContent.style.maxHeight = heroContent.scrollHeight + 'px';
+		heroContent.style.opacity = '1';
+		if (collapseButton) collapseButton.classList.remove('hidden');
+		if (main) main.style.paddingTop = '1rem';
+		document.addEventListener('click', handleOutsideClick);
+		isExpanded = true;
+	};
+
+	const handleOutsideClick = (event) => {
+		if (!heroContainer.contains(event.target)) {
+			collapseHero();
+		}
+	};
+
+	if (heroContainer && heroContent) {
+		collapseHero();
+		heroContainer.style.transition = 'max-height 0.5s ease-in-out';
+		heroContent.style.transition = 'max-height 0.5s ease-in-out, opacity 0.3s ease-in-out';
+
+		heroContainer.addEventListener('click', () => {
+			if (!isExpanded) {
+				expandHero();
+				window.scrollTo({ top: 0, behavior: 'smooth' });
+			}
+		});
+
+		window.addEventListener('scroll', () => {
+			if (isExpanded && window.scrollY > 30) {
+				collapseHero();
+			}
+		});
+	}
+
+	if (collapseButton) {
+		collapseButton.addEventListener('click', (event) => {
+			event.stopPropagation();
+			collapseHero();
+		});
+	}
+</script>
+
 <style is:global>
+	#hero-container.expanded {
+		position: relative;
+	}
+
+	#hero-container.expanded section {
+		min-height: 100vh;
+	}
+
+	#hero-container.collapsed section {
+		padding-top: 0.5rem;
+		padding-bottom: 0.75rem;
+	}
+
+	#hero-container.collapsed .absolute.inset-0,
+	#hero-container.collapsed .absolute.bottom-0 {
+		opacity: 0 !important;
+		pointer-events: none;
+	}
+
+	#hero-container.collapsed .hero-title {
+		font-size: 1.25rem;
+		margin-bottom: 0.15rem;
+	}
+
+	#hero-container.collapsed .hero-subtitle {
+		font-size: 0.75rem;
+		margin-bottom: 0.15rem;
+	}
+
+	#hero-container.collapsed .hero-actions {
+		opacity: 0;
+		max-height: 0;
+		overflow: hidden;
+	}
+
+	#hero-container .hero-actions {
+		transition: opacity 0.3s ease-in-out, max-height 0.3s ease-in-out;
+	}
+
+	#hero-container {
+		cursor: pointer;
+	}
+
+	#hero-container .hero-collapse-button {
+		pointer-events: auto;
+	}
+
+	html,
+	body {
+		overflow-x: hidden;
+	}
+
 	html {
 		scroll-behavior: smooth;
 	}
