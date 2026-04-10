@@ -35,7 +35,8 @@ import Footer from "@/components/Footer.astro";
 	<Footer />
 </Layout>
 
-<script>
+<!-- 🔥 关键：用 is:inline 强制非模块，保证先挂载全局函数，解决执行顺序问题 -->
+<script is:inline>
 	const heroContainer = document.getElementById('hero-container');
 	const heroContent = document.getElementById('hero-content');
 	const collapseButton = document.getElementById('collapse-button');
@@ -59,7 +60,7 @@ import Footer from "@/components/Footer.astro";
 		heroContent.style.opacity = '0';
 		if (collapseButton) collapseButton.classList.add('hidden');
 		if (main) main.style.paddingTop = '178px';
-		document.removeEventListener('click', handleOutsideClick);
+		// 已移除外部点击监听
 		isExpanded = false;
 	};
 
@@ -74,16 +75,15 @@ import Footer from "@/components/Footer.astro";
 		heroContent.style.opacity = '1';
 		if (collapseButton) collapseButton.classList.remove('hidden');
 		if (main) main.style.paddingTop = '1rem';
-		document.addEventListener('click', handleOutsideClick);
+		// 已移除外部点击监听
 		isExpanded = true;
 	};
 
-	const handleOutsideClick = (event) => {
-		if (!heroContainer.contains(event.target)) {
-			collapseHero();
-		}
-	};
+	// 🔥 强制挂载到 window，确保侧边栏能调用
+	window.expandHeroGlobal = expandHero;
+	window.collapseHeroGlobal = collapseHero;
 
+	// 初始化与事件监听
 	if (heroContainer && heroContent) {
 		collapseHero();
 		heroContainer.style.transition = 'max-height 0.5s ease-in-out';
@@ -91,11 +91,20 @@ import Footer from "@/components/Footer.astro";
 
 		heroContainer.addEventListener('click', () => {
 			if (!isExpanded) {
-				expandHero();
+				// 先滚动到顶部，等待滚动完成后再展开
+				const startY = window.scrollY;
 				window.scrollTo({ top: 0, behavior: 'smooth' });
+				
+				const checkScrollComplete = setInterval(() => {
+					if (window.scrollY === 0) {
+						clearInterval(checkScrollComplete);
+						expandHero();
+					}
+				}, 50);
 			}
 		});
 
+		// 🔥 滚动自动收起（修复状态同步）
 		window.addEventListener('scroll', () => {
 			if (isExpanded && window.scrollY > 30) {
 				collapseHero();
