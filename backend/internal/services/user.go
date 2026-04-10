@@ -23,11 +23,11 @@ var (
 
 // UserService 用户业务逻辑层
 type UserService struct {
-	repo repository.UserRepository
+	repo *repository.UserRepository
 }
 
 // NewUserService 创建 UserService 实例
-func NewUserService(repo repository.UserRepository) *UserService {
+func NewUserService(repo *repository.UserRepository) *UserService {
 	return &UserService{repo: repo}
 }
 
