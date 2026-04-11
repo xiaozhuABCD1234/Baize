@@ -3,89 +3,95 @@ import { Button } from "@/components/ui/button";
 import mountainSvg from "@/assets/decorations/mountain.svg";
 ---
 
+<!-- 🔥 修复：把底部内边距取消，只留顶部内边距 -->
 <section
-	id="home"
-	class="relative overflow-hidden bg-linear-to-b from-background to-muted/20 py-16 md:py-24"
+  id="home"
+  class="relative overflow-hidden bg-linear-to-b from-background to-muted/20 pt-16 pb-0 md:pt-24 md:pb-0"
 >
-	<div class="absolute inset-0 pointer-events-none">
-		<img
-			src={mountainSvg.src}
-			alt=""
-			class="h-full w-full object-cover opacity-60"
-			aria-hidden="true"
-		/>
-	</div>
+  <div class="absolute inset-0 pointer-events-none">
+    <img
+      src={mountainSvg.src}
+      alt=""
+      class="h-full w-full object-cover opacity-60"
+      aria-hidden="true"
+    />
+  </div>
 
-	<div
-		class="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-background/80 pointer-events-none"
-	>
-	</div>
+  <div
+    class="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-background/80 pointer-events-none"
+  >
+  </div>
 
-	<div class="relative mx-auto max-w-7xl px-6 lg:px-12">
-		<div class="mx-auto max-w-3xl text-center">
-			<h1
-				class="hero-title font-heading text-4xl md:text-5xl lg:text-6xl font-semibold tracking-wide text-foreground mb-6"
-			>
-				守望<span class="text-primary">非遗</span>，传承之美
-			</h1>
+  <div class="relative mx-auto max-w-7xl px-6 lg:px-12">
+    <div class="mx-auto max-w-3xl text-center">
+      <h1
+        class="hero-title font-heading text-4xl md:text-5xl lg:text-6xl font-semibold tracking-wide text-foreground mb-6"
+      >
+        守望<span class="text-primary">非遗</span>，传承之美
+      </h1>
 
-			<div id="hero-content" class="hero-content transition-all duration-500 ease-in-out overflow-hidden">
-				<p
-					class="hero-subtitle text-xl md:text-2xl text-muted-foreground mb-10 leading-relaxed"
-				>
-					用影像记录技艺，用平台连接传承人<br class="hidden md:block" />
-					让每一份手艺都被看见，让每一份文化得以延续
-				</p>
+      <div id="hero-content" class="hero-content transition-all duration-500 ease-in-out overflow-hidden">
+        <p
+          class="hero-subtitle text-xl md:text-2xl text-muted-foreground mb-10 leading-relaxed"
+        >
+          用影像记录技艺，用平台连接传承人<br class="hidden md:block" />
+          让每一份手艺都被看见，让每一份文化得以延续
+        </p>
 
-				<div class="hero-actions flex flex-col sm:flex-row items-center justify-center gap-4">
-					<Button size="lg" className="h-14 px-8 text-lg font-medium">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="20"
-							height="20"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="mr-2"
-						>
-							<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-							<polyline points="17 8 12 3 7 8"></polyline>
-							<line x1="12" x2="12" y1="3" y2="15"></line>
-						</svg>
-						开始记录
-					</Button>
-					<Button
-						variant="outline"
-						size="lg"
-						className="h-14 px-8 text-lg font-medium border-2 border-secondary text-secondary-foreground hover:bg-secondary/10"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="20"
-							height="20"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="mr-2"
-						>
-							<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-							<path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-						</svg>
-						探索非遗
-					</Button>
-				</div>
-			</div>
-		</div>
-	</div>
+        <div class="hero-actions flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="/upload">
+            <Button size="lg" className="h-14 px-8 text-lg font-medium w-full">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="mr-2"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" x2="12" y1="3" y2="15"></line>
+              </svg>
+              开始记录
+            </Button>
+          </a>
 
-	<div
-		class="absolute bottom-0 left-0 right-0 h-24 bg-linear-to-t from-background to-transparent pointer-events-none"
-	>
-	</div>
+          <a href="#传承">
+            <Button
+              variant="outline"
+              size="lg"
+              className="h-14 px-8 text-lg font-medium border-2 border-secondary text-secondary-foreground hover:bg-secondary/10 w-full"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="mr-2"
+              >
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+              </svg>
+              探索非遗
+            </Button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="absolute bottom-0 left-0 right-0 h-24 bg-linear-to-t from-background to-transparent pointer-events-none"
+  >
+  </div>
 </section>

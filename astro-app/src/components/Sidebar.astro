@@ -5,7 +5,7 @@
             bg-[var(--sidebar)]
             border-r border-[var(--sidebar-border)]
             shadow-lg shadow-[var(--sidebar-border)]/10
-            transition-all duration-300 ease-in-out z-40
+            transition-all duration-300 ease-in-out z-999
             left-0 -translate-x-[calc(100%-8px)] hover:translate-x-0
             rounded-r-md"
 >
@@ -13,7 +13,7 @@
     <nav class="space-y-2">
       <!-- 首页 -->
       <a
-        href="#home"
+        href="/#home"
         class="sidebar-home flex items-center gap-3 px-3 py-2 rounded-lg
                             hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-accent-foreground)]
                             transition-colors duration-200"
@@ -36,7 +36,7 @@
       </a>
       <!-- 推荐 -->
       <a
-        href="#recommend"
+        href="/#recommend"
         class="flex items-center gap-3 px-3 py-2 rounded-lg
                             hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-accent-foreground)]
                             transition-colors duration-200"
@@ -62,7 +62,7 @@
       </a>
       <!-- 关注 -->
       <a
-        href="#following"
+        href="/#following"
         class="flex items-center gap-3 px-3 py-2 rounded-lg
                             hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-accent-foreground)]
                             transition-colors duration-200"
@@ -86,7 +86,7 @@
       </a>
       <!-- 分类 -->
       <a
-        href="#categories"
+        href="/#categories"
         class="flex items-center gap-3 px-3 py-2 rounded-lg
                             hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-accent-foreground)]
                             transition-colors duration-200"
@@ -116,22 +116,27 @@
 <script is:inline>
   document.addEventListener("DOMContentLoaded", () => {
     const homeLink = document.querySelector(".sidebar-home");
-    const hero = document.getElementById("hero-container");
 
-    if (homeLink && hero) {
+    if (homeLink) {
       homeLink.addEventListener("click", (e) => {
-        e.preventDefault();
+        // 1. 判断当前是否在首页
+        const isOnHomePage = window.location.pathname === "/";
 
-        // 检查 hero 容器是否已展开（通过类名判断）
-        const heroContainer = document.getElementById("hero-container");
-        if (heroContainer && heroContainer.classList.contains("expanded")) {
+        if (!isOnHomePage) {
+          // 不在首页 → 正常跳转，让首页自己加载后展开
           return;
         }
 
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        setTimeout(() => {
-          hero.click();
-        }, 100);
+        // 2. 已经在首页 → 执行展开逻辑
+        e.preventDefault();
+
+        // 安全调用全局展开方法
+        if (window.expandHeroGlobal) {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          setTimeout(() => {
+            window.expandHeroGlobal();
+          }, 100);
+        }
       });
     }
   });
