@@ -1,0 +1,133 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "@/styles/global.css";
+import Header from "@/components/Header.astro";
+import Sidebar from "@/components/Sidebar.astro";
+import ActivityFeed from "@/components/ActivityFeed.astro";
+import Footer from "@/components/Footer.astro";
+---
+
+<Layout>
+	<Header />
+	<Sidebar />
+
+	<aside id="activity-sidebar" class="fixed -right-80 top-[72px] h-[calc(100vh-72px)] w-80 bg-background border-l border-border/50 transition-all duration-300 ease-in-out hover:right-0 z-40">
+		<div class="p-4 h-full overflow-y-auto">
+			<ActivityFeed />
+		</div>
+	</aside>
+
+	<main class="pt-[100px] w-full max-w-[1800px] mx-auto px-4 lg:px-6 relative z-50">
+		<!-- 返回按钮 -->
+		<div class="mb-6 relative z-50">
+			<a href="/#home" class="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-card text-foreground hover:bg-muted border border-border transition-all">
+				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M19 12H5"></path>
+					<path d="M12 19l-7-7 7-7"></path>
+				</svg>
+				<span>返回首页</span>
+			</a>
+		</div>
+
+		<!-- 🔥 小红书/B站风格 科普页面 -->
+		<section id="科普" class="py-5 bg-background min-h-screen">
+			<div class="mx-auto max-w-7xl px-6 lg:px-8">
+				
+				<!-- 标题区域（和你内容推荐板块完全同款） -->
+				<div class="text-center mb-10">
+					<h2 class="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-4">
+						非遗知识科普
+					</h2>
+					<p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+						一站式了解非遗文化、技艺与历史内涵
+					</p>
+				</div>
+
+				<!-- 🔥 网格卡片流（小红书/B站样式） -->
+				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+					<!-- 卡片 1 -->
+					<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+						<div class="h-48 bg-muted/30 flex items-center justify-center">
+							<svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.223 9.246 4.5 7.5 4.5S4.168 5.223 3 6.253v13C4.168 18.777 5.754 19.5 7.5 19.5s3.332-.723 4.5-1.747zm0 0C13.168 19.777 14.754 20.5 16.5 20.5s3.332-.723 4.5-1.747v-13C20.832 5.223 19.246 4.5 17.5 4.5s-3.332.723-4.5 1.747z" /></svg>
+						</div>
+						<div class="p-5">
+							<h3 class="text-lg font-semibold mb-2">什么是非物质文化遗产？</h3>
+							<p class="text-sm text-muted-foreground line-clamp-3">
+								非物质文化遗产是各群体、团体、个人视为文化遗产的各种实践、表演、知识体系及其相关工具、实物、工艺品。
+							</p>
+						</div>
+					</div>
+
+					<!-- 卡片 2 -->
+					<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+						<div class="h-48 bg-muted/30 flex items-center justify-center">
+							<svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+						</div>
+						<div class="p-5">
+							<h3 class="text-lg font-semibold mb-2">非遗的五大类别</h3>
+							<p class="text-sm text-muted-foreground line-clamp-3">
+								传统文学、传统美术音乐舞蹈、传统技艺医药、传统民俗节庆、传统体育游艺杂技。
+							</p>
+						</div>
+					</div>
+
+					<!-- 卡片 3 -->
+					<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+						<div class="h-48 bg-muted/30 flex items-center justify-center">
+							<svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+						</div>
+						<div class="p-5">
+							<h3 class="text-lg font-semibold mb-2">非遗传承的意义</h3>
+							<p class="text-sm text-muted-foreground line-clamp-3">
+								非遗承载民族历史记忆与文化基因，是民族身份的象征，守护民族精神命脉与文化根脉。
+							</p>
+						</div>
+					</div>
+
+					<!-- 卡片 4 -->
+					<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+						<div class="h-48 bg-muted/30 flex items-center justify-center">
+							<svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+						</div>
+						<div class="p-5">
+							<h3 class="text-lg font-semibold mb-2">我们如何保护非遗？</h3>
+							<p class="text-sm text-muted-foreground line-clamp-3">
+								记录、传播、学习、参与。数字化存档、影像记录、技艺展示、文化传播。
+							</p>
+						</div>
+					</div>
+
+					<!-- 卡片 5 -->
+					<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+						<div class="h-48 bg-muted/30 flex items-center justify-center">
+							<svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.022 12.022 0 01.665 6.479A11.959 11.959 0 0112 20.055a11.96 11.96 0 01-6.824-2.998 12.022 12.022 0 01.665-6.479L12 14z" /></svg>
+						</div>
+						<div class="p-5">
+							<h3 class="text-lg font-semibold mb-2">国家级非遗名录</h3>
+							<p class="text-sm text-muted-foreground line-clamp-3">
+								截至目前，中国共有国家级非遗项目 1557 项，是世界上入选非遗项目最多的国家。
+							</p>
+						</div>
+					</div>
+
+					<!-- 卡片 6 -->
+					<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+						<div class="h-48 bg-muted/30 flex items-center justify-center">
+							<svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+						</div>
+						<div class="p-5">
+							<h3 class="text-lg font-semibold mb-2">传统技艺分类</h3>
+							<p class="text-sm text-muted-foreground line-clamp-3">
+								陶瓷、刺绣、木雕、剪纸、漆器、编织、铸造、制茶、制瓷、服饰织造等。
+							</p>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<Footer />
+</Layout>

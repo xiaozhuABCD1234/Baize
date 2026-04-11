@@ -13,11 +13,7 @@ import Footer from "@/components/Footer.astro";
 <Layout>
 	<Header />
 	<Sidebar />
-	<aside id="activity-sidebar" class="fixed -right-80 top-[72px] h-[calc(100vh-72px)] w-80 bg-background border-l border-border/50 transition-all duration-300 ease-in-out hover:right-0 z-40">
-		<div class="p-4 h-full overflow-y-auto">
-			<ActivityFeed />
-		</div>
-	</aside>
+
 	<main class="pt-4 w-full max-w-[1800px] mx-auto px-4 lg:px-6">
 		<div id="hero-container" class="collapsed relative cursor-pointer">
 			<Hero />
@@ -25,13 +21,20 @@ import Footer from "@/components/Footer.astro";
 				收起
 			</button>
 		</div>
+
 		<div class="flex">
 			<div class="flex-1">
 				<FeatureSection />
 				<ContentStream />
 			</div>
 		</div>
+
+		<!-- 👇 社区动态 → 放在页面最底部（Footer上方）-->
+		<div class="mt-16 mb-8">
+			<ActivityFeed />
+		</div>
 	</main>
+
 	<Footer />
 </Layout>
 
@@ -46,19 +49,14 @@ import Footer from "@/components/Footer.astro";
 	let isInternalJump = false;
 
 	window.addEventListener('hashchange', (e) => {
-		if (window.location.hash === '#home') {
-			isInternalJump = true;
-		}
+		if (window.location.hash === '#home') isInternalJump = true;
 	});
 	window.addEventListener('popstate', (e) => {
-		if (window.location.pathname === '/' || window.location.hash === '#home') {
-			isInternalJump = true;
-		}
+		if (window.location.pathname === '/' || window.location.hash === '#home') isInternalJump = true;
 	});
 
 	const STORAGE_KEY = 'hero_home_state';
 
-	// 🔥 收起：只留大标题
 	const collapseHero = () => {
 		heroContainer.classList.add('collapsed');
 		heroContainer.classList.remove('expanded');
@@ -71,16 +69,13 @@ import Footer from "@/components/Footer.astro";
 		heroContainer.style.backdropFilter = 'blur(8px)';
 		heroContainer.style.maxHeight = '90px';
 		heroContainer.style.overflow = 'hidden';
-		// 🔥 强制小标题隐藏
 		heroContent.style.maxHeight = '60px';
 		heroContent.style.opacity = '1';
 		if (collapseButton) collapseButton.classList.add('hidden');
 		if (main) main.style.paddingTop = '90px';
 		isExpanded = false;
-		localStorage.setItem(STORAGE_KEY, JSON.stringify({ expanded: false, scrollY: window.scrollY }));
 	};
 
-	// 展开：显示全部
 	const expandHero = () => {
 		heroContainer.classList.remove('collapsed');
 		heroContainer.classList.add('expanded');
@@ -93,49 +88,44 @@ import Footer from "@/components/Footer.astro";
 		if (collapseButton) collapseButton.classList.remove('hidden');
 		if (main) main.style.paddingTop = '1rem';
 		isExpanded = true;
-		localStorage.setItem(STORAGE_KEY, JSON.stringify({ expanded: true, scrollY: window.scrollY }));
 	};
 
 	const scrollToTopAndExpand = () => {
-		if (scrollCheckTimer) clearInterval(scrollCheckTimer);
 		window.scrollTo({ top: 0, behavior: 'smooth' });
-
-		const handleScrollEnd = () => {
-			clearInterval(scrollCheckTimer);
-			window.removeEventListener('scrollend', handleScrollEnd);
-			setTimeout(() => expandHero(), 50);
-		};
-
-		window.addEventListener('scrollend', handleScrollEnd);
-		scrollCheckTimer = setInterval(() => {
-			if (window.scrollY === 0) handleScrollEnd();
-		}, 50);
+		setTimeout(() => {
+			expandHero();
+		}, 250);
 	};
 
 	window.expandHeroGlobal = scrollToTopAndExpand;
 	window.collapseHeroGlobal = collapseHero;
 
 	if (heroContainer && heroContent) {
+		heroContainer.style.transition = 'none';
+		heroContent.style.transition = 'none';
+
 		const savedState = localStorage.getItem(STORAGE_KEY);
 		const isFromExternal = document.referrer && !document.referrer.includes(window.location.host);
 
-		heroContainer.style.transition = 'max-height 0.5s ease-in-out';
-		heroContent.style.transition = 'max-height 0.5s ease-in-out, opacity 0.3s ease-in-out';
-
 		setTimeout(() => {
 			if (isFromExternal || isInternalJump || window.location.hash === '#home') {
-				scrollToTopAndExpand();
+				window.scrollTo(0, 0);
+				expandHero();
 				isInternalJump = false;
-			}
-			else if (savedState) {
+			} else if (savedState) {
 				const { expanded, scrollY } = JSON.parse(savedState);
 				window.scrollTo(0, scrollY);
 				expanded ? expandHero() : collapseHero();
-			}
-			else {
+			} else {
 				collapseHero();
 			}
-		}, 100);
+
+			setTimeout(() => {
+				heroContainer.style.transition = 'max-height 0.5s ease-out, background 0.3s ease';
+				heroContent.style.transition = 'max-height 0.5s ease-out, opacity 0.3s ease';
+			}, 50);
+
+		}, 0);
 
 		heroContainer.addEventListener('click', () => {
 			if (!isExpanded) scrollToTopAndExpand();
@@ -147,8 +137,8 @@ import Footer from "@/components/Footer.astro";
 			scrollDebounce = setTimeout(() => {
 				if (isExpanded && window.scrollY > 30) {
 					collapseHero();
+					localStorage.setItem(STORAGE_KEY, JSON.stringify({ expanded: false, scrollY: window.scrollY }));
 				}
-				localStorage.setItem(STORAGE_KEY, JSON.stringify({ expanded: isExpanded, scrollY: window.scrollY }));
 			}, 100);
 		});
 
@@ -156,6 +146,7 @@ import Footer from "@/components/Footer.astro";
 			collapseButton.addEventListener('click', (e) => {
 				e.stopPropagation();
 				collapseHero();
+				localStorage.setItem(STORAGE_KEY, JSON.stringify({ expanded: false, scrollY: window.scrollY }));
 			});
 		}
 	}
@@ -165,7 +156,6 @@ import Footer from "@/components/Footer.astro";
 	#hero-container.expanded { position: relative; }
 	#hero-container.expanded section { min-height: 100vh; }
 
-	/* ========== 🔥 最终修复：收起后 100% 隐藏小标题 ========== */
 	#hero-container.collapsed .hero-subtitle {
 		display: none !important;
 		visibility: hidden !important;

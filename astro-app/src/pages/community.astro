@@ -1,0 +1,271 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "@/styles/global.css";
+import Header from "@/components/Header.astro";
+import Sidebar from "@/components/Sidebar.astro";
+import ActivityFeed from "@/components/ActivityFeed.astro";
+import Footer from "@/components/Footer.astro";
+---
+
+<Layout>
+	<Header />
+	<Sidebar />
+
+	<aside id="activity-sidebar" class="fixed -right-80 top-[72px] h-[calc(100vh-72px)] w-80 bg-background border-l border-border/50 transition-all duration-300 ease-in-out hover:right-0 z-40">
+		<div class="p-4 h-full overflow-y-auto">
+			<ActivityFeed />
+		</div>
+	</aside>
+
+	<main class="pt-[100px] w-full max-w-[1800px] mx-auto px-4 lg:px-6 relative z-50">
+		<!-- 返回按钮 -->
+		<div class="mb-6 relative z-50">
+			<a href="/#home" class="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-card text-foreground hover:bg-muted border border-border transition-all">
+				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M19 12H5"></path>
+					<path d="M12 19l-7-7 7-7"></path>
+				</svg>
+				<span>返回首页</span>
+			</a>
+		</div>
+
+		<!-- 🔥 社区动态页面（小红书风格） -->
+		<section id="社区" class="py-5 bg-background min-h-screen">
+			<div class="mx-auto max-w-7xl px-6 lg:px-8">
+				
+				<!-- 标题区域 -->
+				<div class="text-center mb-10">
+					<h2 class="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-4">
+						非遗社区动态
+					</h2>
+					<p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+						发现非遗爱好者的分享、技艺展示与文化交流
+					</p>
+				</div>
+
+				<!-- 顶部筛选栏 -->
+				<div class="flex flex-wrap items-center justify-center gap-3 mb-10">
+					<button class="px-4 py-2 bg-primary text-primary-foreground rounded-full text-sm font-medium">全部动态</button>
+					<button class="px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">官方发布</button>
+					<button class="px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">技艺展示</button>
+					<button class="px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">文化分享</button>
+					<button class="px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">传承人动态</button>
+				</div>
+
+				<!-- 🔥 小红书瀑布流卡片 -->
+				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+					<!-- ====================== -->
+					<!-- 卡片 1 · 官方账号 -->
+					<!-- ====================== -->
+					<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+						<!-- 封面 -->
+						<div class="h-52 bg-muted/30 relative">
+							<div class="absolute top-2 left-2 bg-primary/90 text-white text-xs font-bold px-2 py-1 rounded-md">官方</div>
+						</div>
+						<!-- 内容 -->
+						<div class="p-4">
+							<div class="flex items-center gap-2 mb-3">
+								<div class="w-8 h-8 rounded-full bg-primary/20"></div>
+								<div>
+									<p class="text-sm font-medium flex items-center gap-1">
+										国家级非遗传承中心
+										<span class="text-xs text-primary">✓</span>
+									</p>
+									<p class="text-xs text-muted-foreground">官方账号</p>
+								</div>
+							</div>
+							<h3 class="text-base font-semibold mb-2 line-clamp-2">2025非遗传承计划启动，面向全国招募青年传承人</h3>
+							<p class="text-xs text-muted-foreground mb-3 line-clamp-2">助力传统技艺年轻化传播，让非遗走进生活、走向世界。</p>
+							<div class="flex gap-2 mb-3 flex-wrap">
+								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#官方</span>
+								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#传承计划</span>
+								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#青年传承人</span>
+							</div>
+							<!-- 互动栏 -->
+							<div class="flex items-center justify-between text-xs text-muted-foreground">
+								<div class="flex items-center gap-3">
+									<span class="flex items-center gap-1">❤️ 256</span>
+									<span class="flex items-center gap-1">💬 48</span>
+									<span class="flex items-center gap-1">⭐ 120</span>
+								</div>
+								<span>1小时前</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- ====================== -->
+					<!-- 卡片 2 · 普通用户 -->
+					<!-- ====================== -->
+					<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+						<div class="h-52 bg-muted/30"></div>
+						<div class="p-4">
+							<div class="flex items-center gap-2 mb-3">
+								<div class="w-8 h-8 rounded-full bg-muted"></div>
+								<div>
+									<p class="text-sm font-medium">苏绣手作-小李</p>
+									<p class="text-xs text-muted-foreground">非遗爱好者</p>
+								</div>
+							</div>
+							<h3 class="text-base font-semibold mb-2 line-clamp-2">耗时一个月完成的苏绣作品，每一针都是传承</h3>
+							<p class="text-xs text-muted-foreground mb-3 line-clamp-2">传统苏绣花鸟图，纯手工制作，希望更多人喜欢这门手艺。</p>
+							<div class="flex gap-2 mb-3 flex-wrap">
+								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#苏绣</span>
+								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#手工技艺</span>
+							</div>
+							<div class="flex items-center justify-between text-xs text-muted-foreground">
+								<div class="flex items-center gap-3">
+									<span class="flex items-center gap-1">❤️ 428</span>
+									<span class="flex items-center gap-1">💬 76</span>
+									<span class="flex items-center gap-1">⭐ 199</span>
+								</div>
+								<span>3小时前</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- ====================== -->
+					<!-- 卡片 3 · 官方账号 -->
+					<!-- ====================== -->
+					<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+						<div class="h-52 bg-muted/30 relative">
+							<div class="absolute top-2 left-2 bg-primary/90 text-white text-xs font-bold px-2 py-1 rounded-md">官方</div>
+						</div>
+						<div class="p-4">
+							<div class="flex items-center gap-2 mb-3">
+								<div class="w-8 h-8 rounded-full bg-primary/20"></div>
+								<div>
+									<p class="text-sm font-medium flex items-center gap-1">
+										中国非遗保护中心
+										<span class="text-xs text-primary">✓</span>
+									</p>
+									<p class="text-xs text-muted-foreground">官方账号</p>
+								</div>
+							</div>
+							<h3 class="text-base font-semibold mb-2 line-clamp-2">中国传统制茶技艺及其相关习俗入选世界非遗</h3>
+							<p class="text-xs text-muted-foreground mb-3 line-clamp-2">茶文化传承千年，是中华民族的文化瑰宝，值得被世界看见。</p>
+							<div class="flex gap-2 mb-3 flex-wrap">
+								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#茶文化</span>
+								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#世界非遗</span>
+							</div>
+							<div class="flex items-center justify-between text-xs text-muted-foreground">
+								<div class="flex items-center gap-3">
+									<span class="flex items-center gap-1">❤️ 1.2k</span>
+									<span class="flex items-center gap-1">💬 320</span>
+									<span class="flex items-center gap-1">⭐ 566</span>
+								</div>
+								<span>昨天</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- ====================== -->
+					<!-- 卡片 4 · 普通用户 -->
+					<!-- ====================== -->
+					<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+						<div class="h-52 bg-muted/30"></div>
+						<div class="p-4">
+							<div class="flex items-center gap-2 mb-3">
+								<div class="w-8 h-8 rounded-full bg-muted"></div>
+								<div>
+									<p class="text-sm font-medium">木雕匠人-老陈</p>
+									<p class="text-xs text-muted-foreground">传统木雕传承人</p>
+								</div>
+							</div>
+							<h3 class="text-base font-semibold mb-2 line-clamp-2">东阳木雕现场创作，一把刻刀演绎千年技艺</h3>
+							<p class="text-xs text-muted-foreground mb-3 line-clamp-2">坚持手工雕刻30年，希望这门手艺能一直传下去。</p>
+							<div class="flex gap-2 mb-3 flex-wrap">
+								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#东阳木雕</span>
+								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#手工雕刻</span>
+							</div>
+							<div class="flex items-center justify-between text-xs text-muted-foreground">
+								<div class="flex items-center gap-3">
+									<span class="flex items-center gap-1">❤️ 582</span>
+									<span class="flex items-center gap-1">💬 112</span>
+									<span class="flex items-center gap-1">⭐ 245</span>
+								</div>
+								<span>2天前</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- ====================== -->
+					<!-- 卡片 5 · 普通用户 -->
+					<!-- ====================== -->
+					<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+						<div class="h-52 bg-muted/30"></div>
+						<div class="p-4">
+							<div class="flex items-center gap-2 mb-3">
+								<div class="w-8 h-8 rounded-full bg-muted"></div>
+								<div>
+									<p class="text-sm font-medium">剪纸艺术-小琳</p>
+									<p class="text-xs text-muted-foreground">非遗爱好者</p>
+								</div>
+							</div>
+							<h3 class="text-base font-semibold mb-2 line-clamp-2">一把剪刀，一张红纸，剪出中国年味</h3>
+							<p class="text-xs text-muted-foreground mb-3 line-clamp-2">传统剪纸艺术，藏着中国人最朴素的浪漫与祝福。</p>
+							<div class="flex gap-2 mb-3 flex-wrap">
+								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#剪纸</span>
+								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#传统民俗</span>
+							</div>
+							<div class="flex items-center justify-between text-xs text-muted-foreground">
+								<div class="flex items-center gap-3">
+									<span class="flex items-center gap-1">❤️ 732</span>
+									<span class="flex items-center gap-1">💬 156</span>
+									<span class="flex items-center gap-1">⭐ 310</span>
+								</div>
+								<span>3天前</span>
+							</div>
+						</div>
+					</div>
+
+					<!-- ====================== -->
+					<!-- 卡片 6 · 官方账号 -->
+					<!-- ====================== -->
+					<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+						<div class="h-52 bg-muted/30 relative">
+							<div class="absolute top-2 left-2 bg-primary/90 text-white text-xs font-bold px-2 py-1 rounded-md">官方</div>
+						</div>
+						<div class="p-4">
+							<div class="flex items-center gap-2 mb-3">
+								<div class="w-8 h-8 rounded-full bg-primary/20"></div>
+								<div>
+									<p class="text-sm font-medium flex items-center gap-1">
+										国家级非遗传承中心
+										<span class="text-xs text-primary">✓</span>
+									</p>
+									<p class="text-xs text-muted-foreground">官方账号</p>
+								</div>
+							</div>
+							<h3 class="text-base font-semibold mb-2 line-clamp-2">全国非遗技艺展览即将开幕，欢迎大家前来参观</h3>
+							<p class="text-xs text-muted-foreground mb-3 line-clamp-2">汇聚全国百项非遗技艺，沉浸式体验传统文化魅力。</p>
+							<div class="flex gap-2 mb-3 flex-wrap">
+								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#非遗展览</span>
+								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#线下活动</span>
+							</div>
+							<div class="flex items-center justify-between text-xs text-muted-foreground">
+								<div class="flex items-center gap-3">
+									<span class="flex items-center gap-1">❤️ 890</span>
+									<span class="flex items-center gap-1">💬 276</span>
+									<span class="flex items-center gap-1">⭐ 412</span>
+								</div>
+								<span>5天前</span>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<!-- 加载更多 -->
+				<div class="mt-12 text-center">
+					<button class="px-6 py-3 bg-card hover:bg-muted border border-border rounded-lg text-sm font-medium transition-all">
+						加载更多动态
+					</button>
+				</div>
+
+			</div>
+		</section>
+	</main>
+
+	<Footer />
+</Layout>

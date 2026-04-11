@@ -1,7 +1,21 @@
 ---
+type Activity = {
+  id: string;
+  user: {
+    name: string;
+    avatar: string;
+  };
+  type: "upload" | "comment" | "like";
+  content: string;
+  time: string;
+  imageUrl?: string;
+  likes: number;
+  comments: number;
+};
+
 import ActivityCard from "./ActivityCard.astro";
 
-const activities = [
+const activities: Activity[] = [
   {
     id: "1",
     user: {
@@ -69,7 +83,7 @@ const activities = [
     </div>
 
     <div class="text-center mt-10">
-      <a href="#" class="inline-flex items-center gap-2 text-lg text-primary hover:underline font-medium">
+      <a href="/community" class="inline-flex items-center gap-2 text-lg text-primary hover:underline font-medium">
         查看全部动态
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M5 12h14"/>
