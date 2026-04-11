@@ -59,7 +59,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handlers.SuccessResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     }
                 }
@@ -101,70 +101,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handlers.SuccessResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.ErrorResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/handlers.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/users/refresh": {
-            "post": {
-                "description": "使用RefreshToken获取新的AccessToken",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "users"
-                ],
-                "summary": "刷新Token",
-                "parameters": [
-                    {
-                        "description": "刷新Token请求",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "refresh_token": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.SuccessResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ErrorResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/handlers.ErrorResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     }
                 }
@@ -206,19 +155,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handlers.SuccessResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.ErrorResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/handlers.ErrorResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     }
                 }
@@ -252,19 +201,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handlers.SuccessResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.ErrorResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/handlers.ErrorResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     }
                 }
@@ -316,25 +265,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handlers.SuccessResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.ErrorResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/handlers.ErrorResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/handlers.ErrorResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     }
                 }
@@ -366,19 +315,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handlers.SuccessResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.ErrorResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/handlers.ErrorResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     }
                 }
@@ -432,25 +381,25 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/handlers.SuccessResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/handlers.ErrorResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/handlers.ErrorResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/handlers.ErrorResponse"
+                            "$ref": "#/definitions/backend_pkg_response.Response-any"
                         }
                     }
                 }
@@ -458,25 +407,43 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "handlers.ErrorResponse": {
+        "backend_pkg_response.ErrorField": {
             "type": "object",
             "properties": {
                 "code": {
-                    "type": "integer"
+                    "type": "string"
                 },
+                "details": {},
                 "message": {
                     "type": "string"
                 }
             }
         },
-        "handlers.SuccessResponse": {
+        "backend_pkg_response.PageInfo": {
             "type": "object",
             "properties": {
-                "code": {
+                "page_num": {
                     "type": "integer"
                 },
+                "page_size": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "backend_pkg_response.Response-any": {
+            "type": "object",
+            "properties": {
                 "data": {},
-                "message": {
+                "error": {
+                    "$ref": "#/definitions/backend_pkg_response.ErrorField"
+                },
+                "page": {
+                    "$ref": "#/definitions/backend_pkg_response.PageInfo"
+                },
+                "request_id": {
                     "type": "string"
                 }
             }

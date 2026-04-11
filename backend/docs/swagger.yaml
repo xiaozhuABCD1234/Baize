@@ -1,18 +1,30 @@
 basePath: /api/v1
 definitions:
-  handlers.ErrorResponse:
+  backend_pkg_response.ErrorField:
     properties:
       code:
-        type: integer
+        type: string
+      details: {}
       message:
         type: string
     type: object
-  handlers.SuccessResponse:
+  backend_pkg_response.PageInfo:
     properties:
-      code:
+      page_num:
         type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+    type: object
+  backend_pkg_response.Response-any:
+    properties:
       data: {}
-      message:
+      error:
+        $ref: '#/definitions/backend_pkg_response.ErrorField'
+      page:
+        $ref: '#/definitions/backend_pkg_response.PageInfo'
+      request_id:
         type: string
     type: object
 host: localhost:1323
@@ -49,7 +61,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handlers.SuccessResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
       security:
       - BearerAuth: []
       summary: 获取用户列表
@@ -70,15 +82,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handlers.SuccessResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
       security:
       - BearerAuth: []
       summary: 删除用户
@@ -98,15 +110,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handlers.SuccessResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
       security:
       - BearerAuth: []
       summary: 获取用户
@@ -139,19 +151,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handlers.SuccessResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
       security:
       - BearerAuth: []
       summary: 更新用户
@@ -185,19 +197,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handlers.SuccessResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
       security:
       - BearerAuth: []
       summary: 修改密码
@@ -226,49 +238,16 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handlers.SuccessResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
       summary: 用户登录
-      tags:
-      - users
-  /users/refresh:
-    post:
-      consumes:
-      - application/json
-      description: 使用RefreshToken获取新的AccessToken
-      parameters:
-      - description: 刷新Token请求
-        in: body
-        name: request
-        required: true
-        schema:
-          properties:
-            refresh_token:
-              type: string
-          type: object
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/handlers.SuccessResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
-      summary: 刷新Token
       tags:
       - users
   /users/register:
@@ -294,15 +273,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handlers.SuccessResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
+            $ref: '#/definitions/backend_pkg_response.Response-any'
       summary: 用户注册
       tags:
       - users

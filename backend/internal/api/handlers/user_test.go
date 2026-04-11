@@ -9,9 +9,9 @@ import (
 	"strings"
 	"testing"
 
-	svc "backend/internal/services"
-
 	"backend/internal/models"
+	svc "backend/internal/services"
+	"backend/pkg/response"
 
 	"github.com/labstack/echo/v5"
 )
@@ -312,10 +312,10 @@ func TestLogin_Success(t *testing.T) {
 		t.Errorf("expected status %d, got %d", http.StatusOK, rec.Code)
 	}
 
-	var resp SuccessResponse
+	var resp response.Response[any]
 	json.Unmarshal(rec.Body.Bytes(), &resp)
-	if resp.Code != http.StatusOK {
-		t.Errorf("expected code %d in response", http.StatusOK)
+	if resp.Error != nil {
+		t.Errorf("expected no error in response")
 	}
 }
 
