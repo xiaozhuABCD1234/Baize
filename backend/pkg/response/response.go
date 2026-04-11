@@ -1,30 +1,35 @@
 package response
 
-type Response[T any] struct {
-	Data      T           `json:"data,omitempty"`
+// Response 标准API响应结构
+type Response struct {
+	Data      interface{} `json:"data,omitempty" swaggertype:"object"`
 	Error     *ErrorField `json:"error,omitempty"`
 	Page      *PageInfo   `json:"page,omitempty"`
 	RequestID string      `json:"request_id,omitempty"`
 }
 
+// ErrorField 错误详情结构
 type ErrorField struct {
 	Code    string `json:"code"`
 	Message string `json:"message"`
-	Details any    `json:"details,omitempty"`
+	Details any    `json:"details,omitempty" swaggertype:"object"`
 }
 
+// PageInfo 分页信息结构
 type PageInfo struct {
 	PageNum  int   `json:"page_num"`
 	PageSize int   `json:"page_size"`
 	Total    int64 `json:"total"`
 }
 
-func Success[T any](data T) Response[T] {
-	return Response[T]{Data: data}
+// Success 返回成功响应
+func Success(data interface{}) Response {
+	return Response{Data: data}
 }
 
-func SuccessWithPage[T any](data T, pageNum, pageSize int, total int64) Response[T] {
-	return Response[T]{
+// SuccessWithPage 返回带分页的成功响应
+func SuccessWithPage(data interface{}, pageNum, pageSize int, total int64) Response {
+	return Response{
 		Data: data,
 		Page: &PageInfo{
 			PageNum:  pageNum,
@@ -34,8 +39,9 @@ func SuccessWithPage[T any](data T, pageNum, pageSize int, total int64) Response
 	}
 }
 
-func Fail(code, message string) Response[any] {
-	return Response[any]{
+// Fail 返回失败响应
+func Fail(code, message string) Response {
+	return Response{
 		Error: &ErrorField{
 			Code:    code,
 			Message: message,
@@ -43,8 +49,9 @@ func Fail(code, message string) Response[any] {
 	}
 }
 
-func FailWithDetails(code, message string, details any) Response[any] {
-	return Response[any]{
+// FailWithDetails 返回带详细信息的失败响应
+func FailWithDetails(code, message string, details any) Response {
+	return Response{
 		Error: &ErrorField{
 			Code:    code,
 			Message: message,

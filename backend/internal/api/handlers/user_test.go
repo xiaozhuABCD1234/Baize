@@ -312,7 +312,7 @@ func TestLogin_Success(t *testing.T) {
 		t.Errorf("expected status %d, got %d", http.StatusOK, rec.Code)
 	}
 
-	var resp response.Response[any]
+	var resp response.Response
 	json.Unmarshal(rec.Body.Bytes(), &resp)
 	if resp.Error != nil {
 		t.Errorf("expected no error in response")

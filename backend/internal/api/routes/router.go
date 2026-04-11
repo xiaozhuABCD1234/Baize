@@ -2,7 +2,7 @@ package routes
 
 import (
 	"backend/internal/api/handlers"
-	// "backend/internal/api/middleware"
+	"backend/internal/api/middleware"
 
 	"github.com/labstack/echo/v5"
 )
@@ -16,7 +16,7 @@ func SetupRouter(e *echo.Echo,userHandler *handlers.UserHandler) {
 	users.POST("/refresh", userHandler.RefreshToken)
 
 	protected := users.Group("")
-	// protected.Use(middleware.JWTAuth())
+	protected.Use(middleware.JWTAuth())
 	protected.GET("", userHandler.ListUsers)
 	protected.GET("/:id", userHandler.GetUser)
 	protected.PUT("/:id", userHandler.UpdateUser)

@@ -34,13 +34,13 @@ func errorResp(c *echo.Context, status int, msgOrCode string, msg ...string) err
 
 // @Summary 用户注册
 // @Description 创建新用户账号
-// @Tags users
+// @Tags 用户
 // @Accept json
 // @Produce json
-// @Param request body object{email=string,password=string} true "注册请求"
-// @Success 200 {object} response.Response[any]
-// @Failure 400 {object} response.Response[any]
-// @Failure 409 {object} response.Response[any]
+// @Param request body svc.RegisterRequest true "注册请求"
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 409 {object} response.Response
 // @Router /users/register [post]
 func (h *UserHandler) Register(c *echo.Context) error {
 	var req svc.RegisterRequest
@@ -61,13 +61,13 @@ func (h *UserHandler) Register(c *echo.Context) error {
 
 // @Summary 用户登录
 // @Description 用户登录获取Token
-// @Tags users
+// @Tags 用户
 // @Accept json
 // @Produce json
-// @Param request body object{email=string,password=string} true "登录请求"
-// @Success 200 {object} response.Response[any]
-// @Failure 400 {object} response.Response[any]
-// @Failure 401 {object} response.Response[any]
+// @Param request body svc.LoginRequest true "登录请求"
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 401 {object} response.Response
 // @Router /users/login [post]
 func (h *UserHandler) Login(c *echo.Context) error {
 	var req svc.LoginRequest
@@ -91,13 +91,13 @@ func (h *UserHandler) Login(c *echo.Context) error {
 
 // @Summary 获取用户
 // @Description 根据ID获取用户信息
-// @Tags users
+// @Tags 用户
 // @Produce json
-// @Param id path int true "用户ID"
-// @Success 200 {object} response.Response[any]
-// @Failure 400 {object} response.Response[any]
-// @Failure 404 {object} response.Response[any]
 // @Security BearerAuth
+// @Param id path int true "用户ID"
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 404 {object} response.Response
 // @Router /users/{id} [get]
 func (h *UserHandler) GetUser(c *echo.Context) error {
 	idStr := c.Param("id")
@@ -119,12 +119,12 @@ func (h *UserHandler) GetUser(c *echo.Context) error {
 
 // @Summary 获取用户列表
 // @Description 分页获取用户列表
-// @Tags users
+// @Tags 用户
 // @Produce json
+// @Security BearerAuth
 // @Param page query int false "页码" default(1)
 // @Param page_size query int false "每页数量" default(10)
-// @Success 200 {object} response.Response[any]
-// @Security BearerAuth
+// @Success 200 {object} response.Response
 // @Router /users [get]
 func (h *UserHandler) ListUsers(c *echo.Context) error {
 	page, _ := strconv.Atoi(c.QueryParam("page"))
@@ -147,16 +147,16 @@ func (h *UserHandler) ListUsers(c *echo.Context) error {
 
 // @Summary 更新用户
 // @Description 更新用户信息
-// @Tags users
+// @Tags 用户
 // @Accept json
 // @Produce json
-// @Param id path int true "用户ID"
-// @Param request body object{name=string,email=string} true "更新请求"
-// @Success 200 {object} response.Response[any]
-// @Failure 400 {object} response.Response[any]
-// @Failure 404 {object} response.Response[any]
-// @Failure 409 {object} response.Response[any]
 // @Security BearerAuth
+// @Param id path int true "用户ID"
+// @Param request body svc.UpdateUserRequest true "更新请求"
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 404 {object} response.Response
+// @Failure 409 {object} response.Response
 // @Router /users/{id} [put]
 func (h *UserHandler) UpdateUser(c *echo.Context) error {
 	idStr := c.Param("id")
@@ -186,16 +186,16 @@ func (h *UserHandler) UpdateUser(c *echo.Context) error {
 
 // @Summary 修改密码
 // @Description 修改用户密码
-// @Tags users
+// @Tags 用户
 // @Accept json
 // @Produce json
-// @Param id path int true "用户ID"
-// @Param request body object{old_password=string,new_password=string} true "修改密码请求"
-// @Success 200 {object} response.Response[any]
-// @Failure 400 {object} response.Response[any]
-// @Failure 401 {object} response.Response[any]
-// @Failure 404 {object} response.Response[any]
 // @Security BearerAuth
+// @Param id path int true "用户ID"
+// @Param request body svc.ChangePasswordRequest true "修改密码请求"
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 401 {object} response.Response
+// @Failure 404 {object} response.Response
 // @Router /users/{id}/password [put]
 func (h *UserHandler) ChangePassword(c *echo.Context) error {
 	idStr := c.Param("id")
@@ -228,13 +228,13 @@ func (h *UserHandler) ChangePassword(c *echo.Context) error {
 
 // @Summary 删除用户
 // @Description 根据ID删除用户
-// @Tags users
+// @Tags 用户
 // @Produce json
-// @Param id path int true "用户ID"
-// @Success 200 {object} response.Response[any]
-// @Failure 400 {object} response.Response[any]
-// @Failure 404 {object} response.Response[any]
 // @Security BearerAuth
+// @Param id path int true "用户ID"
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 404 {object} response.Response
 // @Router /users/{id} [delete]
 func (h *UserHandler) DeleteUser(c *echo.Context) error {
 	idStr := c.Param("id")
@@ -253,6 +253,16 @@ func (h *UserHandler) DeleteUser(c *echo.Context) error {
 	return c.JSON(http.StatusOK, response.Success(map[string]interface{}{"message": "删除成功"}))
 }
 
+// @Summary 刷新Token
+// @Description 使用RefreshToken刷新访问令牌
+// @Tags 用户
+// @Accept json
+// @Produce json
+// @Param request body struct{RefreshToken string `json:"refresh_token"`} true "刷新Token请求"
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 401 {object} response.Response
+// @Router /users/refresh [post]
 func (h *UserHandler) RefreshToken(c *echo.Context) error {
 	var req struct {
 		RefreshToken string `json:"refresh_token"`

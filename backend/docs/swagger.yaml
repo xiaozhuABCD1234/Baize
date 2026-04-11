@@ -4,7 +4,8 @@ definitions:
     properties:
       code:
         type: string
-      details: {}
+      details:
+        type: object
       message:
         type: string
     type: object
@@ -17,9 +18,10 @@ definitions:
       total:
         type: integer
     type: object
-  backend_pkg_response.Response-any:
+  backend_pkg_response.Response:
     properties:
-      data: {}
+      data:
+        type: object
       error:
         $ref: '#/definitions/backend_pkg_response.ErrorField'
       page:
@@ -61,7 +63,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
       security:
       - BearerAuth: []
       summary: 获取用户列表
@@ -82,15 +84,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
       security:
       - BearerAuth: []
       summary: 删除用户
@@ -110,15 +112,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
       security:
       - BearerAuth: []
       summary: 获取用户
@@ -151,19 +153,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
       security:
       - BearerAuth: []
       summary: 更新用户
@@ -197,19 +199,19 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
       security:
       - BearerAuth: []
       summary: 修改密码
@@ -238,15 +240,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
       summary: 用户登录
       tags:
       - users
@@ -273,15 +275,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/backend_pkg_response.Response-any'
+            $ref: '#/definitions/backend_pkg_response.Response'
       summary: 用户注册
       tags:
       - users
