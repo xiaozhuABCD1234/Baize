@@ -29,7 +29,6 @@ import Footer from "@/components/Footer.astro";
 			</div>
 		</div>
 
-		<!-- 👇 社区动态 → 放在页面最底部（Footer上方）-->
 		<div class="mt-16 mb-8">
 			<ActivityFeed />
 		</div>
@@ -108,17 +107,21 @@ import Footer from "@/components/Footer.astro";
 		const isFromExternal = document.referrer && !document.referrer.includes(window.location.host);
 
 		setTimeout(() => {
-			if (isFromExternal || isInternalJump || window.location.hash === '#home') {
-				window.scrollTo(0, 0);
-				expandHero();
-				isInternalJump = false;
-			} else if (savedState) {
-				const { expanded, scrollY } = JSON.parse(savedState);
-				window.scrollTo(0, scrollY);
-				expanded ? expandHero() : collapseHero();
-			} else {
-				collapseHero();
-			}
+			// 👇 核心修改：默认直接展开，不再默认收起
+			window.scrollTo(0, 0);
+			expandHero();
+			isInternalJump = false;
+
+			// 如果你想保留记住上次滚动状态，把上面注释，打开下面这段
+			// if (savedState) {
+			// 	const { expanded, scrollY } = JSON.parse(savedState);
+			// 	window.scrollTo(0, scrollY);
+			// 	expanded ? expandHero() : collapseHero();
+			// } else {
+			// 	// 无缓存 → 默认展开
+			// 	window.scrollTo(0, 0);
+			// 	expandHero();
+			// }
 
 			setTimeout(() => {
 				heroContainer.style.transition = 'max-height 0.5s ease-out, background 0.3s ease';

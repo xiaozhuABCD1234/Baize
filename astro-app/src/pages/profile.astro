@@ -1,0 +1,169 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "@/styles/global.css";
+import Header from "@/components/Header.astro";
+import Sidebar from "@/components/Sidebar.astro";
+import ActivityFeed from "@/components/ActivityFeed.astro";
+import Footer from "@/components/Footer.astro";
+---
+
+<Layout>
+	<Header />
+	<Sidebar />
+
+	<aside id="activity-sidebar" class="fixed -right-80 top-[72px] h-[calc(100vh-72px)] w-80 bg-background border-l border-border/50 transition-all duration-300 ease-in-out hover:right-0 z-40">
+		<div class="p-4 h-full overflow-y-auto">
+			<ActivityFeed />
+		</div>
+	</aside>
+
+	<main class="pt-[100px] w-full max-w-[1800px] mx-auto px-4 lg:px-6 relative z-50">
+		<!-- 返回按钮 -->
+		<div class="mb-6 relative z-10">
+			<a href="/#home" class="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-card text-foreground hover:bg-muted border border-border transition-all">
+				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M19 12H5"></path>
+					<path d="M12 19l-7-7 7-7"></path>
+				</svg>
+				<span>返回首页</span>
+			</a>
+		</div>
+
+		<!-- 🔥 个人中心主布局：左侧固定竖栏 + 右侧内容区 -->
+		<section id="个人中心" class="py-5 bg-background min-h-screen">
+			<div class="max-w-9xl px-4 lg:px-6">
+				<div class="flex flex-col lg:flex-row gap-8">
+					<!-- ========== 左侧固定个人简介竖栏（极致左对齐） ========== -->
+					<div class="lg:w-80 w-full sticky top-28 self-start">
+						<!-- 自定义背景卡片：减少内边距，让内容靠左 -->
+						<div class="bg-gradient-to-b from-primary/30 to-background rounded-2xl p-3 lg:p-4 shadow-lg border border-border overflow-hidden relative">
+							<!-- 背景自定义区域 -->
+							<div class="absolute inset-0 opacity-20 bg-[url('https://picsum.photos/id/1060/800/1200')] bg-cover bg-center"></div>
+							
+							<!-- 核心修改：去掉 flex items-center，改为 items-start 并左对齐 -->
+							<div class="relative z-10 flex flex-col items-start w-full">
+								<!-- 头像：手动居中（用 margin 实现，不影响其他内容） -->
+								<div class="w-28 h-28 rounded-full bg-primary/20 flex items-center justify-center border-4 border-background shadow-md mb-4 mx-auto">
+									<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+										<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+										<circle cx="12" cy="7" r="4"></circle>
+									</svg>
+								</div>
+
+								<!-- 昵称 & 身份：左对齐 -->
+								<h2 class="text-xl font-bold font-heading text-foreground mb-1 w-full text-left">苏绣匠人-李婉</h2>
+								<p class="text-sm text-primary font-medium mb-3 w-full text-left">国家级非遗传承人</p>
+
+								<!-- 个人简介：极致左对齐，无任何内边距 -->
+								<p class="text-sm text-muted-foreground mb-5 w-full text-left">
+									专注苏绣技艺传承30年，擅长花鸟、山水题材创作，
+									致力于让传统苏绣走进现代生活。
+								</p>
+
+								<!-- 编辑按钮：宽度100%，左对齐 -->
+								<a href="/profile/edit" class="w-full py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:opacity-90 transition-all text-center mb-6">
+									编辑资料/背景
+								</a>
+
+								<!-- 作品分类统计：左对齐 -->
+								<div class="w-full space-y-3 text-left">
+									<div class="flex justify-between items-center text-sm">
+										<span class="text-muted-foreground">苏绣作品</span>
+										<span class="font-semibold text-foreground">12 件</span>
+									</div>
+									<div class="flex justify-between items-center text-sm">
+										<span class="text-muted-foreground">刺绣教程</span>
+										<span class="font-semibold text-foreground">8 篇</span>
+									</div>
+									<div class="flex justify-between items-center text-sm">
+										<span class="text-muted-foreground">收藏藏品</span>
+										<span class="font-semibold text-foreground">68 件</span>
+									</div>
+									<div class="flex justify-between items-center text-sm">
+										<span class="text-muted-foreground">获赞总数</span>
+										<span class="font-semibold text-foreground">2.3k+</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+										<!-- ========== 右侧内容展示区 ========== -->
+					<div class="flex-1 px-6">
+						<!-- 菜单切换栏 -->
+						<div class="flex gap-4 mb-8 overflow-x-auto pb-2">
+							<button class="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-medium whitespace-nowrap">我的作品</button>
+							<button class="px-5 py-2.5 bg-card hover:bg-muted rounded-lg text-sm font-medium whitespace-nowrap">我的收藏</button>
+							<button class="px-5 py-2.5 bg-card hover:bg-muted rounded-lg text-sm font-medium whitespace-nowrap">我的教程</button>
+							<button class="px-5 py-2.5 bg-card hover:bg-muted rounded-lg text-sm font-medium whitespace-nowrap">账号设置</button>
+						</div>
+
+						<!-- 作品列表（小红书风格） -->
+						<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+							<!-- 作品卡片 1 -->
+							<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+								<div class="h-48 bg-muted/30 bg-[url('https://picsum.photos/id/102/800/800')] bg-cover bg-center"></div>
+								<div class="p-5">
+									<h3 class="text-base font-semibold mb-2 line-clamp-2">苏绣 · 花开富贵图</h3>
+									<p class="text-xs text-muted-foreground mb-3 line-clamp-2">传统苏绣技艺，纯手工制作，耗时3个月完成。</p>
+									<div class="flex items-center justify-between text-xs text-muted-foreground">
+										<span>🎨 苏绣 · 花鸟</span>
+										<span>❤️ 526</span>
+									</div>
+								</div>
+							</div>
+
+							<!-- 作品卡片 2 -->
+							<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+								<div class="h-48 bg-muted/30 bg-[url('https://picsum.photos/id/103/800/800')] bg-cover bg-center"></div>
+								<div class="p-5">
+									<h3 class="text-base font-semibold mb-2 line-clamp-2">苏绣 · 千里江山图</h3>
+									<p class="text-xs text-muted-foreground mb-3 line-clamp-2">非遗复刻作品，采用天然蚕丝线，色彩绚丽。</p>
+									<div class="flex items-center justify-between text-xs text-muted-foreground">
+										<span>🎨 苏绣 · 山水</span>
+										<span>❤️ 789</span>
+									</div>
+								</div>
+							</div>
+
+							<!-- 作品卡片 3 -->
+							<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+								<div class="h-48 bg-muted/30 bg-[url('https://picsum.photos/id/104/800/800')] bg-cover bg-center"></div>
+								<div class="p-5">
+									<h3 class="text-base font-semibold mb-2 line-clamp-2">苏绣 · 十二生肖册</h3>
+									<p class="text-xs text-muted-foreground mb-3 line-clamp-2">民俗主题作品，小巧精致，适合收藏。</p>
+									<div class="flex items-center justify-between text-xs text-muted-foreground">
+										<span>🎨 苏绣 · 民俗</span>
+										<span>❤️ 452</span>
+									</div>
+								</div>
+							</div>
+
+							<!-- 作品卡片 4 -->
+							<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+								<div class="h-48 bg-muted/30 bg-[url('https://picsum.photos/id/105/800/800')] bg-cover bg-center"></div>
+								<div class="p-5">
+									<h3 class="text-base font-semibold mb-2 line-clamp-2">苏绣 · 梅兰竹菊四君子</h3>
+									<p class="text-xs text-muted-foreground mb-3 line-clamp-2">传统文人题材，清雅脱俗，尽显东方美学。</p>
+									<div class="flex items-center justify-between text-xs text-muted-foreground">
+										<span>🎨 苏绣 · 植物</span>
+										<span>❤️ 618</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- 加载更多 -->
+						<div class="mt-12 text-center">
+							<button class="px-6 py-3 bg-card hover:bg-muted border border-border rounded-lg text-sm font-medium transition-all">
+								加载更多作品
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<Footer />
+</Layout>

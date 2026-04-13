@@ -7,11 +7,11 @@
             shadow-lg shadow-[var(--sidebar-border)]/10
             transition-all duration-300 ease-in-out z-999
             left-0 -translate-x-[calc(100%-8px)] hover:translate-x-0
-            rounded-r-md"
+            rounded-r-md overflow-y-auto"
 >
   <div class="p-4 w-full text-[var(--sidebar-foreground)]">
     <nav class="space-y-2">
-      <!-- 首页 -->
+      <!-- 基础导航 -->
       <a
         href="/#home"
         class="sidebar-home flex items-center gap-3 px-3 py-2 rounded-lg
@@ -34,81 +34,142 @@
         </svg>
         首页
       </a>
-      <!-- 推荐 -->
-      <a
-        href="/#recommend"
-        class="flex items-center gap-3 px-3 py-2 rounded-lg
-                            hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-accent-foreground)]
-                            transition-colors duration-200"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+
+      <!-- 核心功能区 -->
+      <div class="mt-4 pt-2 border-t border-[var(--sidebar-border)]/30">
+        <p class="text-xs text-[var(--sidebar-foreground)]/60 px-3 mb-2">核心功能</p>
+        <!-- 非遗作品库（核心） -->
+        <a
+          href="/#works"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg
+                              hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-accent-foreground)]
+                              transition-colors duration-200"
         >
-          <path d="M14.828 14.828a4 4 0 0 1-5.656 0"></path>
-          <path
-            d="M9 10h1.586a1 1 0 0 1 .707.293l.707.707a1 1 0 0 0 1.414-1.414H15a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-1a2 2 0 0 1 2-2Z"
-          ></path>
-          <path d="M16 5V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v1"></path>
-        </svg>
-        推荐
-      </a>
-      <!-- 关注 -->
-      <a
-        href="/#following"
-        class="flex items-center gap-3 px-3 py-2 rounded-lg
-                            hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-accent-foreground)]
-                            transition-colors duration-200"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          作品库
+        </a>
+        <!-- 作品上传（创作者核心入口） -->
+        <a
+          href="/#upload"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg
+                              hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-accent-foreground)]
+                              transition-colors duration-200"
         >
-          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-          <circle cx="9" cy="7" r="4"></circle>
-          <path d="M22 2l-4.5 4.5L15 6"></path>
-        </svg>
-        关注
-      </a>
-      <!-- 分类 -->
-      <a
-        href="/#categories"
-        class="flex items-center gap-3 px-3 py-2 rounded-lg
-                            hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-accent-foreground)]
-                            transition-colors duration-200"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" x2="12" y1="3" y2="15"></line>
+          </svg>
+          上传作品
+        </a>
+      </div>
+
+      <!-- 辅助功能区 -->
+      <div class="mt-4 pt-2 border-t border-[var(--sidebar-border)]/30">
+        <p class="text-xs text-[var(--sidebar-foreground)]/60 px-3 mb-2">辅助工具</p>
+        <!-- 非遗科普 -->
+        <a
+          href="/#science"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg
+                              hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-accent-foreground)]
+                              transition-colors duration-200"
         >
-          <rect width="7" height="7" x="3" y="3" rx="1"></rect>
-          <rect width="7" height="7" x="14" y="3" rx="1"></rect>
-          <rect width="7" height="7" x="14" y="14" rx="1"></rect>
-          <rect width="7" height="7" x="3" y="14" rx="1"></rect>
-        </svg>
-        分类
-      </a>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="m12 2 2 5h5l-4 4 1 5-4-3-4 3 2-5-4-4h5z"></path>
+          </svg>
+          非遗科普
+        </a>
+        <!-- 技艺识别 -->
+        <a
+          href="/#identify"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg
+                              hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-accent-foreground)]
+                              transition-colors duration-200"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12h5"></path>
+            <path d="m17 12 5 0"></path>
+            <path d="M12 2v5"></path>
+            <path d="M12 17v5"></path>
+            <circle cx="12" cy="12" r="5"></circle>
+          </svg>
+          技艺识别
+        </a>
+        <!-- 传承社区 -->
+        <a
+          href="/#community"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg
+                              hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-accent-foreground)]
+                              transition-colors duration-200"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 18a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+            <path d="M7 21v-2a5 5 0 0 1 10 0v2"></path>
+          </svg>
+          传承社区
+        </a>
+      </div>
+
+      <!-- 个人功能区 -->
+      <div class="mt-4 pt-2 border-t border-[var(--sidebar-border)]/30">
+        <p class="text-xs text-[var(--sidebar-foreground)]/60 px-3 mb-2">个人中心</p>
+        <!-- 个人主页 -->
+        <a
+          href="/profile"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg
+                              hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-accent-foreground)]
+                              transition-colors duration-200"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          个人主页
+        </a>
+        <!-- 我的藏品 -->
+        <a
+          href="/#collection"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg
+                              hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-accent-foreground)]
+                              transition-colors duration-200"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          我的藏品
+        </a>
+        <!-- 个人设置 -->
+        <a
+          href="/#settings"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg
+                              hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-accent-foreground)]
+                              transition-colors duration-200"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          设置
+        </a>
+        <!-- 帮助中心 -->
+        <a
+          href="/#help"
+          class="flex items-center gap-3 px-3 py-2 rounded-lg
+                              hover:bg-[var(--sidebar-accent)] hover:text-[var(--sidebar-accent-foreground)]
+                              transition-colors duration-200"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" x2="12.01" y1="17" y2="17"></line>
+          </svg>
+          帮助中心
+        </a>
+      </div>
     </nav>
   </div>
 </aside>
@@ -119,18 +180,10 @@
 
     if (homeLink) {
       homeLink.addEventListener("click", (e) => {
-        // 1. 判断当前是否在首页
         const isOnHomePage = window.location.pathname === "/";
+        if (!isOnHomePage) return;
 
-        if (!isOnHomePage) {
-          // 不在首页 → 正常跳转，让首页自己加载后展开
-          return;
-        }
-
-        // 2. 已经在首页 → 执行展开逻辑
         e.preventDefault();
-
-        // 安全调用全局展开方法
         if (window.expandHeroGlobal) {
           window.scrollTo({ top: 0, behavior: "smooth" });
           setTimeout(() => {
