@@ -83,6 +83,8 @@ func (r *UserRepository) GetByUsername(ctx context.Context, username string) (*m
 }
 
 // List 查询所有用户
+// 注意：Find() 自动过滤已软删除的记录（gorm.Model.DeletedAt）
+// 参考: https://gorm.io/docs/delete.html#Soft-Delete
 func (r *UserRepository) List(ctx context.Context) ([]model.User, error) {
 	return gorm.G[model.User](r.db).
 		Order("created_at desc").
@@ -90,15 +92,15 @@ func (r *UserRepository) List(ctx context.Context) ([]model.User, error) {
 }
 
 // ListWithPagination 分页查询
+// 注意：Find/Count 自动过滤已软删除的记录（gorm.Model.DeletedAt）
+// 参考: https://gorm.io/docs/delete.html#Soft-Delete
 func (r *UserRepository) ListWithPagination(ctx context.Context, page, pageSize int) ([]model.User, int64, error) {
 	var total int64
 
 	// 统计总数
-	err := gorm.G[model.User](r.db).
-		Raw("SELECT COUNT(*) FROM users").
-		Scan(ctx, &total)
-	if err != nil {
-		return nil, 0, err
+	countResult := r.db.Model(&model.User{}).Count(&total)
+	if countResult.Error != nil {
+		return nil, 0, countResult.Error
 	}
 
 	// 分页查询

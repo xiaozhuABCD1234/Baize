@@ -5,6 +5,7 @@ const (
 	UserEmailExists = "USER_002"
 	InvalidPassword = "USER_003"
 	SamePassword    = "USER_004"
+	UserNameExists  = "USER_005"
 
 	TokenInvalid     = "AUTH_001"
 	TokenExpired     = "AUTH_002"

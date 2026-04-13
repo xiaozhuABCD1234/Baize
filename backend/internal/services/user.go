@@ -20,6 +20,7 @@ var (
 	ErrInvalidPassword = errors.New("密码错误")
 	ErrEmailNotChanged = errors.New("新邮箱与当前邮箱相同")
 	ErrSamePassword    = errors.New("新密码不能与旧密码相同")
+	ErrInvalidRole     = errors.New("无效的角色，只能为 admin 或 user")
 )
 
 type UserServiceInterface interface {
@@ -53,7 +54,7 @@ type RegisterRequest struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,min=6,max=32"`
 	Phone    string `json:"phone,omitempty" validate:"omitempty,e164"`
-	Role     string `json:"role,omitempty"` // admin / user，默认 user
+	Role     string `json:"role,omitempty"`
 }
 
 // RegisterResponse 注册响应
@@ -98,7 +99,7 @@ func (s *UserService) Register(ctx context.Context, req RegisterRequest) (*Regis
 		role = "user"
 	}
 	if role != "admin" && role != "user" {
-		role = "user"
+		return nil, ErrInvalidRole
 	}
 
 	// 5. 创建用户
@@ -231,7 +232,6 @@ func (s *UserService) ListUsersWithPagination(ctx context.Context, page, pageSiz
 // UpdateUserRequest 更新用户请求
 type UpdateUserRequest struct {
 	ID    uint   `json:"id" validate:"required"`
-	Name  string `json:"name,omitempty"`
 	Email string `json:"email,omitempty" validate:"omitempty,email"`
 }
 
@@ -258,13 +258,7 @@ func (s *UserService) UpdateUser(ctx context.Context, req UpdateUserRequest) err
 		existing.Email = req.Email
 	}
 
-	// 3. 更新其他字段
-	if req.Name != "" {
-		// 如果有 Name 字段才更新
-		// existing.Name = req.Name
-	}
-
-	// 4. 执行更新
+	// 3. 执行更新
 	if err := s.repo.Update(ctx, existing); err != nil {
 		return fmt.Errorf("更新用户失败: %w", err)
 	}

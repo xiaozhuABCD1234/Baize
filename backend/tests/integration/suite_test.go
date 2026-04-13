@@ -75,6 +75,7 @@ func (s *IntegrationSuite) TearDownSuite() {
 
 func (s *IntegrationSuite) CreateUserAndLogin(email, password string) (*models.User, string) {
 	registerReq := svc.RegisterRequest{
+		Username: email,
 		Email:    email,
 		Password: password,
 	}
