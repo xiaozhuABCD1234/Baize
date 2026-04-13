@@ -2,6 +2,7 @@
 import Logo from "./Logo.astro";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import SidebarMobile from "./SidebarMobile.astro";
 ---
 
 <header class="fixed top-0 z-60 w-full bg-background/80 backdrop-blur-md">
@@ -10,53 +11,90 @@ import { Input } from "@/components/ui/input";
       <Logo />
     </a>
 
+    <!-- 电脑端导航 -->
     <nav class="hidden md:flex items-center gap-8">
-      <a href="#传承" class="text-lg font-medium text-foreground/80 hover:text-primary transition-colors">传承</a>
-      <a href="#记录" class="text-lg font-medium text-foreground/80 hover:text-primary transition-colors">记录</a>
-      <a href="#连接" class="text-lg font-medium text-foreground/80 hover:text-primary transition-colors">连接</a>
+      <a href="/#home" class="text-lg font-medium text-foreground/80 hover:text-primary transition-colors">首页</a>
+      <a href="/knowledge" class="text-lg font-medium text-foreground/80 hover:text-primary transition-colors">科普</a>
+      <a href="/community" class="text-lg font-medium text-foreground/80 hover:text-primary transition-colors">社区动态</a>
     </nav>
 
     <div class="flex items-center gap-4">
-      <button 
-        class="flex h-11 w-11 items-center justify-center rounded-full hover:bg-muted transition-colors md:hidden"
-        aria-label="搜索"
-      >
+      <!-- 手机搜索按钮 -->
+      <button class="flex h-11 w-11 items-center justify-center rounded-full hover:bg-muted transition-colors md:hidden" aria-label="搜索">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"/>
-          <path d="m21 21-4.3-4.3"/>
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
         </svg>
       </button>
       
+      <!-- 电脑端搜索+登录注册 -->
       <div class="hidden md:flex items-center gap-3">
         <div class="relative">
-          <Input 
-            type="search" 
-            placeholder="搜索非遗..." 
-            className="w-[200px] lg:w-[280px] h-11 pl-10"
-          />
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-            <circle cx="11" cy="11" r="8"/>
-            <path d="m21 21-4.3-4.3"/>
+          <Input type="search" placeholder="搜索非遗..." className="w-[200px] lg:w-[280px] h-11 pl-10" />
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-[14px] text-muted-foreground">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
           </svg>
         </div>
-        <a href="/Layout" class="hidden md:inline-flex">
-          <Button variant="outline" size="lg" className="h-11 px-5 text-base">登录</Button>
-        </a>
-        <a href="/register" class="hidden md:inline-flex">
-        <Button size="lg" className="h-11 px-5 text-base">注册</Button>
-        </a>
+        <a href="/login"><Button variant="outline" size="lg" className="h-11 px-5 text-base">登录</Button></a>
+        <a href="/register"><Button size="lg" className="h-11 px-5 text-base">注册</Button></a>
       </div>
 
+      <!-- 手机菜单按钮 -->
       <button 
-        class="flex h-11 w-11 items-center justify-center rounded-full hover:bg-muted transition-colors md:hidden"
+        id="menuBtn"
+        class="flex h-11 w-11 items-center justify-center rounded-full transition-colors md:hidden" 
         aria-label="菜单"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="4" x2="20" y1="12" y2="12"/>
-          <line x1="4" x2="20" y1="6" y2="6"/>
-          <line x1="4" x2="20" y1="18" y2="18"/>
+          <line x1="4" x2="20" y1="12" y2="12"></line>
+          <line x1="4" x2="20" y1="6" y2="6"></line>
+          <line x1="4" x2="20" y1="18" y2="18"></line>
         </svg>
       </button>
     </div>
   </div>
 </header>
+
+<!-- 引入你的独立侧边栏文件 -->
+<SidebarMobile />
+
+<script is:inline>
+document.addEventListener("DOMContentLoaded", () => {
+  // 统一修复所有 首页 点击逻辑（顶部 + 侧边栏）
+  const homeLinks = document.querySelectorAll('a[href="/#home"]');
+  homeLinks.forEach(link => {
+    link.addEventListener("click", (e) => {
+      if (window.location.pathname === "/") {
+        e.preventDefault();
+        window.scrollTo({ top: 0 });
+        setTimeout(() => window.expandHeroGlobal?.(), 100);
+      }
+    });
+  });
+
+  // 移动端菜单逻辑（只在手机生效，不影响电脑端）
+  const menuBtn = document.getElementById("menuBtn");
+  const sidebar = document.getElementById("sidebar-mobile");
+
+  if (menuBtn && sidebar) {
+    // 打开/关闭菜单
+    menuBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      sidebar.classList.toggle("translate-x-full");
+    });
+
+    // 点击侧边栏不关闭
+    sidebar.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
+
+    // 点击空白关闭 → 只在移动端生效，不影响电脑端链接
+    document.addEventListener("click", (e) => {
+      if (window.innerWidth < 768) {
+        sidebar.classList.add("translate-x-full");
+      }
+    });
+  }
+});
+</script>

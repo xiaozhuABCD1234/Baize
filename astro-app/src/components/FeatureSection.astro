@@ -2,22 +2,22 @@
 import FeatureCard from "./FeatureCard.astro";
 ---
 
-<section id="核心功能" class="py-8 md:py-16 bg-background">
+<section id="核心功能" class="pt-10 pb-20 md:pt-24 md:pb-58 bg-background">
   <div class="mx-auto max-w-7xl px-6 lg:px-12">
-    <div class="text-center mb-12">
-      <h2 class="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-4">核心功能</h2>
-      <p class="text-lg text-muted-foreground max-w-2xl mx-auto">为非遗传承人、爱好者和文化探索者打造的三大核心入口</p>
+    <div class="text-center mb-10 md:mb-16">
+      <h2 class="font-heading text-3xl md:text-5xl font-semibold text-foreground mb-4">核心功能</h2>
+      <p class="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">为非遗传承人、爱好者和文化探索者打造的三大核心入口</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+    <!-- 🔥 手机 2 列，平板 3列，高度自动匹配 -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
       <FeatureCard 
         title="作品上传保存"
         description="上传您的非遗作品图片和视频，永久保存珍贵技艺记录，支持高清原图存储"
         icon="upload"
-        href="/upload"  
+        href="/upload"
       />
       
-      <!-- 🔥 这里改成跳转到页面 /knowledge -->
       <FeatureCard 
         title="非遗知识科普"
         description="系统整理的传统技艺知识库，从历史渊源到制作流程，深入浅出了解非遗文化"
