@@ -1,0 +1,21 @@
+app:
+  port: "1323"
+  env: "development"
+
+database:
+  host: "localhost"
+  port: "5432"
+  name: "baize_db"
+  user: "postgres"
+  password: ""
+  sslmode: "disable"
+  timezone: "Asia/Shanghai"
+
+jwt:
+  secret_key: "default_secret_change_in_production"
+  access_expires: 900
+  refresh_expires: 604800
+
+log:
+  level: "info"
+  file: "log/server.log"
