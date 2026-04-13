@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v5"
 )
 
-func SetupRouter(e *echo.Echo,userHandler *handlers.UserHandler) {
+func SetupRouter(e *echo.Echo, userHandler *handlers.UserHandler) {
 	api := e.Group("/api/v1")
 
 	users := api.Group("/users")

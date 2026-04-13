@@ -50,6 +50,9 @@ func (h *UserHandler) Register(c *echo.Context) error {
 
 	resp, err := h.svc.Register(c.Request().Context(), req)
 	if err != nil {
+		if errors.Is(err, svc.ErrUsernameExists) {
+			return c.JSON(http.StatusConflict, response.Fail(response.UserEmailExists, "用户名已被使用"))
+		}
 		if errors.Is(err, svc.ErrEmailExists) {
 			return c.JSON(http.StatusConflict, response.Fail(response.UserEmailExists, "邮箱已被注册"))
 		}

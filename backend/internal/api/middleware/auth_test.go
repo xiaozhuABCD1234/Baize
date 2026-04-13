@@ -13,7 +13,7 @@ import (
 func TestJWTAuth_Success(t *testing.T) {
 	e := echo.New()
 
-	token, err := utils.GenerateAccessToken(1, "test@example.com")
+	token, err := utils.GenerateAccessToken(1, "test@example.com", "user")
 	if err != nil {
 		t.Fatalf("Failed to generate token: %v", err)
 	}
@@ -139,7 +139,7 @@ func TestJWTAuth_InvalidToken(t *testing.T) {
 func TestJWTAuth_ExpiredToken(t *testing.T) {
 	e := echo.New()
 
-	refreshToken, err := utils.GenerateRefreshToken(1, "test@example.com")
+	refreshToken, err := utils.GenerateRefreshToken(1, "test@example.com", "user")
 	if err != nil {
 		t.Fatalf("Failed to generate refresh token: %v", err)
 	}
@@ -166,7 +166,7 @@ func TestJWTAuth_ExpiredToken(t *testing.T) {
 func TestJWTAuth_RefreshTokenInsteadofAccessToken(t *testing.T) {
 	e := echo.New()
 
-	refreshToken, err := utils.GenerateRefreshToken(1, "test@example.com")
+	refreshToken, err := utils.GenerateRefreshToken(1, "test@example.com", "user")
 	if err != nil {
 		t.Fatalf("Failed to generate refresh token: %v", err)
 	}
@@ -215,7 +215,7 @@ func TestJWTAuth_EmptyToken(t *testing.T) {
 func TestJWTAuth_CaseInsensitiveBearer(t *testing.T) {
 	e := echo.New()
 
-	token, err := utils.GenerateAccessToken(1, "test@example.com")
+	token, err := utils.GenerateAccessToken(1, "test@example.com", "user")
 	if err != nil {
 		t.Fatalf("Failed to generate token: %v", err)
 	}

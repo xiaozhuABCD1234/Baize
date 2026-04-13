@@ -15,6 +15,7 @@ import (
 // 定义业务错误
 var (
 	ErrEmailExists     = errors.New("邮箱已被注册")
+	ErrUsernameExists  = errors.New("用户名已被使用")
 	ErrUserNotFound    = errors.New("用户不存在")
 	ErrInvalidPassword = errors.New("密码错误")
 	ErrEmailNotChanged = errors.New("新邮箱与当前邮箱相同")
@@ -48,21 +49,36 @@ func NewUserService(repo repository.UserRepositoryInterface) *UserService {
 
 // RegisterRequest 注册请求
 type RegisterRequest struct {
+	Username string `json:"username" validate:"required,min=3,max=50"`
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,min=6,max=32"`
+	Phone    string `json:"phone,omitempty" validate:"omitempty,e164"`
+	Role     string `json:"role,omitempty"` // admin / user，默认 user
 }
 
 // RegisterResponse 注册响应
 type RegisterResponse struct {
 	ID        uint   `json:"id"`
+	Username  string `json:"username"`
 	Email     string `json:"email"`
+	Phone     string `json:"phone"`
+	Role      string `json:"role"`
 	CreatedAt string `json:"created_at"`
 }
 
 // Register 用户注册
 func (s *UserService) Register(ctx context.Context, req RegisterRequest) (*RegisterResponse, error) {
-	// 1. 检查邮箱是否已存在
-	existingUser, err := s.repo.GetByEmail(ctx, req.Email)
+	// 1. 检查用户名是否已存在
+	existingUser, err := s.repo.GetByUsername(ctx, req.Username)
+	if err != nil {
+		return nil, fmt.Errorf("查询用户失败: %w", err)
+	}
+	if existingUser != nil {
+		return nil, ErrUsernameExists
+	}
+
+	// 2. 检查邮箱是否已存在
+	existingUser, err = s.repo.GetByEmail(ctx, req.Email)
 	if err != nil {
 		return nil, fmt.Errorf("查询用户失败: %w", err)
 	}
@@ -70,16 +86,28 @@ func (s *UserService) Register(ctx context.Context, req RegisterRequest) (*Regis
 		return nil, ErrEmailExists
 	}
 
-	// 2. 密码哈希
+	// 3. 密码哈希
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, fmt.Errorf("密码加密失败: %w", err)
 	}
 
-	// 3. 创建用户
+	// 4. 确定角色
+	role := req.Role
+	if role == "" {
+		role = "user"
+	}
+	if role != "admin" && role != "user" {
+		role = "user"
+	}
+
+	// 5. 创建用户
 	user := &models.User{
+		Username: req.Username,
 		Email:    req.Email,
 		Password: string(hashedPassword),
+		Phone:    req.Phone,
+		Role:     role,
 	}
 
 	if err := s.repo.Create(ctx, user); err != nil {
@@ -88,7 +116,10 @@ func (s *UserService) Register(ctx context.Context, req RegisterRequest) (*Regis
 
 	return &RegisterResponse{
 		ID:        user.ID,
+		Username:  user.Username,
 		Email:     user.Email,
+		Phone:     user.Phone,
+		Role:      user.Role,
 		CreatedAt: user.CreatedAt.Format("2006-01-02 15:04:05"),
 	}, nil
 }
@@ -101,9 +132,11 @@ type LoginRequest struct {
 
 // LoginResponse 登录响应
 type LoginResponse struct {
-	ID    uint   `json:"id"`
-	Email string `json:"email"`
-	Token string `json:"token"`
+	ID       uint   `json:"id"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Role     string `json:"role"`
+	Token    string `json:"token"`
 }
 
 // Login 用户登录
@@ -123,15 +156,17 @@ func (s *UserService) Login(ctx context.Context, req LoginRequest) (*LoginRespon
 	}
 
 	// 3. 生成 JWT Token
-	tokenPair, err := utils.GenerateTokenPair(user.ID, user.Email)
+	tokenPair, err := utils.GenerateTokenPair(user.ID, user.Email, user.Role)
 	if err != nil {
 		return nil, fmt.Errorf("生成Token失败: %w", err)
 	}
 
 	return &LoginResponse{
-		ID:    user.ID,
-		Email: user.Email,
-		Token: tokenPair.AccessToken,
+		ID:       user.ID,
+		Username: user.Username,
+		Email:    user.Email,
+		Role:     user.Role,
+		Token:    tokenPair.AccessToken,
 	}, nil
 }
 

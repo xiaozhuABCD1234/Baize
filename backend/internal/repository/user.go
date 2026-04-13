@@ -13,6 +13,7 @@ type UserRepositoryInterface interface {
 	Create(ctx context.Context, user *model.User) error
 	GetByID(ctx context.Context, id uint) (*model.User, error)
 	GetByEmail(ctx context.Context, email string) (*model.User, error)
+	GetByUsername(ctx context.Context, username string) (*model.User, error)
 	List(ctx context.Context) ([]model.User, error)
 	ListWithPagination(ctx context.Context, page, pageSize int) ([]model.User, int64, error)
 	Update(ctx context.Context, user *model.User) error
@@ -57,6 +58,20 @@ func (r *UserRepository) GetByID(ctx context.Context, id uint) (*model.User, err
 func (r *UserRepository) GetByEmail(ctx context.Context, email string) (*model.User, error) {
 	user, err := gorm.G[model.User](r.db).
 		Where("email = ?", email).
+		First(ctx)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &user, nil
+}
+
+// GetByUsername 根据用户名查询用户
+func (r *UserRepository) GetByUsername(ctx context.Context, username string) (*model.User, error) {
+	user, err := gorm.G[model.User](r.db).
+		Where("username = ?", username).
 		First(ctx)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

@@ -16,6 +16,7 @@ const (
 type Claims struct {
 	UserID uint      `json:"user_id"`
 	Email  string    `json:"email"`
+	Role   string    `json:"role"`
 	Type   TokenType `json:"type"`
 	jwt.RegisteredClaims
 }
@@ -26,11 +27,12 @@ type TokenPair struct {
 	ExpiresIn    int64  `json:"expires_in"`
 }
 
-func GenerateAccessToken(userID uint, email string) (string, error) {
+func GenerateAccessToken(userID uint, email string, role string) (string, error) {
 	expiresIn := GetEnvInt("JWT_ACCESS_EXPIRES", 15*60)
 	claims := Claims{
 		UserID: userID,
 		Email:  email,
+		Role:   role,
 		Type:   AccessToken,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(expiresIn) * time.Second)),
@@ -41,11 +43,12 @@ func GenerateAccessToken(userID uint, email string) (string, error) {
 	return token.SignedString([]byte(GetEnv("JWT_SECRET_KEY", "default_secret")))
 }
 
-func GenerateRefreshToken(userID uint, email string) (string, error) {
+func GenerateRefreshToken(userID uint, email string, role string) (string, error) {
 	expiresIn := GetEnvInt("JWT_REFRESH_EXPIRES", 7*24*60*60)
 	claims := Claims{
 		UserID: userID,
 		Email:  email,
+		Role:   role,
 		Type:   RefreshToken,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(expiresIn) * time.Second)),
@@ -56,12 +59,12 @@ func GenerateRefreshToken(userID uint, email string) (string, error) {
 	return token.SignedString([]byte(GetEnv("JWT_SECRET_KEY", "default_secret")))
 }
 
-func GenerateTokenPair(userID uint, email string) (*TokenPair, error) {
-	accessToken, err := GenerateAccessToken(userID, email)
+func GenerateTokenPair(userID uint, email string, role string) (*TokenPair, error) {
+	accessToken, err := GenerateAccessToken(userID, email, role)
 	if err != nil {
 		return nil, err
 	}
-	refreshToken, err := GenerateRefreshToken(userID, email)
+	refreshToken, err := GenerateRefreshToken(userID, email, role)
 	if err != nil {
 		return nil, err
 	}
@@ -94,5 +97,5 @@ func RefreshAccessToken(refreshTokenString string) (*TokenPair, error) {
 	if claims.Type != RefreshToken {
 		return nil, jwt.ErrSignatureInvalid
 	}
-	return GenerateTokenPair(claims.UserID, claims.Email)
+	return GenerateTokenPair(claims.UserID, claims.Email, claims.Role)
 }

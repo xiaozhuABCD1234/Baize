@@ -12,24 +12,27 @@ import (
 )
 
 type mockUserRepository struct {
-	users          map[uint]*models.User
-	usersByEmail   map[string]*models.User
-	createErr      error
-	getByIDErr     error
-	getByEmailErr  error
-	listErr        error
-	listPagErr     error
-	updateErr      error
-	updatePassErr  error
-	updateEmailErr error
-	deleteErr      error
-	forceDeleteErr error
+	users            map[uint]*models.User
+	usersByEmail     map[string]*models.User
+	usersByUsername  map[string]*models.User
+	createErr        error
+	getByIDErr       error
+	getByEmailErr    error
+	getByUsernameErr error
+	listErr          error
+	listPagErr       error
+	updateErr        error
+	updatePassErr    error
+	updateEmailErr   error
+	deleteErr        error
+	forceDeleteErr   error
 }
 
 func newMockUserRepository() *mockUserRepository {
 	return &mockUserRepository{
-		users:        make(map[uint]*models.User),
-		usersByEmail: make(map[string]*models.User),
+		users:           make(map[uint]*models.User),
+		usersByEmail:    make(map[string]*models.User),
+		usersByUsername: make(map[string]*models.User),
 	}
 }
 
@@ -56,6 +59,9 @@ func (m *mockUserRepository) Create(ctx context.Context, user *models.User) erro
 	}
 	m.users[user.ID] = user
 	m.usersByEmail[user.Email] = user
+	if user.Username != "" {
+		m.usersByUsername[user.Username] = user
+	}
 	return nil
 }
 
@@ -74,6 +80,16 @@ func (m *mockUserRepository) GetByEmail(ctx context.Context, email string) (*mod
 		return nil, m.getByEmailErr
 	}
 	if user, ok := m.usersByEmail[email]; ok {
+		return user, nil
+	}
+	return nil, nil
+}
+
+func (m *mockUserRepository) GetByUsername(ctx context.Context, username string) (*models.User, error) {
+	if m.getByUsernameErr != nil {
+		return nil, m.getByUsernameErr
+	}
+	if user, ok := m.usersByUsername[username]; ok {
 		return user, nil
 	}
 	return nil, nil
@@ -160,8 +176,10 @@ func (m *mockUserRepository) ForceDelete(ctx context.Context, id uint) error {
 		return repository.ErrUserNotFound
 	}
 	email := m.users[id].Email
+	username := m.users[id].Username
 	delete(m.users, id)
 	delete(m.usersByEmail, email)
+	delete(m.usersByUsername, username)
 	return nil
 }
 
@@ -175,6 +193,7 @@ func TestUserService_Register(t *testing.T) {
 		{
 			name: "success",
 			req: RegisterRequest{
+				Username: "testuser",
 				Email:    "test@example.com",
 				Password: "password123",
 			},
@@ -184,20 +203,39 @@ func TestUserService_Register(t *testing.T) {
 		{
 			name: "email exists",
 			req: RegisterRequest{
+				Username: "testuser",
 				Email:    "existing@example.com",
 				Password: "password123",
 			},
 			setupMock: func(m *mockUserRepository) {
-				user := &models.User{Email: "existing@example.com", Password: "hash"}
+				user := &models.User{Username: "existing", Email: "existing@example.com", Password: "hash"}
 				user.ID = 1
 				m.users[1] = user
 				m.usersByEmail["existing@example.com"] = user
+				m.usersByUsername["existing"] = user
 			},
 			wantErr: ErrEmailExists,
 		},
 		{
+			name: "username exists",
+			req: RegisterRequest{
+				Username: "existing",
+				Email:    "new@example.com",
+				Password: "password123",
+			},
+			setupMock: func(m *mockUserRepository) {
+				user := &models.User{Username: "existing", Email: "existing@example.com", Password: "hash"}
+				user.ID = 1
+				m.users[1] = user
+				m.usersByEmail["existing@example.com"] = user
+				m.usersByUsername["existing"] = user
+			},
+			wantErr: ErrUsernameExists,
+		},
+		{
 			name: "create error",
 			req: RegisterRequest{
+				Username: "testuser",
 				Email:    "test@example.com",
 				Password: "password123",
 			},

@@ -17,8 +17,9 @@ func TestMain(m *testing.M) {
 func TestGenerateAccessToken(t *testing.T) {
 	userID := uint(1)
 	email := "test@example.com"
+	role := "user"
 
-	token, err := GenerateAccessToken(userID, email)
+	token, err := GenerateAccessToken(userID, email, role)
 	if err != nil {
 		t.Fatalf("GenerateAccessToken failed: %v", err)
 	}
@@ -38,6 +39,9 @@ func TestGenerateAccessToken(t *testing.T) {
 	if claims.Email != email {
 		t.Errorf("Email mismatch: got %s, want %s", claims.Email, email)
 	}
+	if claims.Role != role {
+		t.Errorf("Role mismatch: got %s, want %s", claims.Role, role)
+	}
 	if claims.Type != AccessToken {
 		t.Errorf("TokenType mismatch: got %s, want %s", claims.Type, AccessToken)
 	}
@@ -46,8 +50,9 @@ func TestGenerateAccessToken(t *testing.T) {
 func TestGenerateRefreshToken(t *testing.T) {
 	userID := uint(1)
 	email := "test@example.com"
+	role := "user"
 
-	token, err := GenerateRefreshToken(userID, email)
+	token, err := GenerateRefreshToken(userID, email, role)
 	if err != nil {
 		t.Fatalf("GenerateRefreshToken failed: %v", err)
 	}
@@ -75,8 +80,9 @@ func TestGenerateRefreshToken(t *testing.T) {
 func TestGenerateTokenPair(t *testing.T) {
 	userID := uint(1)
 	email := "test@example.com"
+	role := "user"
 
-	pair, err := GenerateTokenPair(userID, email)
+	pair, err := GenerateTokenPair(userID, email, role)
 	if err != nil {
 		t.Fatalf("GenerateTokenPair failed: %v", err)
 	}
@@ -111,8 +117,9 @@ func TestGenerateTokenPair(t *testing.T) {
 func TestValidateToken_ValidToken(t *testing.T) {
 	userID := uint(123)
 	email := "valid@example.com"
+	role := "user"
 
-	token, _ := GenerateAccessToken(userID, email)
+	token, _ := GenerateAccessToken(userID, email, role)
 
 	claims, err := ValidateToken(token)
 	if err != nil {
@@ -136,7 +143,7 @@ func TestValidateToken_InvalidToken(t *testing.T) {
 
 func TestValidateToken_WrongSecret(t *testing.T) {
 	os.Setenv("JWT_SECRET_KEY", "secret_a")
-	token, _ := GenerateAccessToken(1, "a@test.com")
+	token, _ := GenerateAccessToken(1, "a@test.com", "user")
 	os.Setenv("JWT_SECRET_KEY", "secret_b")
 
 	_, err := ValidateToken(token)
@@ -148,8 +155,9 @@ func TestValidateToken_WrongSecret(t *testing.T) {
 func TestRefreshAccessToken_ValidRefreshToken(t *testing.T) {
 	userID := uint(1)
 	email := "test@example.com"
+	role := "user"
 
-	refreshToken, _ := GenerateRefreshToken(userID, email)
+	refreshToken, _ := GenerateRefreshToken(userID, email, role)
 
 	newPair, err := RefreshAccessToken(refreshToken)
 	if err != nil {
@@ -177,7 +185,7 @@ func TestRefreshAccessToken_InvalidToken(t *testing.T) {
 }
 
 func TestRefreshAccessToken_WrongTokenType(t *testing.T) {
-	accessToken, _ := GenerateAccessToken(1, "test@example.com")
+	accessToken, _ := GenerateAccessToken(1, "test@example.com", "user")
 
 	_, err := RefreshAccessToken(accessToken)
 	if err == nil {
@@ -188,7 +196,7 @@ func TestRefreshAccessToken_WrongTokenType(t *testing.T) {
 func TestRefreshAccessToken_ExpiredRefreshToken(t *testing.T) {
 	os.Setenv("JWT_REFRESH_EXPIRES", "1")
 
-	refreshToken, _ := GenerateRefreshToken(1, "test@example.com")
+	refreshToken, _ := GenerateRefreshToken(1, "test@example.com", "user")
 
 	time.Sleep(2 * time.Second)
 
@@ -201,8 +209,8 @@ func TestRefreshAccessToken_ExpiredRefreshToken(t *testing.T) {
 }
 
 func TestClaims_TokenTypes(t *testing.T) {
-	access, _ := GenerateAccessToken(1, "a@b.com")
-	refresh, _ := GenerateRefreshToken(1, "a@b.com")
+	access, _ := GenerateAccessToken(1, "a@b.com", "user")
+	refresh, _ := GenerateRefreshToken(1, "a@b.com", "user")
 
 	accessClaims, _ := ValidateToken(access)
 	refreshClaims, _ := ValidateToken(refresh)
