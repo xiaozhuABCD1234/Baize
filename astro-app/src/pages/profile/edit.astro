@@ -1,0 +1,138 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import "@/styles/global.css";
+import Header from "@/components/Header.astro";
+import Sidebar from "@/components/Sidebar.astro";
+import ActivityFeed from "@/components/ActivityFeed.astro";
+import Footer from "@/components/Footer.astro";
+---
+
+<Layout>
+	<Header />
+	<Sidebar />
+
+	<aside id="activity-sidebar" class="fixed -right-80 top-[72px] h-[calc(100vh-72px)] w-80 bg-background border-l border-border/50 transition-all duration-300 ease-in-out hover:right-0 z-40">
+		<div class="p-4 h-full overflow-y-auto">
+			<ActivityFeed />
+		</div>
+	</aside>
+
+	<main class="pt-[100px] w-full max-w-[1800px] mx-auto px-4 lg:px-6 relative z-50">
+		<!-- 返回按钮 -->
+		<div class="mb-6 relative z-10">
+			<a href="/profile" class="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-card text-foreground hover:bg-muted border border-border transition-all">
+				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M19 12H5"></path>
+					<path d="M12 19l-7-7 7-7"></path>
+				</svg>
+				<span>返回个人中心</span>
+			</a>
+		</div>
+
+		<!-- 编辑资料页面 -->
+		<section id="编辑资料" class="py-5 bg-background min-h-screen">
+			<div class="max-w-4xl mx-auto">
+				<div class="bg-card rounded-2xl shadow-lg border border-border overflow-hidden">
+					<!-- 背景图片编辑 -->
+					<div class="relative h-48 bg-gradient-to-r from-primary/30 to-background">
+						<div class="absolute inset-0 flex items-center justify-center">
+							<button class="px-4 py-2 bg-black/50 text-white rounded-lg text-sm font-medium hover:bg-black/70 transition-all flex items-center gap-2">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M21.2 7.2a2 2 0 0 0-1.4-1.4L16 8l-4.8-4.8a2 2 0 0 0-2.8 0L4 11a2 2 0 0 0-.6 1.1l1 3a2 2 0 0 0 1.4 1.4l3 1c.3.1.7.2 1.1.2l8-8Z"></path>
+									<path d="m18 15-3-3"></path>
+								</svg>
+								更换背景
+							</button>
+						</div>
+					</div>
+
+					<!-- 个人资料编辑 -->
+					<div class="p-8">
+						<div class="flex flex-col items-center mb-8">
+							<!-- 头像编辑 -->
+							<div class="relative mb-4">
+								<div class="w-32 h-32 rounded-full bg-primary/20 flex items-center justify-center border-4 border-background shadow-md">
+									<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+										<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+										<circle cx="12" cy="7" r="4"></circle>
+									</svg>
+								</div>
+								<button class="absolute bottom-0 right-0 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-md hover:bg-primary/90 transition-all">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M21.2 7.2a2 2 0 0 0-1.4-1.4L16 8l-4.8-4.8a2 2 0 0 0-2.8 0L4 11a2 2 0 0 0-.6 1.1l1 3a2 2 0 0 0 1.4 1.4l3 1c.3.1.7.2 1.1.2l8-8Z"></path>
+										<path d="m18 15-3-3"></path>
+									</svg>
+								</button>
+							</div>
+							<h2 class="text-2xl font-bold font-heading text-foreground mb-2">编辑个人资料</h2>
+							<p class="text-sm text-muted-foreground">完善你的个人信息，让更多人了解你</p>
+						</div>
+
+						<!-- 编辑表单 -->
+						<form class="space-y-6">
+							<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+								<div>
+									<label class="block text-sm font-medium text-foreground mb-2">昵称</label>
+									<input type="text" class="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary" value="苏绣匠人-李婉">
+								</div>
+								<div>
+									<label class="block text-sm font-medium text-foreground mb-2">真实姓名</label>
+									<input type="text" class="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary" value="李婉">
+								</div>
+							</div>
+
+							<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+								<div>
+									<label class="block text-sm font-medium text-foreground mb-2">职业</label>
+									<input type="text" class="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary" value="国家级非遗传承人">
+								</div>
+								<div>
+									<label class="block text-sm font-medium text-foreground mb-2">联系邮箱</label>
+									<input type="email" class="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary" value="liwan@example.com">
+								</div>
+							</div>
+
+							<div>
+								<label class="block text-sm font-medium text-foreground mb-2">个人简介</label>
+								<textarea class="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary" rows="4">专注苏绣技艺传承30年，擅长花鸟、山水题材创作，致力于让传统苏绣走进现代生活。</textarea>
+							</div>
+
+							<div>
+								<label class="block text-sm font-medium text-foreground mb-2">个人名言</label>
+								<input type="text" class="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary" value="传承非遗，匠心独运">
+							</div>
+
+							<div>
+								<label class="block text-sm font-medium text-foreground mb-2">擅长领域</label>
+								<div class="flex flex-wrap gap-2">
+									<span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">苏绣</span>
+									<span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">花鸟</span>
+									<span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">山水</span>
+									<input type="text" placeholder="添加领域" class="px-3 py-1 border border-border rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+								</div>
+							</div>
+
+							<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+								<div>
+									<label class="block text-sm font-medium text-foreground mb-2">所在地区</label>
+									<input type="text" class="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary" value="上海市">
+								</div>
+								<div>
+									<label class="block text-sm font-medium text-foreground mb-2">个人网站</label>
+									<input type="url" class="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary" placeholder="https://">
+								</div>
+							</div>
+
+							<div class="flex justify-end gap-4">
+								<button type="button" class="px-6 py-2 bg-muted hover:bg-muted/80 rounded-lg text-sm font-medium transition-all">取消</button>
+								<button type="button" class="px-6 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:opacity-90 transition-all">保存修改</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<Footer />
+</Layout>

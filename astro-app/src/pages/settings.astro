@@ -1,0 +1,233 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "@/styles/global.css";
+import Header from "@/components/Header.astro";
+import Sidebar from "@/components/Sidebar.astro";
+import ActivityFeed from "@/components/ActivityFeed.astro";
+import Footer from "@/components/Footer.astro";
+---
+
+<Layout>
+	<Header />
+	<Sidebar />
+
+	<aside id="activity-sidebar" class="fixed -right-80 top-[72px] h-[calc(100vh-72px)] w-80 bg-background border-l border-border/50 transition-all duration-300 ease-in-out hover:right-0 z-40">
+		<div class="p-4 h-full overflow-y-auto">
+			<ActivityFeed />
+		</div>
+	</aside>
+
+	<main class="pt-[100px] w-full max-w-[1800px] mx-auto px-4 lg:px-6 relative z-50">
+		<!-- 返回按钮 -->
+		<div class="mb-6 relative z-10">
+			<a href="/profile" class="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-card text-foreground hover:bg-muted border border-border transition-all">
+				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M19 12H5"></path>
+					<path d="M12 19l-7-7 7-7"></path>
+				</svg>
+				<span>返回个人中心</span>
+			</a>
+		</div>
+
+		<!-- 设置页面主布局 -->
+		<section id="设置页面" class="py-5 bg-background min-h-screen">
+			<div class="max-w-9xl px-4 lg:px-6">
+				<div class="flex flex-col lg:flex-row gap-8">
+					<!-- ========== 左侧设置菜单 ========== -->
+					<div class="w-full lg:w-1/4">
+						<div class="sticky top-28">
+							<div class="bg-card rounded-2xl shadow-lg border border-border overflow-hidden">
+								<div class="p-6">
+									<h2 class="text-xl font-bold font-heading text-foreground mb-6">设置菜单</h2>
+									<nav class="space-y-1">
+									<a href="#account" class="flex items-center gap-3 px-4 py-3 rounded-lg text-foreground hover:bg-muted transition-all">
+										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+											<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+										</svg>
+										<span>账号安全</span>
+									</a>
+									<a href="#notification" class="flex items-center gap-3 px-4 py-3 rounded-lg text-foreground hover:bg-muted transition-all">
+										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+											<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+										</svg>
+										<span>通知设置</span>
+									</a>
+									<a href="#privacy" class="flex items-center gap-3 px-4 py-3 rounded-lg text-foreground hover:bg-muted transition-all">
+										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+											<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+										</svg>
+										<span>隐私设置</span>
+									</a>
+									<a href="#other" class="flex items-center gap-3 px-4 py-3 rounded-lg text-foreground hover:bg-muted transition-all">
+										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<circle cx="12" cy="12" r="3"></circle>
+											<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+										</svg>
+										<span>其他设置</span>
+									</a>
+								</nav>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- ========== 右侧设置内容区 ========== -->
+					<div class="w-full lg:w-3/4 px-0 sm:px-6">
+						<!-- 账号安全设置 -->
+						<div id="account" class="bg-card rounded-2xl shadow-lg border border-border p-6 mb-8">
+							<h3 class="text-xl font-bold font-heading text-foreground mb-6">账号安全</h3>
+							<div class="space-y-6">
+								<div class="flex items-center justify-between">
+									<div>
+										<h4 class="font-medium text-foreground">修改密码</h4>
+										<p class="text-sm text-muted-foreground">定期修改密码有助于保护账号安全</p>
+									</div>
+									<button class="px-4 py-2 bg-muted hover:bg-muted/80 rounded-lg text-sm font-medium transition-all">修改</button>
+								</div>
+								<div class="flex items-center justify-between">
+									<div>
+										<h4 class="font-medium text-foreground">两步验证</h4>
+										<p class="text-sm text-muted-foreground">开启两步验证，提高账号安全性</p>
+									</div>
+									<button class="px-4 py-2 bg-muted hover:bg-muted/80 rounded-lg text-sm font-medium transition-all">开启</button>
+								</div>
+							</div>
+						</div>
+
+						<!-- 通知设置 -->
+						<div id="notification" class="bg-card rounded-2xl shadow-lg border border-border p-6 mb-8">
+							<h3 class="text-xl font-bold font-heading text-foreground mb-6">通知设置</h3>
+							<div class="space-y-4">
+								<div class="flex items-center justify-between">
+									<div>
+										<h4 class="font-medium text-foreground">作品评论通知</h4>
+										<p class="text-sm text-muted-foreground">当有人评论你的作品时通知你</p>
+									</div>
+									<label class="relative inline-flex items-center cursor-pointer">
+										<input type="checkbox" class="sr-only peer" checked>
+										<div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+									</label>
+								</div>
+								<div class="flex items-center justify-between">
+									<div>
+										<h4 class="font-medium text-foreground">关注通知</h4>
+										<p class="text-sm text-muted-foreground">当有人关注你时通知你</p>
+									</div>
+									<label class="relative inline-flex items-center cursor-pointer">
+										<input type="checkbox" class="sr-only peer" checked>
+										<div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+									</label>
+								</div>
+								<div class="flex items-center justify-between">
+									<div>
+										<h4 class="font-medium text-foreground">系统通知</h4>
+										<p class="text-sm text-muted-foreground">接收系统重要通知</p>
+									</div>
+									<label class="relative inline-flex items-center cursor-pointer">
+										<input type="checkbox" class="sr-only peer" checked>
+										<div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+									</label>
+								</div>
+								<div class="flex items-center justify-between">
+									<div>
+										<h4 class="font-medium text-foreground">活动通知</h4>
+										<p class="text-sm text-muted-foreground">接收非遗相关活动通知</p>
+									</div>
+									<label class="relative inline-flex items-center cursor-pointer">
+										<input type="checkbox" class="sr-only peer">
+										<div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+									</label>
+								</div>
+							</div>
+						</div>
+
+						<!-- 隐私设置 -->
+						<div id="privacy" class="bg-card rounded-2xl shadow-lg border border-border p-6 mb-8">
+							<h3 class="text-xl font-bold font-heading text-foreground mb-6">隐私设置</h3>
+							<div class="space-y-4">
+								<div class="flex items-center justify-between">
+									<div>
+										<h4 class="font-medium text-foreground">公开个人资料</h4>
+										<p class="text-sm text-muted-foreground">允许其他用户查看你的个人资料</p>
+									</div>
+									<label class="relative inline-flex items-center cursor-pointer">
+										<input type="checkbox" class="sr-only peer" checked>
+										<div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+									</label>
+								</div>
+								<div class="flex items-center justify-between">
+									<div>
+										<h4 class="font-medium text-foreground">允许评论</h4>
+										<p class="text-sm text-muted-foreground">允许其他用户评论你的作品</p>
+									</div>
+									<label class="relative inline-flex items-center cursor-pointer">
+										<input type="checkbox" class="sr-only peer" checked>
+										<div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+									</label>
+								</div>
+								<div class="flex items-center justify-between">
+									<div>
+										<h4 class="font-medium text-foreground">允许私信</h4>
+										<p class="text-sm text-muted-foreground">允许其他用户给你发送私信</p>
+									</div>
+									<label class="relative inline-flex items-center cursor-pointer">
+										<input type="checkbox" class="sr-only peer">
+										<div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+									</label>
+								</div>
+							</div>
+						</div>
+
+						<!-- 其他设置 -->
+						<div id="other" class="bg-card rounded-2xl shadow-lg border border-border p-6">
+							<h3 class="text-xl font-bold font-heading text-foreground mb-6">其他设置</h3>
+							<div class="space-y-6">
+								<div>
+									<label class="block text-sm font-medium text-foreground mb-2">语言</label>
+									<select class="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
+										<option value="zh-CN">简体中文</option>
+										<option value="en-US">English</option>
+									</select>
+								</div>
+								<div>
+									<label class="block text-sm font-medium text-foreground mb-2">主题</label>
+									<select class="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary">
+										<option value="light">浅色模式</option>
+										<option value="dark">深色模式</option>
+										<option value="system">跟随系统</option>
+									</select>
+								</div>
+								<div class="flex items-center justify-between">
+									<div>
+										<h4 class="font-medium text-foreground">清理缓存</h4>
+										<p class="text-sm text-muted-foreground">清理浏览器缓存，提高加载速度</p>
+									</div>
+									<button class="px-4 py-2 bg-muted hover:bg-muted/80 rounded-lg text-sm font-medium transition-all">清理</button>
+								</div>
+								<div class="flex items-center justify-between">
+									<div>
+										<h4 class="font-medium text-foreground">关于我们</h4>
+										<p class="text-sm text-muted-foreground">了解更多关于非遗平台的信息</p>
+									</div>
+									<button class="px-4 py-2 bg-muted hover:bg-muted/80 rounded-lg text-sm font-medium transition-all">查看</button>
+								</div>
+								<div class="flex items-center justify-between">
+									<div>
+										<h4 class="font-medium text-foreground">退出登录</h4>
+										<p class="text-sm text-muted-foreground">退出当前账号</p>
+									</div>
+									<button class="px-4 py-2 bg-red-500 text-white rounded-lg text-sm font-medium hover:opacity-90 transition-all">退出</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<Footer />
+</Layout>

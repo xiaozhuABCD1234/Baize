@@ -2,7 +2,6 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/noto-serif-sc";
-@import "@chinese-fonts/lxgwwenkai/dist/LXGWWenKai-Regular/result.css";
 
 @custom-variant dark (&:is(.dark *));
 

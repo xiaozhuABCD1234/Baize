@@ -10,6 +10,7 @@ export interface KnowledgeItem {
     significance: string;
   };
   inheritors?: {
+    id: string;
     name: string;
     title: string;
     bio: string;
@@ -39,6 +40,7 @@ export async function fetchKnowledgeItems(): Promise<KnowledgeItem[]> {
         },
         inheritors: [
           {
+            id: "p1",
             name: "陈少芳",
             title: "国家级非物质文化遗产代表性传承人",
             bio: "陈少芳，1945年生，上海剪纸代表性传承人，从事剪纸艺术60余年。",
@@ -59,6 +61,7 @@ export async function fetchKnowledgeItems(): Promise<KnowledgeItem[]> {
         },
         inheritors: [
           {
+            id: "p2",
             name: "张灯",
             title: "上海市非物质文化遗产代表性传承人",
             bio: "张灯，1950年生，豫园灯会制作技艺代表性传承人，从事灯彩制作50余年。",
@@ -79,12 +82,14 @@ export async function fetchKnowledgeItems(): Promise<KnowledgeItem[]> {
         },
         inheritors: [
           {
+            id: "p3",
             name: "余红仙",
             title: "国家级非物质文化遗产代表性传承人",
             bio: "余红仙，1939年生，上海评弹代表性传承人，从事评弹艺术70余年。",
             contributions: "她的演唱风格独特，表演功底深厚，为上海评弹的传承和发展做出了重要贡献。"
           },
           {
+            id: "p4",
             name: "秦建国",
             title: "上海市非物质文化遗产代表性传承人",
             bio: "秦建国，1956年生，上海评弹代表性传承人，从事评弹艺术50余年。",
@@ -105,6 +110,7 @@ export async function fetchKnowledgeItems(): Promise<KnowledgeItem[]> {
         },
         inheritors: [
           {
+            id: "p5",
             name: "王阿婆",
             title: "上海市非物质文化遗产代表性传承人",
             bio: "王阿婆，1940年生，龙华庙会传统手工艺代表性传承人，从事传统手工艺品制作60余年。",
@@ -125,6 +131,7 @@ export async function fetchKnowledgeItems(): Promise<KnowledgeItem[]> {
         },
         inheritors: [
           {
+            id: "p6",
             name: "李伯荣",
             title: "国家级非物质文化遗产代表性传承人",
             bio: "李伯荣，1932年生，上海老饭店本帮菜制作技艺代表性传承人，从事烹饪艺术70余年。",
@@ -145,6 +152,7 @@ export async function fetchKnowledgeItems(): Promise<KnowledgeItem[]> {
         },
         inheritors: [
           {
+            id: "p7",
             name: "黄明贤",
             title: "国家级非物质文化遗产代表性传承人",
             bio: "黄明贤，1943年生，南翔小笼制作技艺代表性传承人，从事小笼制作60余年。",
@@ -165,6 +173,7 @@ export async function fetchKnowledgeItems(): Promise<KnowledgeItem[]> {
         },
         inheritors: [
           {
+            id: "p8",
             name: "戴明教",
             title: "国家级非物质文化遗产代表性传承人",
             bio: "戴明教，1932年生，顾绣代表性传承人，从事刺绣艺术70余年。",
@@ -185,12 +194,14 @@ export async function fetchKnowledgeItems(): Promise<KnowledgeItem[]> {
         },
         inheritors: [
           {
+            id: "p9",
             name: "尚长荣",
             title: "国家级非物质文化遗产代表性传承人",
             bio: "尚长荣，1940年生，上海京剧代表性传承人，从事京剧艺术70余年。",
             contributions: "他的表演风格独特，技艺精湛，为上海京剧的传承和发展做出了重要贡献。"
           },
           {
+            id: "p10",
             name: "李炳淑",
             title: "国家级非物质文化遗产代表性传承人",
             bio: "李炳淑，1942年生，上海京剧代表性传承人，从事京剧艺术70余年。",
@@ -211,6 +222,7 @@ export async function fetchKnowledgeItems(): Promise<KnowledgeItem[]> {
         },
         inheritors: [
           {
+            id: "p11",
             name: "陈莲笙",
             title: "上海市非物质文化遗产代表性传承人",
             bio: "陈莲笙，1917年生，上海道教音乐代表性传承人，从事道教音乐80余年。",
@@ -231,6 +243,7 @@ export async function fetchKnowledgeItems(): Promise<KnowledgeItem[]> {
         },
         inheritors: [
           {
+            id: "p12",
             name: "顾希佳",
             title: "上海市非物质文化遗产代表性传承人",
             bio: "顾希佳，1941年生，上海民间故事代表性传承人，从事民间文学研究和整理60余年。",
@@ -251,6 +264,7 @@ export async function fetchKnowledgeItems(): Promise<KnowledgeItem[]> {
         },
         inheritors: [
           {
+            id: "p13",
             name: "张宝庆",
             title: "上海市非物质文化遗产代表性传承人",
             bio: "张宝庆，1945年生，上海传统建筑营造技艺代表性传承人，从事建筑营造60余年。",
@@ -271,12 +285,14 @@ export async function fetchKnowledgeItems(): Promise<KnowledgeItem[]> {
         },
         inheritors: [
           {
+            id: "p14",
             name: "裘沛然",
             title: "国家级非物质文化遗产代表性传承人",
             bio: "裘沛然，1916年生，上海传统中医药代表性传承人，从事中医药临床和研究80余年。",
             contributions: "他在中医药理论和临床实践方面取得了丰硕成果，为上海传统中医药的传承和发展做出了重要贡献。"
           },
           {
+            id: "p15",
             name: "张镜人",
             title: "国家级非物质文化遗产代表性传承人",
             bio: "张镜人，1923年生，上海传统中医药代表性传承人，从事中医药临床和研究70余年。",

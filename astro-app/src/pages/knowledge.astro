@@ -77,7 +77,7 @@ const items = await getKnowledgeItems();
 									<p class="text-sm text-muted-foreground mb-3">{inheritor.title}</p>
 									<p class="text-sm text-muted-foreground mb-3">所属项目：{inheritor.非遗项目}</p>
 									<p class="text-sm text-muted-foreground line-clamp-3 mb-4">{inheritor.bio}</p>
-									<a href={`/knowledge/${inheritor.非遗项目ID}`} class="text-sm text-primary hover:underline">查看详情</a>
+									<a href={`/people/${inheritor.id}`} class="text-sm text-primary hover:underline">查看详情</a>
 								</div>
 							))}
 					</div>

@@ -1,0 +1,161 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import "@/styles/global.css";
+import Header from "@/components/Header.astro";
+import Sidebar from "@/components/Sidebar.astro";
+import ActivityFeed from "@/components/ActivityFeed.astro";
+import Footer from "@/components/Footer.astro";
+import { knowledgeItems, getKnowledgeItems } from "@/data/knowledge";
+
+// 生成人物详情页面的静态路径
+export function getStaticPaths() {
+  const allInheritors = knowledgeItems
+    .filter(item => item.inheritors && item.inheritors.length > 0)
+    .flatMap(item => item.inheritors!);
+  
+  return allInheritors.map(inheritor => ({
+    params: { id: inheritor.id }
+  }));
+}
+
+const { id } = Astro.params;
+// 获取科普数据
+const items = await getKnowledgeItems();
+
+// 查找人物信息
+let person = null;
+let relatedProject = null;
+
+for (const item of items) {
+  if (item.inheritors) {
+    const foundPerson = item.inheritors.find(inheritor => inheritor.id === id);
+    if (foundPerson) {
+      person = foundPerson;
+      relatedProject = item;
+      break;
+    }
+  }
+}
+
+if (!person) {
+  return Astro.redirect("/knowledge");
+}
+---
+
+<Layout>
+	<Header />
+	<Sidebar />
+
+	<aside id="activity-sidebar" class="fixed -right-80 top-[72px] h-[calc(100vh-72px)] w-80 bg-background border-l border-border/50 transition-all duration-300 ease-in-out hover:right-0 z-40">
+		<div class="p-4 h-full overflow-y-auto">
+			<ActivityFeed />
+		</div>
+	</aside>
+
+	<main class="pt-[100px] w-full max-w-[1800px] mx-auto px-4 lg:px-6 relative z-50">
+		<!-- 返回按钮 -->
+		<div class="mb-6 relative z-50">
+			<a href="/knowledge" class="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-card text-foreground hover:bg-muted border border-border transition-all">
+				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M19 12H5"></path>
+					<path d="M12 19l-7-7 7-7"></path>
+				</svg>
+				<span>返回传承人列表</span>
+			</a>
+		</div>
+
+		<!-- 人物详情页面 -->
+		<section id="人物详情" class="py-5 bg-background min-h-screen">
+			<div class="mx-auto max-w-4xl px-6 lg:px-8">
+				<!-- 人物头部信息 -->
+				<div class="bg-card rounded-xl p-8 shadow border border-border mb-8">
+					<div class="flex flex-col md:flex-row items-center gap-8">
+						<!-- 人物头像区域 -->
+						<div class="w-40 h-40 bg-primary/20 flex items-center justify-center rounded-full border-4 border-background shadow-lg">
+							<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+								<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+								<circle cx="12" cy="7" r="4"></circle>
+							</svg>
+						</div>
+
+						<!-- 人物基本信息 -->
+						<div class="text-center md:text-left">
+							<h1 class="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-2">
+								{person.name}
+							</h1>
+							<p class="text-lg text-primary font-medium mb-4">
+								{person.title}
+							</p>
+							{relatedProject && (
+								<p class="text-sm text-muted-foreground mb-4">
+									所属项目：<a href={`/knowledge/${relatedProject.id}`} class="text-primary hover:underline">{relatedProject.title}</a>
+								</p>
+							)}
+						</div>
+					</div>
+				</div>
+
+				<!-- 人物简介 -->
+				<div class="bg-card rounded-xl p-8 shadow border border-border mb-8">
+					<h2 class="text-2xl font-semibold mb-6 text-foreground">人物简介</h2>
+					<p class="text-muted-foreground text-lg leading-relaxed">
+						{person.bio}
+					</p>
+				</div>
+
+				<!-- 主要贡献 -->
+				<div class="bg-card rounded-xl p-8 shadow border border-border mb-8">
+					<h2 class="text-2xl font-semibold mb-6 text-foreground">主要贡献</h2>
+					<p class="text-muted-foreground text-lg leading-relaxed">
+						{person.contributions}
+					</p>
+				</div>
+
+				<!-- 相关项目 -->
+				{relatedProject && (
+					<div class="bg-card rounded-xl p-8 shadow border border-border mb-8">
+						<h2 class="text-2xl font-semibold mb-6 text-foreground">相关非遗项目</h2>
+						<div class="flex flex-col md:flex-row gap-6">
+							<div class="md:w-1/4">
+								<div class="h-32 bg-muted/30 flex items-center justify-center rounded-lg">
+									<div set:html={relatedProject.icon}></div>
+								</div>
+							</div>
+							<div class="md:w-3/4">
+								<h3 class="text-xl font-medium mb-3 text-primary">{relatedProject.title}</h3>
+								<p class="text-muted-foreground mb-4">{relatedProject.description}</p>
+								<a href={`/knowledge/${relatedProject.id}`} class="inline-flex items-center gap-2 text-primary hover:underline">
+									查看项目详情
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="m9 18 6-6-6-6"/>
+									</svg>
+								</a>
+							</div>
+						</div>
+					</div>
+				)}
+
+				<!-- 其他传承人 -->
+				<div class="mt-12">
+					<h3 class="text-xl font-semibold mb-6">其他传承人</h3>
+					<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+						{items
+							.filter(item => item.inheritors && item.inheritors.length > 0)
+							.flatMap(item => item.inheritors!)
+							.filter(inheritor => inheritor.id !== id)
+							.slice(0, 6)
+							.map((inheritor) => (
+								<a href={`/people/${inheritor.id}`} class="block bg-card rounded-lg p-4 shadow hover:shadow-md transition-all border border-border">
+									<h4 class="font-semibold mb-1">{inheritor.name}</h4>
+									<p class="text-sm text-muted-foreground mb-1">{inheritor.title}</p>
+									<p class="text-xs text-muted-foreground line-clamp-2">{inheritor.bio}</p>
+								</a>
+							))}
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<Footer />
+</Layout>
