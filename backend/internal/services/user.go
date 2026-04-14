@@ -39,10 +39,10 @@ type UserServiceInterface interface {
 }
 
 type UserService struct {
-	repo repository.UserRepositoryInterface
+	repo repository.UserRepository
 }
 
-func NewUserService(repo repository.UserRepositoryInterface) *UserService {
+func NewUserService(repo repository.UserRepository) *UserService {
 	return &UserService{repo: repo}
 }
 
@@ -187,7 +187,7 @@ func (s *UserService) GetUserByEmail(ctx context.Context, email string) (*models
 }
 
 func (s *UserService) ListUsers(ctx context.Context) ([]models.User, error) {
-	users, err := s.repo.List(ctx)
+	users, err := s.repo.List(ctx, "created_at desc")
 	if err != nil {
 		return nil, fmt.Errorf("查询用户列表失败: %w", err)
 	}
@@ -205,7 +205,7 @@ func (s *UserService) ListUsersWithPagination(ctx context.Context, page, pageSiz
 		pageSize = 10
 	}
 
-	users, total, err := s.repo.ListWithPagination(ctx, page, pageSize)
+	users, total, err := s.repo.ListWithPagination(ctx, page, pageSize, "created_at desc")
 	if err != nil {
 		return nil, 0, fmt.Errorf("分页查询用户失败: %w", err)
 	}
