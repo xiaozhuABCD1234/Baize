@@ -82,12 +82,12 @@ const articles = [
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
       <div>
         <div class="flex items-center justify-between mb-6">
-          <h3 class="font-heading text-2xl font-semibold text-foreground flex items-center gap-3">
-            <span class="w-1.5 h-8 bg-primary rounded-full"></span>
-            精选作品
-          </h3>
-          <a href="/knowledge" class="text-base text-primary hover:underline font-medium">查看更多 →</a>
-        </div>
+        <h3 class="font-heading text-2xl font-semibold text-foreground flex items-center gap-3">
+          <span class="w-1.5 h-8 bg-primary rounded-full"></span>
+          精选作品
+        </h3>
+        <a href="/community" class="text-base text-primary hover:underline font-medium">查看更多 →</a>
+      </div>
         <div class="grid grid-cols-2 gap-4">
           {works.map(work => (
             <ContentCard type="work" data={work} />
@@ -97,12 +97,12 @@ const articles = [
 
       <div>
         <div class="flex items-center justify-between mb-6">
-          <h3 class="font-heading text-2xl font-semibold text-foreground flex items-center gap-3">
-            <span class="w-1.5 h-8 bg-secondary rounded-full"></span>
-            知识科普
-          </h3>
-          <a href="/knowledge" class="text-base text-secondary hover:underline font-medium">查看更多 →</a>
-        </div>
+        <h3 class="font-heading text-2xl font-semibold text-foreground flex items-center gap-3">
+          <span class="w-1.5 h-8 bg-secondary rounded-full"></span>
+          知识科普
+        </h3>
+        <a href="/community" class="text-base text-secondary hover:underline font-medium">查看更多 →</a>
+      </div>
         <div class="grid grid-cols-2 gap-4">
           {articles.map(article => (
             <ContentCard type="article" data={article} />

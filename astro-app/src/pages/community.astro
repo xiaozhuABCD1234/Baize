@@ -35,22 +35,24 @@ import Footer from "@/components/Footer.astro";
 				
 				<!-- 标题区域 -->
 				<div class="text-center mb-10">
-					<h2 class="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-4">
-						非遗社区动态
-					</h2>
-					<p class="text-lg text-muted-foreground max-w-2xl mx-auto">
-						发现非遗爱好者的分享、技艺展示与文化交流
-					</p>
-				</div>
+				<h2 class="font-heading text-3xl md:text-4xl font-semibold text-foreground mb-4">
+					非遗社区动态
+				</h2>
+				<p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+					发现非遗爱好者的分享、技艺展示与文化交流
+				</p>
+			</div>
 
-				<!-- 顶部筛选栏 -->
-				<div class="flex flex-wrap items-center justify-center gap-3 mb-10">
-					<button data-filter="all" class="filter-btn px-4 py-2 bg-primary text-primary-foreground rounded-full text-sm font-medium">全部动态</button>
-					<button data-filter="official" class="filter-btn px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">官方发布</button>
-					<button data-filter="skill" class="filter-btn px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">技艺展示</button>
-					<button data-filter="culture" class="filter-btn px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">文化分享</button>
-					<button data-filter="inheritor" class="filter-btn px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">传承人动态</button>
-				</div>
+			<!-- 顶部筛选栏 -->
+			<div class="flex flex-wrap items-center justify-center gap-3 mb-10">
+				<button data-filter="all" class="filter-btn px-4 py-2 bg-primary text-primary-foreground rounded-full text-sm font-medium">全部动态</button>
+				<button data-filter="featured" class="filter-btn px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">精选作品</button>
+				<button data-filter="daily" class="filter-btn px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">每日推荐</button>
+				<button data-filter="official" class="filter-btn px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">官方发布</button>
+				<button data-filter="skill" class="filter-btn px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">技艺展示</button>
+				<button data-filter="culture" class="filter-btn px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">文化分享</button>
+				<button data-filter="inheritor" class="filter-btn px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">传承人动态</button>
+			</div>
 
 				<!-- 内容类型筛选 -->
 				<div class="flex flex-wrap items-center justify-center gap-3 mb-10">
@@ -369,83 +371,103 @@ import Footer from "@/components/Footer.astro";
 	<Footer />
 
 	<script>
-		// 筛选功能实现
-		document.addEventListener('DOMContentLoaded', function() {
-			const filterButtons = document.querySelectorAll('.filter-btn');
-			const typeButtons = document.querySelectorAll('.type-btn');
-			const cardItems = document.querySelectorAll('.card-item');
+			// 筛选功能实现
+			document.addEventListener('DOMContentLoaded', function() {
+				const filterButtons = document.querySelectorAll('.filter-btn');
+				const typeButtons = document.querySelectorAll('.type-btn');
+				const cardItems = document.querySelectorAll('.card-item');
 
-			let currentFilter = 'all';
-			let currentType = 'all';
+				let currentFilter = 'all';
+				let currentType = 'all';
 
-			// 筛选卡片函数
-			function filterCards() {
-				cardItems.forEach(card => {
-					const category = card.getAttribute('data-category');
-					const type = card.getAttribute('data-type');
+				// 筛选卡片函数
+				function filterCards() {
+					cardItems.forEach(card => {
+						const category = card.getAttribute('data-category');
+						const type = card.getAttribute('data-type');
 
-					const filterMatch = currentFilter === 'all' || category === currentFilter;
-					const typeMatch = currentType === 'all' || type === currentType;
-
-					if (filterMatch && typeMatch) {
-						if (card instanceof HTMLElement) {
-							card.style.display = 'block';
+						let filterMatch = false;
+						if (currentFilter === 'all') {
+							filterMatch = true;
+						} else if (currentFilter === 'featured') {
+							// 精选作品逻辑：可以根据点赞数等条件筛选
+							const likesText = card.querySelector('.flex.items-center.gap-3 span:first-child');
+							if (likesText) {
+								const likes = parseInt(likesText.textContent.replace('❤️ ', '')) || 0;
+								filterMatch = likes > 500;
+							}
+						} else if (currentFilter === 'daily') {
+							// 每日推荐逻辑：可以根据时间条件筛选
+							const timeText = card.querySelector('.flex.items-center.justify-between span:last-child');
+							if (timeText) {
+								const time = timeText.textContent;
+								filterMatch = time.includes('小时前') || time.includes('昨天');
+							}
+						} else {
+							filterMatch = category === currentFilter;
 						}
-					} else {
-						if (card instanceof HTMLElement) {
-							card.style.display = 'none';
-						}
-					}
-				});
-			}
 
-			// 顶部筛选按钮点击事件
-			filterButtons.forEach(button => {
-				button.addEventListener('click', (event) => {
-					const target = event.currentTarget;
-					// 移除所有按钮的活跃状态
-					filterButtons.forEach((btn) => {
-						if (btn instanceof HTMLElement) {
-							btn.classList.remove('bg-primary', 'text-primary-foreground');
-							btn.classList.add('bg-card', 'hover:bg-muted');
-						}
-					});
+						const typeMatch = currentType === 'all' || type === currentType;
 
-					// 添加当前按钮的活跃状态
-					if (target instanceof HTMLElement) {
-						target.classList.remove('bg-card', 'hover:bg-muted');
-						target.classList.add('bg-primary', 'text-primary-foreground');
-
-						// 更新当前筛选条件
-						currentFilter = target.getAttribute('data-filter') || 'all';
-						filterCards();
-					}
-				});
-			});
-
-			// 内容类型筛选按钮点击事件
-			typeButtons.forEach(button => {
-				button.addEventListener('click', (event) => {
-					const target = event.currentTarget;
-					// 移除所有按钮的活跃状态
-					typeButtons.forEach((btn) => {
-						if (btn instanceof HTMLElement) {
-							btn.classList.remove('bg-primary', 'text-primary-foreground');
-							btn.classList.add('bg-card', 'hover:bg-muted');
+						if (filterMatch && typeMatch) {
+							if (card instanceof HTMLElement) {
+								card.style.display = 'block';
+							}
+						} else {
+							if (card instanceof HTMLElement) {
+								card.style.display = 'none';
+							}
 						}
 					});
+				}
 
-					// 添加当前按钮的活跃状态
-					if (target instanceof HTMLElement) {
-						target.classList.remove('bg-card', 'hover:bg-muted');
-						target.classList.add('bg-primary', 'text-primary-foreground');
+				// 顶部筛选按钮点击事件
+				filterButtons.forEach(button => {
+					button.addEventListener('click', (event) => {
+						const target = event.currentTarget;
+						// 移除所有按钮的活跃状态
+						filterButtons.forEach((btn) => {
+							if (btn instanceof HTMLElement) {
+								btn.classList.remove('bg-primary', 'text-primary-foreground');
+								btn.classList.add('bg-card', 'hover:bg-muted');
+							}
+						});
 
-						// 更新当前筛选条件
-						currentType = target.getAttribute('data-type') || 'all';
-						filterCards();
-					}
+						// 添加当前按钮的活跃状态
+						if (target instanceof HTMLElement) {
+							target.classList.remove('bg-card', 'hover:bg-muted');
+							target.classList.add('bg-primary', 'text-primary-foreground');
+
+							// 更新当前筛选条件
+							currentFilter = target.getAttribute('data-filter') || 'all';
+							filterCards();
+						}
+					});
+				});
+
+				// 内容类型筛选按钮点击事件
+				typeButtons.forEach(button => {
+					button.addEventListener('click', (event) => {
+						const target = event.currentTarget;
+						// 移除所有按钮的活跃状态
+						typeButtons.forEach((btn) => {
+							if (btn instanceof HTMLElement) {
+								btn.classList.remove('bg-primary', 'text-primary-foreground');
+								btn.classList.add('bg-card', 'hover:bg-muted');
+							}
+						});
+
+						// 添加当前按钮的活跃状态
+						if (target instanceof HTMLElement) {
+							target.classList.remove('bg-card', 'hover:bg-muted');
+							target.classList.add('bg-primary', 'text-primary-foreground');
+
+							// 更新当前筛选条件
+							currentType = target.getAttribute('data-type') || 'all';
+							filterCards();
+						}
+					});
 				});
 			});
-		});
-	</script>
+		</script>
 </Layout>
