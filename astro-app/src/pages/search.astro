@@ -1,0 +1,181 @@
+---
+// 搜索结果页面
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Layout>
+  <!-- Header -->
+  <Header />
+
+  <!-- 内容容器 -->
+  <main class="w-full max-w-[1800px] mx-auto px-4 lg:px-6 py-12 mt-[72px]">
+    <!-- 搜索栏 -->
+    <div class="mb-8">
+      <div class="max-w-3xl mx-auto relative">
+        <input 
+          type="search" 
+          placeholder="搜索非遗..." 
+          class="w-full h-12 pl-10 pr-12 rounded-full border border-border focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+          id="search-input"
+        />
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+        <button class="absolute right-3 top-1/2 transform -translate-y-1/2 h-8 w-8 flex items-center justify-center rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m22 2-7 20-4-9-9-4 20-7Z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- 分类标签栏 -->
+    <div class="mb-8">
+      <div class="flex flex-wrap gap-4">
+        <button class="px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-medium">全部</button>
+        <button class="px-4 py-2 rounded-full bg-muted text-muted-foreground text-sm font-medium hover:bg-muted/80 transition-colors">非遗项目</button>
+        <button class="px-4 py-2 rounded-full bg-muted text-muted-foreground text-sm font-medium hover:bg-muted/80 transition-colors">传承人</button>
+        <button class="px-4 py-2 rounded-full bg-muted text-muted-foreground text-sm font-medium hover:bg-muted/80 transition-colors">社区动态</button>
+        <button class="px-4 py-2 rounded-full bg-muted text-muted-foreground text-sm font-medium hover:bg-muted/80 transition-colors">科普知识</button>
+      </div>
+    </div>
+
+    <!-- 内容展示区 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- 搜索结果卡片 1 -->
+      <div class="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+        <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=traditional%20chinese%20paper%20cutting%20art&image_size=square" alt="上海剪纸" class="w-full h-48 object-cover">
+        <div class="p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full">非遗项目</span>
+          </div>
+          <h3 class="text-lg font-semibold mb-2 line-clamp-1">上海剪纸</h3>
+          <p class="text-sm text-muted-foreground mb-3 line-clamp-2">上海剪纸是中国传统民间艺术之一，以其精细的刀法和独特的艺术风格而闻名。</p>
+          <a href="/knowledge/1" class="text-sm text-primary hover:underline">查看详情</a>
+        </div>
+      </div>
+
+      <!-- 搜索结果卡片 2 -->
+      <div class="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+        <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=traditional%20chinese%20opera%20performer&image_size=square" alt="昆曲" class="w-full h-48 object-cover">
+        <div class="p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full">非遗项目</span>
+          </div>
+          <h3 class="text-lg font-semibold mb-2 line-clamp-1">昆曲</h3>
+          <p class="text-sm text-muted-foreground mb-3 line-clamp-2">昆曲是中国最古老的戏曲剧种之一，被列入世界非物质文化遗产名录。</p>
+          <a href="/knowledge/2" class="text-sm text-primary hover:underline">查看详情</a>
+        </div>
+      </div>
+
+      <!-- 搜索结果卡片 3 -->
+      <div class="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+        <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=traditional%20chinese%20musician&image_size=square" alt="评弹" class="w-full h-48 object-cover">
+        <div class="p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full">非遗项目</span>
+          </div>
+          <h3 class="text-lg font-semibold mb-2 line-clamp-1">评弹</h3>
+          <p class="text-sm text-muted-foreground mb-3 line-clamp-2">评弹是苏州地区的传统曲艺形式，以说、噱、弹、唱为主要表现手段。</p>
+          <a href="/knowledge/3" class="text-sm text-primary hover:underline">查看详情</a>
+        </div>
+      </div>
+
+      <!-- 搜索结果卡片 4 -->
+      <div class="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+        <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=traditional%20chinese%20craftsman&image_size=square" alt="张小泉剪刀" class="w-full h-48 object-cover">
+        <div class="p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full">非遗项目</span>
+          </div>
+          <h3 class="text-lg font-semibold mb-2 line-clamp-1">张小泉剪刀</h3>
+          <p class="text-sm text-muted-foreground mb-3 line-clamp-2">张小泉剪刀是中国传统手工剪刀的代表，以其锋利耐用而闻名。</p>
+          <a href="/knowledge/4" class="text-sm text-primary hover:underline">查看详情</a>
+        </div>
+      </div>
+
+      <!-- 搜索结果卡片 5 -->
+      <div class="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+        <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=traditional%20chinese%20painter&image_size=square" alt="顾绣" class="w-full h-48 object-cover">
+        <div class="p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full">非遗项目</span>
+          </div>
+          <h3 class="text-lg font-semibold mb-2 line-clamp-1">顾绣</h3>
+          <p class="text-sm text-muted-foreground mb-3 line-clamp-2">顾绣是上海地区的传统刺绣工艺，以其精细的针法和独特的艺术风格而闻名。</p>
+          <a href="/knowledge/5" class="text-sm text-primary hover:underline">查看详情</a>
+        </div>
+      </div>
+
+      <!-- 搜索结果卡片 6 -->
+      <div class="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+        <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=traditional%20chinese%20festival&image_size=square" alt="豫园灯会" class="w-full h-48 object-cover">
+        <div class="p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs px-2 py-1 bg-primary/10 text-primary rounded-full">非遗项目</span>
+          </div>
+          <h3 class="text-lg font-semibold mb-2 line-clamp-1">豫园灯会</h3>
+          <p class="text-sm text-muted-foreground mb-3 line-clamp-2">豫园灯会是上海地区的传统节日活动，以其精美的灯彩和浓厚的节日氛围而闻名。</p>
+          <a href="/knowledge/6" class="text-sm text-primary hover:underline">查看详情</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分页 -->
+    <div class="mt-12 flex justify-center">
+      <div class="flex items-center gap-2">
+        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-muted/80 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m15 18-6-6 6-6"/>
+          </svg>
+        </button>
+        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-primary text-primary-foreground">1</button>
+        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-muted/80 transition-colors">2</button>
+        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-muted/80 transition-colors">3</button>
+        <button class="w-10 h-10 flex items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-muted/80 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m9 18 6-6-6-6"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  // 搜索功能
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  if (searchInput) {
+    searchInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        // 跳转到搜索结果页面
+        window.location.href = `/search?q=${encodeURIComponent(searchInput.value.trim())}`;
+      }
+    });
+  }
+
+  // 分类标签点击事件
+  const categoryButtons = document.querySelectorAll('.flex.flex-wrap.gap-4 button');
+  categoryButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      const target = e.currentTarget as HTMLElement;
+      // 移除所有按钮的激活状态
+      categoryButtons.forEach(btn => {
+        btn.classList.remove('bg-primary', 'text-primary-foreground');
+        btn.classList.add('bg-muted', 'text-muted-foreground');
+      });
+      
+      // 添加当前按钮的激活状态
+      target.classList.remove('bg-muted', 'text-muted-foreground');
+      target.classList.add('bg-primary', 'text-primary-foreground');
+      
+      // 这里可以添加分类筛选逻辑
+      console.log('分类:', target.textContent?.trim());
+    });
+  });
+</script>

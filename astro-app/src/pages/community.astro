@@ -45,23 +45,23 @@ import Footer from "@/components/Footer.astro";
 
 				<!-- 顶部筛选栏 -->
 				<div class="flex flex-wrap items-center justify-center gap-3 mb-10">
-					<button class="px-4 py-2 bg-primary text-primary-foreground rounded-full text-sm font-medium">全部动态</button>
-					<button class="px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">官方发布</button>
-					<button class="px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">技艺展示</button>
-					<button class="px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">文化分享</button>
-					<button class="px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">传承人动态</button>
+					<button data-filter="all" class="filter-btn px-4 py-2 bg-primary text-primary-foreground rounded-full text-sm font-medium">全部动态</button>
+					<button data-filter="official" class="filter-btn px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">官方发布</button>
+					<button data-filter="skill" class="filter-btn px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">技艺展示</button>
+					<button data-filter="culture" class="filter-btn px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">文化分享</button>
+					<button data-filter="inheritor" class="filter-btn px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">传承人动态</button>
 				</div>
 
 				<!-- 内容类型筛选 -->
 				<div class="flex flex-wrap items-center justify-center gap-3 mb-10">
-					<button class="flex items-center gap-2 px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">
+					<button data-type="all" class="type-btn px-4 py-2 bg-primary text-primary-foreground rounded-full text-sm font-medium flex items-center gap-2">
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 							<rect width="18" height="14" x="3" y="4" rx="2"></rect>
 							<line x1="3" x2="21" y1="9" y2="9"></line>
 						</svg>
 						全部类型
 					</button>
-					<button class="flex items-center gap-2 px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">
+					<button data-type="report" class="type-btn px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium flex items-center gap-2">
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 							<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
 							<polyline points="14 2 14 8 20 8"></polyline>
@@ -71,7 +71,7 @@ import Footer from "@/components/Footer.astro";
 						</svg>
 						报道
 					</button>
-					<button class="flex items-center gap-2 px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">
+					<button data-type="image" class="type-btn px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium flex items-center gap-2">
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 							<rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
 							<circle cx="8.5" cy="8.5" r="1.5"></circle>
@@ -79,7 +79,7 @@ import Footer from "@/components/Footer.astro";
 						</svg>
 						图文
 					</button>
-					<button class="flex items-center gap-2 px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium">
+					<button data-type="video" class="type-btn px-4 py-2 bg-card hover:bg-muted rounded-full text-sm font-medium flex items-center gap-2">
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 							<polygon points="23 7 16 12 23 17 23 7"></polygon>
 							<rect width="15" height="15" x="1" y="5" rx="2" ry="2"></rect>
@@ -94,45 +94,47 @@ import Footer from "@/components/Footer.astro";
 					<!-- ====================== -->
 					<!-- 卡片 1 · 官方账号 -->
 					<!-- ====================== -->
-					<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
-						<!-- 封面 -->
-						<div class="h-52 bg-muted/30 relative">
-							<div class="absolute top-2 left-2 bg-primary/90 text-white text-xs font-bold px-2 py-1 rounded-md">官方</div>
-							<div class="absolute top-2 right-2 bg-purple-500/90 text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1">
-								<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<polygon points="23 7 16 12 23 17 23 7"></polygon>
-									<rect width="15" height="15" x="1" y="5" rx="2" ry="2"></rect>
-								</svg>
-								视频
-							</div>
-						</div>
-						<!-- 内容 -->
-						<div class="p-4">
-							<div class="flex items-center gap-2 mb-3">
-								<div class="w-8 h-8 rounded-full bg-primary/20"></div>
-								<div>
-									<p class="text-sm font-medium flex items-center gap-1">
-										国家级非遗传承中心
-										<span class="text-xs text-primary">✓</span>
-									</p>
-									<p class="text-xs text-muted-foreground">官方账号</p>
+					<div class="card-item" data-category="official" data-type="video">
+						<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+							<!-- 封面 -->
+							<div class="h-52 bg-muted/30 relative">
+								<div class="absolute top-2 left-2 bg-primary/90 text-white text-xs font-bold px-2 py-1 rounded-md">官方</div>
+								<div class="absolute top-2 right-2 bg-purple-500/90 text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1">
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<polygon points="23 7 16 12 23 17 23 7"></polygon>
+										<rect width="15" height="15" x="1" y="5" rx="2" ry="2"></rect>
+									</svg>
+									视频
 								</div>
 							</div>
-							<h3 class="text-base font-semibold mb-2 line-clamp-2">2025非遗传承计划启动，面向全国招募青年传承人</h3>
-							<p class="text-xs text-muted-foreground mb-3 line-clamp-2">助力传统技艺年轻化传播，让非遗走进生活、走向世界。</p>
-							<div class="flex gap-2 mb-3 flex-wrap">
-								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#官方</span>
-								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#传承计划</span>
-								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#青年传承人</span>
-							</div>
-							<!-- 互动栏 -->
-							<div class="flex items-center justify-between text-xs text-muted-foreground">
-								<div class="flex items-center gap-3">
-									<span class="flex items-center gap-1">❤️ 256</span>
-									<span class="flex items-center gap-1">💬 48</span>
-									<span class="flex items-center gap-1">⭐ 120</span>
+							<!-- 内容 -->
+							<div class="p-4">
+								<div class="flex items-center gap-2 mb-3">
+									<div class="w-8 h-8 rounded-full bg-primary/20"></div>
+									<div>
+										<p class="text-sm font-medium flex items-center gap-1">
+											国家级非遗传承中心
+											<span class="text-xs text-primary">✓</span>
+										</p>
+										<p class="text-xs text-muted-foreground">官方账号</p>
+									</div>
 								</div>
-								<span>1小时前</span>
+								<h3 class="text-base font-semibold mb-2 line-clamp-1">2025非遗传承计划启动，面向全国招募青年传承人</h3>
+								<p class="text-xs text-muted-foreground mb-3 line-clamp-2">助力传统技艺年轻化传播，让非遗走进生活、走向世界。</p>
+								<div class="flex gap-2 mb-3 flex-wrap">
+									<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#官方</span>
+									<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#传承计划</span>
+									<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#青年传承人</span>
+								</div>
+								<!-- 互动栏 -->
+								<div class="flex items-center justify-between text-xs text-muted-foreground">
+									<div class="flex items-center gap-3">
+										<span class="flex items-center gap-1">❤️ 256</span>
+										<span class="flex items-center gap-1">💬 48</span>
+										<span class="flex items-center gap-1">⭐ 120</span>
+									</div>
+									<span>1小时前</span>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -140,38 +142,40 @@ import Footer from "@/components/Footer.astro";
 					<!-- ====================== -->
 					<!-- 卡片 2 · 普通用户 -->
 					<!-- ====================== -->
-					<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
-						<div class="h-52 bg-muted/30 relative">
-							<div class="absolute top-2 right-2 bg-green-500/90 text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1">
-								<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
-									<circle cx="8.5" cy="8.5" r="1.5"></circle>
-									<path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
-								</svg>
-								图文
-							</div>
-						</div>
-						<div class="p-4">
-							<div class="flex items-center gap-2 mb-3">
-								<div class="w-8 h-8 rounded-full bg-muted"></div>
-								<div>
-									<p class="text-sm font-medium">苏绣手作-小李</p>
-									<p class="text-xs text-muted-foreground">非遗爱好者</p>
+					<div class="card-item" data-category="skill" data-type="image">
+						<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+							<div class="h-52 bg-muted/30 relative">
+								<div class="absolute top-2 right-2 bg-green-500/90 text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1">
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+										<circle cx="8.5" cy="8.5" r="1.5"></circle>
+										<path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+									</svg>
+									图文
 								</div>
 							</div>
-							<h3 class="text-base font-semibold mb-2 line-clamp-2">耗时一个月完成的苏绣作品，每一针都是传承</h3>
-							<p class="text-xs text-muted-foreground mb-3 line-clamp-2">传统苏绣花鸟图，纯手工制作，希望更多人喜欢这门手艺。</p>
-							<div class="flex gap-2 mb-3 flex-wrap">
-								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#苏绣</span>
-								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#手工技艺</span>
-							</div>
-							<div class="flex items-center justify-between text-xs text-muted-foreground">
-								<div class="flex items-center gap-3">
-									<span class="flex items-center gap-1">❤️ 428</span>
-									<span class="flex items-center gap-1">💬 76</span>
-									<span class="flex items-center gap-1">⭐ 199</span>
+							<div class="p-4">
+								<div class="flex items-center gap-2 mb-3">
+									<div class="w-8 h-8 rounded-full bg-muted"></div>
+									<div>
+										<p class="text-sm font-medium">苏绣手作-小李</p>
+										<p class="text-xs text-muted-foreground">非遗爱好者</p>
+									</div>
 								</div>
-								<span>3小时前</span>
+								<h3 class="text-base font-semibold mb-2 line-clamp-1">耗时一个月完成的苏绣作品，每一针都是传承</h3>
+								<p class="text-xs text-muted-foreground mb-3 line-clamp-2">传统苏绣花鸟图，纯手工制作，希望更多人喜欢这门手艺。</p>
+								<div class="flex gap-2 mb-3 flex-wrap">
+									<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#苏绣</span>
+									<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#手工技艺</span>
+								</div>
+								<div class="flex items-center justify-between text-xs text-muted-foreground">
+									<div class="flex items-center gap-3">
+										<span class="flex items-center gap-1">❤️ 428</span>
+										<span class="flex items-center gap-1">💬 76</span>
+										<span class="flex items-center gap-1">⭐ 199</span>
+									</div>
+									<span>3小时前</span>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -179,44 +183,46 @@ import Footer from "@/components/Footer.astro";
 					<!-- ====================== -->
 					<!-- 卡片 3 · 官方账号 -->
 					<!-- ====================== -->
-					<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
-						<div class="h-52 bg-muted/30 relative">
-							<div class="absolute top-2 left-2 bg-primary/90 text-white text-xs font-bold px-2 py-1 rounded-md">官方</div>
-							<div class="absolute top-2 right-2 bg-blue-500/90 text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1">
-								<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
-									<polyline points="14 2 14 8 20 8"></polyline>
-									<line x1="16" x2="8" y1="13" y2="13"></line>
-									<line x1="16" x2="8" y1="17" y2="17"></line>
-									<polyline points="10 9 9 9 8 9"></polyline>
-								</svg>
-								报道
-							</div>
-						</div>
-						<div class="p-4">
-							<div class="flex items-center gap-2 mb-3">
-								<div class="w-8 h-8 rounded-full bg-primary/20"></div>
-								<div>
-									<p class="text-sm font-medium flex items-center gap-1">
-										中国非遗保护中心
-										<span class="text-xs text-primary">✓</span>
-									</p>
-									<p class="text-xs text-muted-foreground">官方账号</p>
+					<div class="card-item" data-category="official" data-type="report">
+						<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+							<div class="h-52 bg-muted/30 relative">
+								<div class="absolute top-2 left-2 bg-primary/90 text-white text-xs font-bold px-2 py-1 rounded-md">官方</div>
+								<div class="absolute top-2 right-2 bg-blue-500/90 text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1">
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+										<polyline points="14 2 14 8 20 8"></polyline>
+										<line x1="16" x2="8" y1="13" y2="13"></line>
+										<line x1="16" x2="8" y1="17" y2="17"></line>
+										<polyline points="10 9 9 9 8 9"></polyline>
+									</svg>
+									报道
 								</div>
 							</div>
-							<h3 class="text-base font-semibold mb-2 line-clamp-2">中国传统制茶技艺及其相关习俗入选世界非遗</h3>
-							<p class="text-xs text-muted-foreground mb-3 line-clamp-2">茶文化传承千年，是中华民族的文化瑰宝，值得被世界看见。</p>
-							<div class="flex gap-2 mb-3 flex-wrap">
-								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#茶文化</span>
-								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#世界非遗</span>
-							</div>
-							<div class="flex items-center justify-between text-xs text-muted-foreground">
-								<div class="flex items-center gap-3">
-									<span class="flex items-center gap-1">❤️ 1.2k</span>
-									<span class="flex items-center gap-1">💬 320</span>
-									<span class="flex items-center gap-1">⭐ 566</span>
+							<div class="p-4">
+								<div class="flex items-center gap-2 mb-3">
+									<div class="w-8 h-8 rounded-full bg-primary/20"></div>
+									<div>
+										<p class="text-sm font-medium flex items-center gap-1">
+											中国非遗保护中心
+											<span class="text-xs text-primary">✓</span>
+										</p>
+										<p class="text-xs text-muted-foreground">官方账号</p>
+									</div>
 								</div>
-								<span>昨天</span>
+								<h3 class="text-base font-semibold mb-2 line-clamp-1">中国传统制茶技艺及其相关习俗入选世界非遗</h3>
+								<p class="text-xs text-muted-foreground mb-3 line-clamp-2">茶文化传承千年，是中华民族的文化瑰宝，值得被世界看见。</p>
+								<div class="flex gap-2 mb-3 flex-wrap">
+									<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#茶文化</span>
+									<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#世界非遗</span>
+								</div>
+								<div class="flex items-center justify-between text-xs text-muted-foreground">
+									<div class="flex items-center gap-3">
+										<span class="flex items-center gap-1">❤️ 1.2k</span>
+										<span class="flex items-center gap-1">💬 320</span>
+										<span class="flex items-center gap-1">⭐ 566</span>
+									</div>
+									<span>昨天</span>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -224,38 +230,40 @@ import Footer from "@/components/Footer.astro";
 					<!-- ====================== -->
 					<!-- 卡片 4 · 普通用户 -->
 					<!-- ====================== -->
-					<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
-						<div class="h-52 bg-muted/30 relative">
-							<div class="absolute top-2 right-2 bg-green-500/90 text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1">
-								<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
-									<circle cx="8.5" cy="8.5" r="1.5"></circle>
-									<path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
-								</svg>
-								图文
-							</div>
-						</div>
-						<div class="p-4">
-							<div class="flex items-center gap-2 mb-3">
-								<div class="w-8 h-8 rounded-full bg-muted"></div>
-								<div>
-									<p class="text-sm font-medium">木雕匠人-老陈</p>
-									<p class="text-xs text-muted-foreground">传统木雕传承人</p>
+					<div class="card-item" data-category="skill" data-type="image">
+						<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+							<div class="h-52 bg-muted/30 relative">
+								<div class="absolute top-2 right-2 bg-green-500/90 text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1">
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+										<circle cx="8.5" cy="8.5" r="1.5"></circle>
+										<path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+									</svg>
+									图文
 								</div>
 							</div>
-							<h3 class="text-base font-semibold mb-2 line-clamp-2">东阳木雕现场创作，一把刻刀演绎千年技艺</h3>
-							<p class="text-xs text-muted-foreground mb-3 line-clamp-2">坚持手工雕刻30年，希望这门手艺能一直传下去。</p>
-							<div class="flex gap-2 mb-3 flex-wrap">
-								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#东阳木雕</span>
-								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#手工雕刻</span>
-							</div>
-							<div class="flex items-center justify-between text-xs text-muted-foreground">
-								<div class="flex items-center gap-3">
-									<span class="flex items-center gap-1">❤️ 582</span>
-									<span class="flex items-center gap-1">💬 112</span>
-									<span class="flex items-center gap-1">⭐ 245</span>
+							<div class="p-4">
+								<div class="flex items-center gap-2 mb-3">
+									<div class="w-8 h-8 rounded-full bg-muted"></div>
+									<div>
+										<p class="text-sm font-medium">木雕匠人-老陈</p>
+										<p class="text-xs text-muted-foreground">传统木雕传承人</p>
+									</div>
 								</div>
-								<span>2天前</span>
+								<h3 class="text-base font-semibold mb-2 line-clamp-1">东阳木雕现场创作，一把刻刀演绎千年技艺</h3>
+								<p class="text-xs text-muted-foreground mb-3 line-clamp-2">坚持手工雕刻30年，希望这门手艺能一直传下去。</p>
+								<div class="flex gap-2 mb-3 flex-wrap">
+									<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#东阳木雕</span>
+									<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#手工雕刻</span>
+								</div>
+								<div class="flex items-center justify-between text-xs text-muted-foreground">
+									<div class="flex items-center gap-3">
+										<span class="flex items-center gap-1">❤️ 582</span>
+										<span class="flex items-center gap-1">💬 112</span>
+										<span class="flex items-center gap-1">⭐ 245</span>
+									</div>
+									<span>2天前</span>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -263,38 +271,40 @@ import Footer from "@/components/Footer.astro";
 					<!-- ====================== -->
 					<!-- 卡片 5 · 普通用户 -->
 					<!-- ====================== -->
-					<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
-						<div class="h-52 bg-muted/30 relative">
-							<div class="absolute top-2 right-2 bg-green-500/90 text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1">
-								<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
-									<circle cx="8.5" cy="8.5" r="1.5"></circle>
-									<path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
-								</svg>
-								图文
-							</div>
-						</div>
-						<div class="p-4">
-							<div class="flex items-center gap-2 mb-3">
-								<div class="w-8 h-8 rounded-full bg-muted"></div>
-								<div>
-									<p class="text-sm font-medium">剪纸艺术-小琳</p>
-									<p class="text-xs text-muted-foreground">非遗爱好者</p>
+					<div class="card-item" data-category="culture" data-type="image">
+						<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+							<div class="h-52 bg-muted/30 relative">
+								<div class="absolute top-2 right-2 bg-green-500/90 text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1">
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+										<circle cx="8.5" cy="8.5" r="1.5"></circle>
+										<path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+									</svg>
+									图文
 								</div>
 							</div>
-							<h3 class="text-base font-semibold mb-2 line-clamp-2">一把剪刀，一张红纸，剪出中国年味</h3>
-							<p class="text-xs text-muted-foreground mb-3 line-clamp-2">传统剪纸艺术，藏着中国人最朴素的浪漫与祝福。</p>
-							<div class="flex gap-2 mb-3 flex-wrap">
-								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#剪纸</span>
-								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#传统民俗</span>
-							</div>
-							<div class="flex items-center justify-between text-xs text-muted-foreground">
-								<div class="flex items-center gap-3">
-									<span class="flex items-center gap-1">❤️ 732</span>
-									<span class="flex items-center gap-1">💬 156</span>
-									<span class="flex items-center gap-1">⭐ 310</span>
+							<div class="p-4">
+								<div class="flex items-center gap-2 mb-3">
+									<div class="w-8 h-8 rounded-full bg-muted"></div>
+									<div>
+										<p class="text-sm font-medium">剪纸艺术-小琳</p>
+										<p class="text-xs text-muted-foreground">非遗爱好者</p>
+									</div>
 								</div>
-								<span>3天前</span>
+								<h3 class="text-base font-semibold mb-2 line-clamp-1">一把剪刀，一张红纸，剪出中国年味</h3>
+								<p class="text-xs text-muted-foreground mb-3 line-clamp-2">传统剪纸艺术，藏着中国人最朴素的浪漫与祝福。</p>
+								<div class="flex gap-2 mb-3 flex-wrap">
+									<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#剪纸</span>
+									<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#传统民俗</span>
+								</div>
+								<div class="flex items-center justify-between text-xs text-muted-foreground">
+									<div class="flex items-center gap-3">
+										<span class="flex items-center gap-1">❤️ 732</span>
+										<span class="flex items-center gap-1">💬 156</span>
+										<span class="flex items-center gap-1">⭐ 310</span>
+									</div>
+									<span>3天前</span>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -302,41 +312,43 @@ import Footer from "@/components/Footer.astro";
 					<!-- ====================== -->
 					<!-- 卡片 6 · 官方账号 -->
 					<!-- ====================== -->
-					<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
-						<div class="h-52 bg-muted/30 relative">
-							<div class="absolute top-2 left-2 bg-primary/90 text-white text-xs font-bold px-2 py-1 rounded-md">官方</div>
-							<div class="absolute top-2 right-2 bg-purple-500/90 text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1">
-								<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<polygon points="23 7 16 12 23 17 23 7"></polygon>
-									<rect width="15" height="15" x="1" y="5" rx="2" ry="2"></rect>
-								</svg>
-								视频
-							</div>
-						</div>
-						<div class="p-4">
-							<div class="flex items-center gap-2 mb-3">
-								<div class="w-8 h-8 rounded-full bg-primary/20"></div>
-								<div>
-									<p class="text-sm font-medium flex items-center gap-1">
-										国家级非遗传承中心
-										<span class="text-xs text-primary">✓</span>
-									</p>
-									<p class="text-xs text-muted-foreground">官方账号</p>
+					<div class="card-item" data-category="official" data-type="video">
+						<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
+							<div class="h-52 bg-muted/30 relative">
+								<div class="absolute top-2 left-2 bg-primary/90 text-white text-xs font-bold px-2 py-1 rounded-md">官方</div>
+								<div class="absolute top-2 right-2 bg-purple-500/90 text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1">
+									<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<polygon points="23 7 16 12 23 17 23 7"></polygon>
+										<rect width="15" height="15" x="1" y="5" rx="2" ry="2"></rect>
+									</svg>
+									视频
 								</div>
 							</div>
-							<h3 class="text-base font-semibold mb-2 line-clamp-2">全国非遗技艺展览即将开幕，欢迎大家前来参观</h3>
-							<p class="text-xs text-muted-foreground mb-3 line-clamp-2">汇聚全国百项非遗技艺，沉浸式体验传统文化魅力。</p>
-							<div class="flex gap-2 mb-3 flex-wrap">
-								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#非遗展览</span>
-								<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#线下活动</span>
-							</div>
-							<div class="flex items-center justify-between text-xs text-muted-foreground">
-								<div class="flex items-center gap-3">
-									<span class="flex items-center gap-1">❤️ 890</span>
-									<span class="flex items-center gap-1">💬 276</span>
-									<span class="flex items-center gap-1">⭐ 412</span>
+							<div class="p-4">
+								<div class="flex items-center gap-2 mb-3">
+									<div class="w-8 h-8 rounded-full bg-primary/20"></div>
+									<div>
+										<p class="text-sm font-medium flex items-center gap-1">
+											国家级非遗传承中心
+											<span class="text-xs text-primary">✓</span>
+										</p>
+										<p class="text-xs text-muted-foreground">官方账号</p>
+									</div>
 								</div>
-								<span>5天前</span>
+								<h3 class="text-base font-semibold mb-2 line-clamp-1">全国非遗技艺展览即将开幕，欢迎大家前来参观</h3>
+								<p class="text-xs text-muted-foreground mb-3 line-clamp-2">汇聚全国百项非遗技艺，沉浸式体验传统文化魅力。</p>
+								<div class="flex gap-2 mb-3 flex-wrap">
+									<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#非遗展览</span>
+									<span class="text-[10px] px-2 py-1 bg-muted rounded-full text-muted-foreground">#线下活动</span>
+								</div>
+								<div class="flex items-center justify-between text-xs text-muted-foreground">
+									<div class="flex items-center gap-3">
+										<span class="flex items-center gap-1">❤️ 890</span>
+										<span class="flex items-center gap-1">💬 276</span>
+										<span class="flex items-center gap-1">⭐ 412</span>
+									</div>
+									<span>5天前</span>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -355,4 +367,73 @@ import Footer from "@/components/Footer.astro";
 	</main>
 
 	<Footer />
+
+	<script>
+		// 筛选功能实现
+		document.addEventListener('DOMContentLoaded', function() {
+			const filterButtons = document.querySelectorAll('.filter-btn');
+			const typeButtons = document.querySelectorAll('.type-btn');
+			const cardItems = document.querySelectorAll('.card-item');
+
+			let currentFilter = 'all';
+			let currentType = 'all';
+
+			// 筛选卡片函数
+			function filterCards() {
+				cardItems.forEach(card => {
+					const category = card.getAttribute('data-category');
+					const type = card.getAttribute('data-type');
+
+					const filterMatch = currentFilter === 'all' || category === currentFilter;
+					const typeMatch = currentType === 'all' || type === currentType;
+
+					if (filterMatch && typeMatch) {
+						(card as HTMLElement).style.display = 'block';
+					} else {
+						(card as HTMLElement).style.display = 'none';
+					}
+				});
+			}
+
+			// 顶部筛选按钮点击事件
+			filterButtons.forEach(button => {
+				button.addEventListener('click', (event) => {
+					const target = event.currentTarget as HTMLElement;
+					// 移除所有按钮的活跃状态
+					filterButtons.forEach(btn => {
+						btn.classList.remove('bg-primary', 'text-primary-foreground');
+						btn.classList.add('bg-card', 'hover:bg-muted');
+					});
+
+					// 添加当前按钮的活跃状态
+					target.classList.remove('bg-card', 'hover:bg-muted');
+					target.classList.add('bg-primary', 'text-primary-foreground');
+
+					// 更新当前筛选条件
+					currentFilter = target.getAttribute('data-filter') || 'all';
+					filterCards();
+				});
+			});
+
+			// 内容类型筛选按钮点击事件
+			typeButtons.forEach(button => {
+				button.addEventListener('click', (event) => {
+					const target = event.currentTarget as HTMLElement;
+					// 移除所有按钮的活跃状态
+					typeButtons.forEach(btn => {
+						btn.classList.remove('bg-primary', 'text-primary-foreground');
+						btn.classList.add('bg-card', 'hover:bg-muted');
+					});
+
+					// 添加当前按钮的活跃状态
+					target.classList.remove('bg-card', 'hover:bg-muted');
+					target.classList.add('bg-primary', 'text-primary-foreground');
+
+					// 更新当前筛选条件
+					currentType = target.getAttribute('data-type') || 'all';
+					filterCards();
+				});
+			});
+		});
+	</script>
 </Layout>
