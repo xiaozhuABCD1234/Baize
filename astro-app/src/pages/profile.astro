@@ -34,62 +34,64 @@ import Footer from "@/components/Footer.astro";
 			<div class="max-w-9xl px-4 lg:px-6">
 				<div class="flex flex-col lg:flex-row gap-8">
 					<!-- ========== 左侧固定个人简介竖栏（极致左对齐） ========== -->
-					<div class="lg:w-80 w-full sticky top-28 self-start">
-						<!-- 自定义背景卡片：减少内边距，让内容靠左 -->
-						<div class="bg-gradient-to-b from-primary/30 to-background rounded-2xl p-3 lg:p-4 shadow-lg border border-border overflow-hidden relative">
-							<!-- 背景自定义区域 -->
-							<div class="absolute inset-0 opacity-20 bg-[url('https://picsum.photos/id/1060/800/1200')] bg-cover bg-center"></div>
-							
-							<!-- 核心修改：去掉 flex items-center，改为 items-start 并左对齐 -->
-							<div class="relative z-10 flex flex-col items-start w-full">
-								<!-- 头像：手动居中（用 margin 实现，不影响其他内容） -->
-								<div class="w-28 h-28 rounded-full bg-primary/20 flex items-center justify-center border-4 border-background shadow-md mb-4 mx-auto">
-									<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
-										<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-										<circle cx="12" cy="7" r="4"></circle>
-									</svg>
-								</div>
-
-								<!-- 昵称 & 身份：左对齐 -->
-								<h2 class="text-xl font-bold font-heading text-foreground mb-1 w-full text-left">苏绣匠人-李婉</h2>
-								<p class="text-sm text-primary font-medium mb-3 w-full text-left">国家级非遗传承人</p>
-
-								<!-- 个人简介：极致左对齐，无任何内边距 -->
-								<p class="text-sm text-muted-foreground mb-5 w-full text-left">
-									专注苏绣技艺传承30年，擅长花鸟、山水题材创作，
-									致力于让传统苏绣走进现代生活。
-								</p>
-
-								<!-- 编辑按钮：宽度100%，左对齐 -->
-								<a href="/profile/edit" class="w-full py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:opacity-90 transition-all text-center mb-6">
-									编辑资料/背景
-								</a>
-
-								<!-- 作品分类统计：左对齐 -->
-								<div class="w-full space-y-3 text-left">
-									<div class="flex justify-between items-center text-sm">
-										<span class="text-muted-foreground">苏绣作品</span>
-										<span class="font-semibold text-foreground">12 件</span>
+					<div class="w-full lg:w-1/4">
+						<div class="sticky top-28">
+							<!-- 自定义背景卡片：减少内边距，让内容靠左 -->
+							<div class="bg-gradient-to-b from-primary/30 to-background rounded-2xl p-3 lg:p-4 shadow-lg border border-border overflow-hidden relative">
+								<!-- 背景自定义区域 -->
+								<div class="absolute inset-0 opacity-20 bg-[url('https://picsum.photos/id/1060/800/1200')] bg-cover bg-center"></div>
+								
+								<!-- 核心修改：去掉 flex items-center，改为 items-start 并左对齐 -->
+								<div class="relative z-10 flex flex-col items-start w-full">
+									<!-- 头像：手动居中（用 margin 实现，不影响其他内容） -->
+									<div class="w-28 h-28 rounded-full bg-primary/20 flex items-center justify-center border-4 border-background shadow-md mb-4 mx-auto">
+										<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+											<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+											<circle cx="12" cy="7" r="4"></circle>
+										</svg>
 									</div>
-									<div class="flex justify-between items-center text-sm">
-										<span class="text-muted-foreground">刺绣教程</span>
-										<span class="font-semibold text-foreground">8 篇</span>
-									</div>
-									<div class="flex justify-between items-center text-sm">
-										<span class="text-muted-foreground">收藏藏品</span>
-										<span class="font-semibold text-foreground">68 件</span>
-									</div>
-									<div class="flex justify-between items-center text-sm">
-										<span class="text-muted-foreground">获赞总数</span>
-										<span class="font-semibold text-foreground">2.3k+</span>
+
+									<!-- 昵称 & 身份：左对齐 -->
+									<h2 class="text-xl font-bold font-heading text-foreground mb-1 w-full text-left">苏绣匠人-李婉</h2>
+									<p class="text-sm text-primary font-medium mb-3 w-full text-left">国家级非遗传承人</p>
+
+									<!-- 个人简介：极致左对齐，无任何内边距 -->
+									<p class="text-sm text-muted-foreground mb-5 w-full text-left">
+										专注苏绣技艺传承30年，擅长花鸟、山水题材创作，
+										致力于让传统苏绣走进现代生活。
+									</p>
+
+									<!-- 编辑按钮：宽度100%，左对齐 -->
+									<a href="/profile/edit" class="w-full py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:opacity-90 transition-all text-center mb-6">
+										编辑资料/背景
+									</a>
+
+									<!-- 作品分类统计：左对齐 -->
+									<div class="w-full space-y-3 text-left">
+										<div class="flex justify-between items-center text-sm">
+											<span class="text-muted-foreground">苏绣作品</span>
+											<span class="font-semibold text-foreground">12 件</span>
+										</div>
+										<div class="flex justify-between items-center text-sm">
+											<span class="text-muted-foreground">刺绣教程</span>
+											<span class="font-semibold text-foreground">8 篇</span>
+										</div>
+										<div class="flex justify-between items-center text-sm">
+											<span class="text-muted-foreground">收藏藏品</span>
+											<span class="font-semibold text-foreground">68 件</span>
+										</div>
+										<div class="flex justify-between items-center text-sm">
+											<span class="text-muted-foreground">获赞总数</span>
+											<span class="font-semibold text-foreground">2.3k+</span>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 
-										<!-- ========== 右侧内容展示区 ========== -->
-					<div class="flex-1 px-6">
+					<!-- ========== 右侧内容展示区 ========== -->
+					<div class="w-full lg:w-3/4 px-0 sm:px-6">
 						<!-- 菜单切换栏 -->
 						<div class="flex gap-4 mb-8 overflow-x-auto pb-2">
 							<button class="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg text-sm font-medium whitespace-nowrap">我的作品</button>
