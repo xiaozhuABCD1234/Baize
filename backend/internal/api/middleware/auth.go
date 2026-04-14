@@ -35,6 +35,7 @@ func JWTAuth() echo.MiddlewareFunc {
 
 			c.Set("user_id", claims.UserID)
 			c.Set("email", claims.Email)
+			c.Set("user_type", claims.UserType)
 
 			return next(c)
 		}

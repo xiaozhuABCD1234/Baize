@@ -31,20 +31,15 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 	return &UserRepository{db: db}
 }
 
-// ========== CREATE ==========
+var ErrUserNotFound = errors.New("用户不存在或已被删除")
 
-// Create 创建用户
 func (r *UserRepository) Create(ctx context.Context, user *model.User) error {
-	return gorm.G[model.User](r.db).Create(ctx, user)
+	return r.db.WithContext(ctx).Create(user).Error
 }
 
-// ========== READ ==========
-
-// GetByID 根据ID查询用户
 func (r *UserRepository) GetByID(ctx context.Context, id uint) (*model.User, error) {
-	user, err := gorm.G[model.User](r.db).
-		Where("id = ?", id).
-		First(ctx)
+	var user model.User
+	err := r.db.WithContext(ctx).Where("id = ?", id).First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
@@ -54,11 +49,9 @@ func (r *UserRepository) GetByID(ctx context.Context, id uint) (*model.User, err
 	return &user, nil
 }
 
-// GetByEmail 根据邮箱查询用户（登录用）
 func (r *UserRepository) GetByEmail(ctx context.Context, email string) (*model.User, error) {
-	user, err := gorm.G[model.User](r.db).
-		Where("email = ?", email).
-		First(ctx)
+	var user model.User
+	err := r.db.WithContext(ctx).Where("email = ?", email).First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
@@ -68,11 +61,9 @@ func (r *UserRepository) GetByEmail(ctx context.Context, email string) (*model.U
 	return &user, nil
 }
 
-// GetByUsername 根据用户名查询用户
 func (r *UserRepository) GetByUsername(ctx context.Context, username string) (*model.User, error) {
-	user, err := gorm.G[model.User](r.db).
-		Where("username = ?", username).
-		First(ctx)
+	var user model.User
+	err := r.db.WithContext(ctx).Where("username = ?", username).First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
@@ -82,108 +73,90 @@ func (r *UserRepository) GetByUsername(ctx context.Context, username string) (*m
 	return &user, nil
 }
 
-// List 查询所有用户
-// 注意：Find() 自动过滤已软删除的记录（gorm.Model.DeletedAt）
-// 参考: https://gorm.io/docs/delete.html#Soft-Delete
 func (r *UserRepository) List(ctx context.Context) ([]model.User, error) {
-	return gorm.G[model.User](r.db).
-		Order("created_at desc").
-		Find(ctx)
+	var users []model.User
+	err := r.db.WithContext(ctx).Order("created_at desc").Find(&users).Error
+	return users, err
 }
 
-// ListWithPagination 分页查询
-// 注意：Find/Count 自动过滤已软删除的记录（gorm.Model.DeletedAt）
-// 参考: https://gorm.io/docs/delete.html#Soft-Delete
 func (r *UserRepository) ListWithPagination(ctx context.Context, page, pageSize int) ([]model.User, int64, error) {
 	var total int64
-
-	// 统计总数
-	countResult := r.db.Model(&model.User{}).Count(&total)
-	if countResult.Error != nil {
-		return nil, 0, countResult.Error
+	if err := r.db.WithContext(ctx).Model(&model.User{}).Count(&total).Error; err != nil {
+		return nil, 0, err
 	}
 
-	// 分页查询
-	users, err := gorm.G[model.User](r.db).
+	var users []model.User
+	err := r.db.WithContext(ctx).
 		Offset((page - 1) * pageSize).
 		Limit(pageSize).
 		Order("created_at desc").
-		Find(ctx)
+		Find(&users).Error
 
 	return users, total, err
 }
 
-// ========== UPDATE ==========
-
-// Update 更新用户（全字段）
 func (r *UserRepository) Update(ctx context.Context, user *model.User) error {
-	rowsAffected, err := gorm.G[model.User](r.db).
+	result := r.db.WithContext(ctx).
 		Where("id = ?", user.ID).
-		Updates(ctx, *user)
-	if err != nil {
-		return err
+		Updates(user)
+	if result.Error != nil {
+		return result.Error
 	}
-	if rowsAffected == 0 {
+	if result.RowsAffected == 0 {
 		return ErrUserNotFound
 	}
 	return nil
 }
 
-// UpdatePassword 只更新密码
 func (r *UserRepository) UpdatePassword(ctx context.Context, id uint, hashedPassword string) error {
-	rowsAffected, err := gorm.G[model.User](r.db).
+	result := r.db.WithContext(ctx).
+		Model(&model.User{}).
 		Where("id = ?", id).
-		Update(ctx, "password", hashedPassword)
-	if err != nil {
-		return err
+		Update("password", hashedPassword)
+	if result.Error != nil {
+		return result.Error
 	}
-	if rowsAffected == 0 {
+	if result.RowsAffected == 0 {
 		return ErrUserNotFound
 	}
 	return nil
 }
 
-// UpdateEmail 只更新邮箱
 func (r *UserRepository) UpdateEmail(ctx context.Context, id uint, email string) error {
-	rowsAffected, err := gorm.G[model.User](r.db).
+	result := r.db.WithContext(ctx).
+		Model(&model.User{}).
 		Where("id = ?", id).
-		Update(ctx, "email", email)
-	if err != nil {
-		return err
+		Update("email", email)
+	if result.Error != nil {
+		return result.Error
 	}
-	if rowsAffected == 0 {
+	if result.RowsAffected == 0 {
 		return ErrUserNotFound
 	}
 	return nil
 }
 
-// ========== DELETE ==========
-
-var ErrUserNotFound = errors.New("用户不存在或已被删除")
-
-// Delete 软删除（使用 gorm.Model 的 DeletedAt）
 func (r *UserRepository) Delete(ctx context.Context, id uint) error {
-	rowsAffected, err := gorm.G[model.User](r.db).
+	result := r.db.WithContext(ctx).
 		Where("id = ?", id).
-		Delete(ctx)
-	if err != nil {
-		return err
+		Delete(&model.User{})
+	if result.Error != nil {
+		return result.Error
 	}
-	if rowsAffected == 0 {
+	if result.RowsAffected == 0 {
 		return ErrUserNotFound
 	}
 	return nil
 }
 
-// ForceDelete 硬删除
 func (r *UserRepository) ForceDelete(ctx context.Context, id uint) error {
-	rowsAffected, err := gorm.G[model.User](r.db.Unscoped()).
+	result := r.db.WithContext(ctx).Unscoped().
 		Where("id = ?", id).
-		Delete(ctx)
-	if err != nil {
-		return err
+		Delete(&model.User{})
+	if result.Error != nil {
+		return result.Error
 	}
-	if rowsAffected == 0 {
+	if result.RowsAffected == 0 {
 		return ErrUserNotFound
 	}
 	return nil

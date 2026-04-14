@@ -3,10 +3,12 @@ package integration
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"strings"
+	"sync/atomic"
 	"testing"
 
 	"backend/internal/api/handlers"
@@ -24,11 +26,12 @@ import (
 
 type IntegrationSuite struct {
 	suite.Suite
-	DB    *gorm.DB
-	Echo  *echo.Echo
-	Repo  *repo.UserRepository
-	Svc   *svc.UserService
-	tmpDB *os.File
+	DB          *gorm.DB
+	Echo        *echo.Echo
+	Repo        *repo.UserRepository
+	Svc         *svc.UserService
+	tmpDB       *os.File
+	userCounter int64
 }
 
 func TestIntegrationSuite(t *testing.T) {
@@ -74,10 +77,12 @@ func (s *IntegrationSuite) TearDownSuite() {
 }
 
 func (s *IntegrationSuite) CreateUserAndLogin(email, password string) (*models.User, string) {
+	phoneNum := atomic.AddInt64(&s.userCounter, 1)
 	registerReq := svc.RegisterRequest{
 		Username: email,
 		Email:    email,
 		Password: password,
+		Phone:    fmt.Sprintf("138%011d", phoneNum),
 	}
 	resp, err := s.Svc.Register(context.Background(), registerReq)
 	if err != nil {

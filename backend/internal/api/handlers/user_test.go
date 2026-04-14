@@ -6,647 +6,930 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strings"
 	"testing"
+	"time"
 
 	"backend/internal/models"
+	"backend/internal/repository"
 	svc "backend/internal/services"
 	"backend/pkg/response"
+	"backend/pkg/utils"
 
 	"github.com/labstack/echo/v5"
+	"github.com/stretchr/testify/assert"
+	"golang.org/x/crypto/bcrypt"
 )
 
-type mockUserService struct {
-	registerErr       error
-	loginErr          error
-	getUserByIDErr    error
-	listUsersErr      error
-	listUsersPagErr   error
-	updateUserErr     error
-	changePasswordErr error
-	deleteUserErr     error
+type mockUserRepository struct {
+	createErr        error
+	getByIDErr       error
+	getByEmailErr    error
+	getByUsernameErr error
+	listErr          error
+	listPagErr       error
+	updateErr        error
+	updatePassErr    error
+	updateEmailErr   error
+	deleteErr        error
+	forceDeleteErr   error
+	users            map[uint]*models.User
+	usersByEmail     map[string]*models.User
+	usersByUsername  map[string]*models.User
 }
 
-func (m *mockUserService) Register(ctx context.Context, req svc.RegisterRequest) (*svc.RegisterResponse, error) {
-	if m.registerErr != nil {
-		return nil, m.registerErr
+func newMockUserRepository() *mockUserRepository {
+	return &mockUserRepository{
+		users:           make(map[uint]*models.User),
+		usersByEmail:    make(map[string]*models.User),
+		usersByUsername: make(map[string]*models.User),
 	}
-	return &svc.RegisterResponse{
-		ID:        1,
-		Email:     req.Email,
-		CreatedAt: "2024-01-01 00:00:00",
-	}, nil
 }
 
-func (m *mockUserService) Login(ctx context.Context, req svc.LoginRequest) (*svc.LoginResponse, error) {
-	if m.loginErr != nil {
-		return nil, m.loginErr
+func (m *mockUserRepository) Create(ctx context.Context, user *models.User) error {
+	if m.createErr != nil {
+		return m.createErr
 	}
-	return &svc.LoginResponse{
-		ID:    1,
-		Email: req.Email,
-		Token: "test_token",
-	}, nil
-}
-
-func (m *mockUserService) GetUserByID(ctx context.Context, id uint) (*models.User, error) {
-	if m.getUserByIDErr != nil {
-		return nil, m.getUserByIDErr
+	if len(m.users) == 0 {
+		user.ID = 1
+	} else {
+		maxID := uint(0)
+		for id := range m.users {
+			if id > maxID {
+				maxID = id
+			}
+		}
+		user.ID = maxID + 1
 	}
-	return &models.User{Email: "test@example.com"}, nil
+	m.users[user.ID] = user
+	m.usersByEmail[user.Email] = user
+	if user.Username != "" {
+		m.usersByUsername[user.Username] = user
+	}
+	return nil
 }
 
-func (m *mockUserService) GetUserByEmail(ctx context.Context, email string) (*models.User, error) {
+func (m *mockUserRepository) GetByID(ctx context.Context, id uint) (*models.User, error) {
+	if m.getByIDErr != nil {
+		return nil, m.getByIDErr
+	}
+	if user, ok := m.users[id]; ok {
+		return user, nil
+	}
 	return nil, nil
 }
 
-func (m *mockUserService) ListUsers(ctx context.Context) ([]models.User, error) {
-	if m.listUsersErr != nil {
-		return nil, m.listUsersErr
+func (m *mockUserRepository) GetByEmail(ctx context.Context, email string) (*models.User, error) {
+	if m.getByEmailErr != nil {
+		return nil, m.getByEmailErr
 	}
-	return []models.User{}, nil
+	if user, ok := m.usersByEmail[email]; ok {
+		return user, nil
+	}
+	return nil, nil
 }
 
-func (m *mockUserService) ListUsersWithPagination(ctx context.Context, page, pageSize int) ([]models.User, int64, error) {
-	if m.listUsersPagErr != nil {
-		return nil, 0, m.listUsersPagErr
+func (m *mockUserRepository) GetByUsername(ctx context.Context, username string) (*models.User, error) {
+	if m.getByUsernameErr != nil {
+		return nil, m.getByUsernameErr
 	}
-	return []models.User{}, 0, nil
+	if user, ok := m.usersByUsername[username]; ok {
+		return user, nil
+	}
+	return nil, nil
 }
 
-func (m *mockUserService) UpdateUser(ctx context.Context, req svc.UpdateUserRequest) error {
-	if m.updateUserErr != nil {
-		return m.updateUserErr
+func (m *mockUserRepository) List(ctx context.Context) ([]models.User, error) {
+	if m.listErr != nil {
+		return nil, m.listErr
 	}
+	users := make([]models.User, 0, len(m.users))
+	for _, user := range m.users {
+		users = append(users, *user)
+	}
+	return users, nil
+}
+
+func (m *mockUserRepository) ListWithPagination(ctx context.Context, page, pageSize int) ([]models.User, int64, error) {
+	if m.listPagErr != nil {
+		return nil, 0, m.listPagErr
+	}
+	users := make([]models.User, 0, len(m.users))
+	for _, user := range m.users {
+		users = append(users, *user)
+	}
+	total := int64(len(users))
+	return users, total, nil
+}
+
+func (m *mockUserRepository) Update(ctx context.Context, user *models.User) error {
+	if m.updateErr != nil {
+		return m.updateErr
+	}
+	if _, ok := m.users[user.ID]; !ok {
+		return repository.ErrUserNotFound
+	}
+	oldEmail := m.users[user.ID].Email
+	delete(m.usersByEmail, oldEmail)
+	m.users[user.ID] = user
+	m.usersByEmail[user.Email] = user
 	return nil
 }
 
-func (m *mockUserService) ChangePassword(ctx context.Context, req svc.ChangePasswordRequest) error {
-	if m.changePasswordErr != nil {
-		return m.changePasswordErr
+func (m *mockUserRepository) UpdatePassword(ctx context.Context, id uint, hashedPassword string) error {
+	if m.updatePassErr != nil {
+		return m.updatePassErr
 	}
+	if _, ok := m.users[id]; !ok {
+		return repository.ErrUserNotFound
+	}
+	m.users[id].Password = hashedPassword
 	return nil
 }
 
-func (m *mockUserService) ResetPassword(ctx context.Context, userID uint, newPassword string) error {
+func (m *mockUserRepository) UpdateEmail(ctx context.Context, id uint, email string) error {
+	if m.updateEmailErr != nil {
+		return m.updateEmailErr
+	}
+	if _, ok := m.users[id]; !ok {
+		return repository.ErrUserNotFound
+	}
+	oldEmail := m.users[id].Email
+	delete(m.usersByEmail, oldEmail)
+	m.users[id].Email = email
+	m.usersByEmail[email] = m.users[id]
 	return nil
 }
 
-func (m *mockUserService) UpdateEmail(ctx context.Context, userID uint, newEmail string) error {
+func (m *mockUserRepository) Delete(ctx context.Context, id uint) error {
+	if m.deleteErr != nil {
+		return m.deleteErr
+	}
+	if _, ok := m.users[id]; !ok {
+		return repository.ErrUserNotFound
+	}
+	delete(m.users, id)
 	return nil
 }
 
-func (m *mockUserService) DeleteUser(ctx context.Context, id uint) error {
-	if m.deleteUserErr != nil {
-		return m.deleteUserErr
+func (m *mockUserRepository) ForceDelete(ctx context.Context, id uint) error {
+	if m.forceDeleteErr != nil {
+		return m.forceDeleteErr
 	}
+	if _, ok := m.users[id]; !ok {
+		return repository.ErrUserNotFound
+	}
+	email := m.users[id].Email
+	username := m.users[id].Username
+	delete(m.users, id)
+	delete(m.usersByEmail, email)
+	delete(m.usersByUsername, username)
 	return nil
 }
 
-func (m *mockUserService) ForceDeleteUser(ctx context.Context, id uint) error {
-	return nil
+func (m *mockUserRepository) addTestUser(id uint, email, username, password string, userType models.UserType) {
+	user := &models.User{
+		Email:    email,
+		Username: username,
+		Password: password,
+		UserType: userType,
+		Status:   models.UserStatusActive,
+	}
+	user.ID = id
+	m.users[id] = user
+	m.usersByEmail[email] = user
+	m.usersByUsername[username] = user
 }
 
-type testHandler struct {
-	svc *mockUserService
+type testEnv struct {
+	restoreJWT func()
 }
 
-func newTestHandler() *testHandler {
-	return &testHandler{svc: &mockUserService{}}
+func setupTestEnv() *testEnv {
+	oldAccess := os.Getenv("JWT_ACCESS_EXPIRES")
+	oldRefresh := os.Getenv("JWT_REFRESH_EXPIRES")
+	os.Setenv("JWT_ACCESS_EXPIRES", "900")
+	os.Setenv("JWT_REFRESH_EXPIRES", "604800")
+	return &testEnv{
+		restoreJWT: func() {
+			if oldAccess != "" {
+				os.Setenv("JWT_ACCESS_EXPIRES", oldAccess)
+			}
+			if oldRefresh != "" {
+				os.Setenv("JWT_REFRESH_EXPIRES", oldRefresh)
+			}
+		},
+	}
 }
 
-func (h *testHandler) Register(c *echo.Context) error {
-	var req svc.RegisterRequest
-	if err := (*c).Bind(&req); err != nil {
-		return errorResp(c, http.StatusBadRequest, "请求参数错误")
-	}
-
-	resp, err := h.svc.Register((*c).Request().Context(), req)
-	if err != nil {
-		if errors.Is(err, svc.ErrEmailExists) {
-			return errorResp(c, http.StatusConflict, "邮箱已被注册")
-		}
-		return errorResp(c, http.StatusInternalServerError, err.Error())
-	}
-
-	return success(c, resp)
+func (e *testEnv) cleanup() {
+	e.restoreJWT()
 }
 
-func (h *testHandler) Login(c *echo.Context) error {
-	var req svc.LoginRequest
-	if err := (*c).Bind(&req); err != nil {
-		return errorResp(c, http.StatusBadRequest, "请求参数错误")
-	}
-
-	resp, err := h.svc.Login((*c).Request().Context(), req)
-	if err != nil {
-		if errors.Is(err, svc.ErrUserNotFound) {
-			return errorResp(c, http.StatusUnauthorized, "用户不存在")
-		}
-		if errors.Is(err, svc.ErrInvalidPassword) {
-			return errorResp(c, http.StatusUnauthorized, "密码错误")
-		}
-		return errorResp(c, http.StatusInternalServerError, err.Error())
-	}
-
-	return success(c, resp)
+func createRealHandler(repo repository.UserRepositoryInterface) *UserHandler {
+	service := svc.NewUserService(repo)
+	return NewUserHandler(service)
 }
 
-func (h *testHandler) GetUser(c *echo.Context) error {
-	idStr := (*c).QueryParam("id")
-	if idStr == "" || idStr == "invalid" {
-		return errorResp(c, http.StatusBadRequest, "无效的用户 ID")
+func setupEchoContext(method, path string, body string) (*echo.Context, *httptest.ResponseRecorder) {
+	e := echo.New()
+	var req *http.Request
+	if body != "" {
+		req = httptest.NewRequest(method, path, strings.NewReader(body))
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	} else {
+		req = httptest.NewRequest(method, path, nil)
 	}
-
-	user, err := h.svc.GetUserByID((*c).Request().Context(), 1)
-	if err != nil {
-		if errors.Is(err, svc.ErrUserNotFound) {
-			return errorResp(c, http.StatusNotFound, "用户不存在")
-		}
-		return errorResp(c, http.StatusInternalServerError, err.Error())
-	}
-
-	return success(c, user)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+	return c, rec
 }
 
-func (h *testHandler) ListUsers(c *echo.Context) error {
-	users, total, err := h.svc.ListUsersWithPagination((*c).Request().Context(), 1, 10)
-	if err != nil {
-		return errorResp(c, http.StatusInternalServerError, err.Error())
+func setupEchoContextWithParams(method, path string, body string, paramName, paramValue string) (*echo.Context, *httptest.ResponseRecorder) {
+	e := echo.New()
+	var req *http.Request
+	if body != "" {
+		req = httptest.NewRequest(method, path, strings.NewReader(body))
+		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	} else {
+		req = httptest.NewRequest(method, path, nil)
+	}
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+
+	if paramName != "" && paramValue != "" {
+		c.SetPath("/users/:" + paramName)
+		c.SetPathValues([]echo.PathValue{{Name: paramName, Value: paramValue}})
 	}
 
-	return success(c, map[string]interface{}{
-		"users":     users,
-		"total":     total,
-		"page":      1,
-		"page_size": 10,
-	})
+	return c, rec
 }
 
-func (h *testHandler) UpdateUser(c *echo.Context) error {
-	idStr := (*c).QueryParam("id")
-	if idStr == "" || idStr == "invalid" {
-		return errorResp(c, http.StatusBadRequest, "无效的用户 ID")
-	}
-
-	var req svc.UpdateUserRequest
-	if err := (*c).Bind(&req); err != nil {
-		return errorResp(c, http.StatusBadRequest, "请求参数错误")
-	}
-	req.ID = 1
-
-	if err := h.svc.UpdateUser((*c).Request().Context(), req); err != nil {
-		if errors.Is(err, svc.ErrUserNotFound) {
-			return errorResp(c, http.StatusNotFound, "用户不存在")
-		}
-		if errors.Is(err, svc.ErrEmailExists) {
-			return errorResp(c, http.StatusConflict, "邮箱已被使用")
-		}
-		return errorResp(c, http.StatusInternalServerError, err.Error())
-	}
-
-	return success(c, map[string]interface{}{"message": "更新成功"})
+func parseResponse(t *testing.T, rec *httptest.ResponseRecorder) response.Response {
+	var resp response.Response
+	err := json.Unmarshal(rec.Body.Bytes(), &resp)
+	assert.NoError(t, err)
+	return resp
 }
 
-func (h *testHandler) ChangePassword(c *echo.Context) error {
-	idStr := (*c).QueryParam("id")
-	if idStr == "" || idStr == "invalid" {
-		return errorResp(c, http.StatusBadRequest, "无效的用户 ID")
-	}
-
-	var req svc.ChangePasswordRequest
-	if err := (*c).Bind(&req); err != nil {
-		return errorResp(c, http.StatusBadRequest, "请求参数错误")
-	}
-	req.UserID = 1
-
-	if err := h.svc.ChangePassword((*c).Request().Context(), req); err != nil {
-		if errors.Is(err, svc.ErrUserNotFound) {
-			return errorResp(c, http.StatusNotFound, "用户不存在")
-		}
-		if errors.Is(err, svc.ErrInvalidPassword) {
-			return errorResp(c, http.StatusUnauthorized, "旧密码错误")
-		}
-		if errors.Is(err, svc.ErrSamePassword) {
-			return errorResp(c, http.StatusBadRequest, "新密码不能与旧密码相同")
-		}
-		return errorResp(c, http.StatusInternalServerError, err.Error())
-	}
-
-	return success(c, map[string]interface{}{"message": "密码修改成功"})
+func assertSuccessResponse(t *testing.T, rec *httptest.ResponseRecorder, expectedStatus int) response.Response {
+	assert.Equal(t, expectedStatus, rec.Code)
+	resp := parseResponse(t, rec)
+	assert.Nil(t, resp.Error, "expected no error in response")
+	assert.NotNil(t, resp.Data, "expected data in response")
+	return resp
 }
 
-func (h *testHandler) DeleteUser(c *echo.Context) error {
-	idStr := (*c).QueryParam("id")
-	if idStr == "" || idStr == "invalid" {
-		return errorResp(c, http.StatusBadRequest, "无效的用户 ID")
-	}
-
-	if err := h.svc.DeleteUser((*c).Request().Context(), 1); err != nil {
-		if errors.Is(err, svc.ErrUserNotFound) {
-			return errorResp(c, http.StatusNotFound, "用户不存在")
-		}
-		return errorResp(c, http.StatusInternalServerError, err.Error())
-	}
-
-	return success(c, map[string]interface{}{"message": "删除成功"})
+func assertErrorResponse(t *testing.T, rec *httptest.ResponseRecorder, expectedStatus int, expectedCode string) {
+	assert.Equal(t, expectedStatus, rec.Code)
+	resp := parseResponse(t, rec)
+	assert.NotNil(t, resp.Error, "expected error in response")
+	assert.Equal(t, expectedCode, resp.Error.Code)
+	assert.NotEmpty(t, resp.Error.Message)
 }
 
 func TestRegister_Success(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("POST", "/users/register", strings.NewReader(`{"email":"test@example.com","password":"password123"}`))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	_ = h.Register(c)
+	body := `{"username":"testuser","email":"test@example.com","password":"password123"}`
+	c, rec := setupEchoContext("POST", "/users/register", body)
 
-	if rec.Code != http.StatusOK {
-		t.Errorf("expected status %d, got %d", http.StatusOK, rec.Code)
-	}
+	err := h.Register(c)
+	assert.NoError(t, err)
+
+	resp := assertSuccessResponse(t, rec, http.StatusOK)
+	data, ok := resp.Data.(map[string]interface{})
+	assert.True(t, ok)
+	assert.Equal(t, float64(1), data["id"])
+	assert.Equal(t, "test@example.com", data["email"])
+	assert.Equal(t, "testuser", data["username"])
 }
 
 func TestRegister_InvalidJSON(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("POST", "/users/register", strings.NewReader(`{invalid json}`))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	_ = h.Register(c)
+	body := `{invalid json}`
+	c, rec := setupEchoContext("POST", "/users/register", body)
 
-	if rec.Code != http.StatusBadRequest {
-		t.Errorf("expected status %d, got %d", http.StatusBadRequest, rec.Code)
-	}
+	err := h.Register(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusBadRequest, response.BadRequest)
 }
 
 func TestRegister_EmailExists(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("POST", "/users/register", strings.NewReader(`{"email":"existing@example.com","password":"password123"}`))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	repo.addTestUser(1, "existing@example.com", "existing", "hash", models.UserTypeUser)
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	h.svc.registerErr = svc.ErrEmailExists
-	_ = h.Register(c)
+	body := `{"username":"newuser","email":"existing@example.com","password":"password123"}`
+	c, rec := setupEchoContext("POST", "/users/register", body)
 
-	if rec.Code != http.StatusConflict {
-		t.Errorf("expected status %d, got %d", http.StatusConflict, rec.Code)
-	}
+	err := h.Register(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusConflict, response.UserEmailExists)
+}
+
+func TestRegister_UsernameExists(t *testing.T) {
+	repo := newMockUserRepository()
+	repo.addTestUser(1, "a@example.com", "existing", "hash", models.UserTypeUser)
+	h := createRealHandler(repo)
+
+	body := `{"username":"existing","email":"new@example.com","password":"password123"}`
+	c, rec := setupEchoContext("POST", "/users/register", body)
+
+	err := h.Register(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusConflict, response.UserNameExists)
+}
+
+func TestRegister_InvalidRole(t *testing.T) {
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
+
+	body := `{"username":"testuser","email":"test@example.com","password":"password123","user_type":"invalid_role"}`
+	c, rec := setupEchoContext("POST", "/users/register", body)
+
+	err := h.Register(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusBadRequest, response.BadRequest)
+}
+
+func TestRegister_ServiceError(t *testing.T) {
+	repo := newMockUserRepository()
+	repo.createErr = errors.New("database connection failed")
+	h := createRealHandler(repo)
+
+	body := `{"username":"testuser","email":"test@example.com","password":"password123"}`
+	c, rec := setupEchoContext("POST", "/users/register", body)
+
+	err := h.Register(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusInternalServerError, response.InternalError)
 }
 
 func TestLogin_Success(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("POST", "/users/login", strings.NewReader(`{"email":"test@example.com","password":"password123"}`))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	hashedPassword, _ := bcryptHash("password123")
+	repo.addTestUser(1, "test@example.com", "testuser", hashedPassword, models.UserTypeUser)
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	_ = h.Login(c)
+	body := `{"email":"test@example.com","password":"password123"}`
+	c, rec := setupEchoContext("POST", "/users/login", body)
 
-	if rec.Code != http.StatusOK {
-		t.Errorf("expected status %d, got %d", http.StatusOK, rec.Code)
-	}
+	err := h.Login(c)
+	assert.NoError(t, err)
 
-	var resp response.Response
-	json.Unmarshal(rec.Body.Bytes(), &resp)
-	if resp.Error != nil {
-		t.Errorf("expected no error in response")
-	}
+	resp := assertSuccessResponse(t, rec, http.StatusOK)
+	data, ok := resp.Data.(map[string]interface{})
+	assert.True(t, ok)
+	assert.NotEmpty(t, data["token"])
 }
 
 func TestLogin_InvalidJSON(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("POST", "/users/login", strings.NewReader(`{invalid}`))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	_ = h.Login(c)
+	body := `{invalid}`
+	c, rec := setupEchoContext("POST", "/users/login", body)
 
-	if rec.Code != http.StatusBadRequest {
-		t.Errorf("expected status %d, got %d", http.StatusBadRequest, rec.Code)
-	}
+	err := h.Login(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusBadRequest, response.BadRequest)
 }
 
 func TestLogin_UserNotFound(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("POST", "/users/login", strings.NewReader(`{"email":"notfound@example.com","password":"password123"}`))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	h.svc.loginErr = svc.ErrUserNotFound
-	_ = h.Login(c)
+	body := `{"email":"notfound@example.com","password":"password123"}`
+	c, rec := setupEchoContext("POST", "/users/login", body)
 
-	if rec.Code != http.StatusUnauthorized {
-		t.Errorf("expected status %d, got %d", http.StatusUnauthorized, rec.Code)
-	}
+	err := h.Login(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusUnauthorized, response.UserNotFound)
 }
 
 func TestLogin_InvalidPassword(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("POST", "/users/login", strings.NewReader(`{"email":"test@example.com","password":"wrongpassword"}`))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	hashedPassword, _ := bcryptHash("correctpassword")
+	repo.addTestUser(1, "test@example.com", "testuser", hashedPassword, models.UserTypeUser)
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	h.svc.loginErr = svc.ErrInvalidPassword
-	_ = h.Login(c)
+	body := `{"email":"test@example.com","password":"wrongpassword"}`
+	c, rec := setupEchoContext("POST", "/users/login", body)
 
-	if rec.Code != http.StatusUnauthorized {
-		t.Errorf("expected status %d, got %d", http.StatusUnauthorized, rec.Code)
-	}
+	err := h.Login(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusUnauthorized, response.InvalidPassword)
 }
 
 func TestGetUser_Success(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("GET", "/users?id=1", nil)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	repo.addTestUser(1, "test@example.com", "testuser", "hash", models.UserTypeUser)
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	_ = h.GetUser(c)
+	c, rec := setupEchoContextWithParams("GET", "/users/1", "", "id", "1")
 
-	if rec.Code != http.StatusOK {
-		t.Errorf("expected status %d, got %d", http.StatusOK, rec.Code)
-	}
+	err := h.GetUser(c)
+	assert.NoError(t, err)
+
+	resp := assertSuccessResponse(t, rec, http.StatusOK)
+	data, ok := resp.Data.(map[string]interface{})
+	assert.True(t, ok)
+	assert.Equal(t, "test@example.com", data["email"])
 }
 
 func TestGetUser_InvalidID(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("GET", "/users?id=invalid", nil)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	_ = h.GetUser(c)
+	c, rec := setupEchoContextWithParams("GET", "/users/abc", "", "id", "abc")
 
-	if rec.Code != http.StatusBadRequest {
-		t.Errorf("expected status %d, got %d", http.StatusBadRequest, rec.Code)
-	}
+	err := h.GetUser(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusBadRequest, response.BadRequest)
 }
 
 func TestGetUser_NotFound(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("GET", "/users?id=999", nil)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	h.svc.getUserByIDErr = svc.ErrUserNotFound
-	_ = h.GetUser(c)
+	c, rec := setupEchoContextWithParams("GET", "/users/999", "", "id", "999")
 
-	if rec.Code != http.StatusNotFound {
-		t.Errorf("expected status %d, got %d", http.StatusNotFound, rec.Code)
-	}
+	err := h.GetUser(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusNotFound, response.UserNotFound)
+}
+
+func TestGetUser_ServiceError(t *testing.T) {
+	repo := newMockUserRepository()
+	repo.getByIDErr = errors.New("database error")
+	h := createRealHandler(repo)
+
+	c, rec := setupEchoContextWithParams("GET", "/users/1", "", "id", "1")
+
+	err := h.GetUser(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusInternalServerError, response.InternalError)
 }
 
 func TestListUsers_Success(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("GET", "/users?page=1&page_size=10", nil)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	repo.addTestUser(1, "a@example.com", "user1", "hash", models.UserTypeUser)
+	repo.addTestUser(2, "b@example.com", "user2", "hash", models.UserTypeUser)
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	_ = h.ListUsers(c)
+	c, rec := setupEchoContext("GET", "/users?page=1&page_size=10", "")
 
-	if rec.Code != http.StatusOK {
-		t.Errorf("expected status %d, got %d", http.StatusOK, rec.Code)
+	err := h.ListUsers(c)
+	assert.NoError(t, err)
+
+	resp := assertSuccessResponse(t, rec, http.StatusOK)
+	assert.NotNil(t, resp.Page)
+	assert.Equal(t, 1, resp.Page.PageNum)
+	assert.Equal(t, 10, resp.Page.PageSize)
+	assert.Equal(t, int64(2), resp.Page.Total)
+}
+
+func TestListUsers_EmptyList(t *testing.T) {
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
+
+	c, rec := setupEchoContext("GET", "/users?page=1", "")
+
+	err := h.ListUsers(c)
+	assert.NoError(t, err)
+
+	resp := assertSuccessResponse(t, rec, http.StatusOK)
+	assert.NotNil(t, resp.Page)
+	assert.Equal(t, int64(0), resp.Page.Total)
+}
+
+func TestListUsers_CustomPagination(t *testing.T) {
+	repo := newMockUserRepository()
+	for i := 0; i < 10; i++ {
+		repo.addTestUser(uint(i+1), "test@example.com", "testuser", "hash", models.UserTypeUser)
 	}
+	h := createRealHandler(repo)
+
+	c, rec := setupEchoContext("GET", "/users?page=2&page_size=5", "")
+
+	err := h.ListUsers(c)
+	assert.NoError(t, err)
+
+	resp := assertSuccessResponse(t, rec, http.StatusOK)
+	assert.Equal(t, 2, resp.Page.PageNum)
+	assert.Equal(t, 5, resp.Page.PageSize)
+}
+
+func TestListUsers_DefaultPagination(t *testing.T) {
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
+
+	c, rec := setupEchoContext("GET", "/users?page=-1&page_size=0", "")
+
+	err := h.ListUsers(c)
+	assert.NoError(t, err)
+
+	resp := assertSuccessResponse(t, rec, http.StatusOK)
+	assert.Equal(t, 1, resp.Page.PageNum)
+	assert.Equal(t, 10, resp.Page.PageSize)
 }
 
 func TestListUsers_ServiceError(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("GET", "/users", nil)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	repo.listPagErr = errors.New("database error")
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	h.svc.listUsersPagErr = errors.New("service error")
-	_ = h.ListUsers(c)
+	c, rec := setupEchoContext("GET", "/users?page=1", "")
 
-	if rec.Code != http.StatusInternalServerError {
-		t.Errorf("expected status %d, got %d", http.StatusInternalServerError, rec.Code)
-	}
+	err := h.ListUsers(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusInternalServerError, response.InternalError)
 }
 
 func TestUpdateUser_Success(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("PUT", "/users?id=1", strings.NewReader(`{"email":"new@example.com"}`))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	repo.addTestUser(1, "old@example.com", "testuser", "hash", models.UserTypeUser)
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	_ = h.UpdateUser(c)
+	body := `{"email":"new@example.com"}`
+	c, rec := setupEchoContextWithParams("PUT", "/users/1", body, "id", "1")
 
-	if rec.Code != http.StatusOK {
-		t.Errorf("expected status %d, got %d", http.StatusOK, rec.Code)
-	}
+	err := h.UpdateUser(c)
+	assert.NoError(t, err)
+
+	resp := assertSuccessResponse(t, rec, http.StatusOK)
+	data, ok := resp.Data.(map[string]interface{})
+	assert.True(t, ok)
+	assert.Equal(t, "更新成功", data["message"])
 }
 
 func TestUpdateUser_InvalidID(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("PUT", "/users?id=invalid", strings.NewReader(`{"email":"new@example.com"}`))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	_ = h.UpdateUser(c)
+	body := `{"email":"new@example.com"}`
+	c, rec := setupEchoContextWithParams("PUT", "/users/abc", body, "id", "abc")
 
-	if rec.Code != http.StatusBadRequest {
-		t.Errorf("expected status %d, got %d", http.StatusBadRequest, rec.Code)
-	}
+	err := h.UpdateUser(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusBadRequest, response.BadRequest)
 }
 
 func TestUpdateUser_InvalidJSON(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("PUT", "/users?id=1", strings.NewReader(`{invalid}`))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	repo.addTestUser(1, "old@example.com", "testuser", "hash", models.UserTypeUser)
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	_ = h.UpdateUser(c)
+	body := `{invalid}`
+	c, rec := setupEchoContextWithParams("PUT", "/users/1", body, "id", "1")
 
-	if rec.Code != http.StatusBadRequest {
-		t.Errorf("expected status %d, got %d", http.StatusBadRequest, rec.Code)
-	}
+	err := h.UpdateUser(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusBadRequest, response.BadRequest)
 }
 
 func TestUpdateUser_NotFound(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("PUT", "/users?id=999", strings.NewReader(`{"email":"new@example.com"}`))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	h.svc.updateUserErr = svc.ErrUserNotFound
-	_ = h.UpdateUser(c)
+	body := `{"email":"new@example.com"}`
+	c, rec := setupEchoContextWithParams("PUT", "/users/999", body, "id", "999")
 
-	if rec.Code != http.StatusNotFound {
-		t.Errorf("expected status %d, got %d", http.StatusNotFound, rec.Code)
-	}
+	err := h.UpdateUser(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusNotFound, response.UserNotFound)
 }
 
 func TestUpdateUser_EmailExists(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("PUT", "/users?id=1", strings.NewReader(`{"email":"existing@example.com"}`))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	repo.addTestUser(1, "old@example.com", "user1", "hash", models.UserTypeUser)
+	repo.addTestUser(2, "existing@example.com", "user2", "hash", models.UserTypeUser)
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	h.svc.updateUserErr = svc.ErrEmailExists
-	_ = h.UpdateUser(c)
+	body := `{"email":"existing@example.com"}`
+	c, rec := setupEchoContextWithParams("PUT", "/users/1", body, "id", "1")
 
-	if rec.Code != http.StatusConflict {
-		t.Errorf("expected status %d, got %d", http.StatusConflict, rec.Code)
-	}
+	err := h.UpdateUser(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusConflict, response.UserEmailExists)
+}
+
+func TestUpdateUser_InvalidRole(t *testing.T) {
+	repo := newMockUserRepository()
+	repo.addTestUser(1, "test@example.com", "testuser", "hash", models.UserTypeUser)
+	h := createRealHandler(repo)
+
+	body := `{"user_type":"invalid_role"}`
+	c, rec := setupEchoContextWithParams("PUT", "/users/1", body, "id", "1")
+
+	err := h.UpdateUser(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusInternalServerError, response.InternalError)
+}
+
+func TestUpdateUser_ServiceError(t *testing.T) {
+	repo := newMockUserRepository()
+	repo.addTestUser(1, "old@example.com", "testuser", "hash", models.UserTypeUser)
+	repo.updateErr = errors.New("database error")
+	h := createRealHandler(repo)
+
+	body := `{"email":"new@example.com"}`
+	c, rec := setupEchoContextWithParams("PUT", "/users/1", body, "id", "1")
+
+	err := h.UpdateUser(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusInternalServerError, response.InternalError)
 }
 
 func TestChangePassword_Success(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("PUT", "/users/1/password?id=1", strings.NewReader(`{"old_password":"oldpass","new_password":"newpass123"}`))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	hashedOld, _ := bcryptHash("oldpassword")
+	repo.addTestUser(1, "test@example.com", "testuser", hashedOld, models.UserTypeUser)
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	_ = h.ChangePassword(c)
+	body := `{"old_password":"oldpassword","new_password":"newpassword123"}`
+	c, rec := setupEchoContextWithParams("PUT", "/users/1/password", body, "id", "1")
 
-	if rec.Code != http.StatusOK {
-		t.Errorf("expected status %d, got %d", http.StatusOK, rec.Code)
-	}
+	err := h.ChangePassword(c)
+	assert.NoError(t, err)
+
+	resp := assertSuccessResponse(t, rec, http.StatusOK)
+	data, ok := resp.Data.(map[string]interface{})
+	assert.True(t, ok)
+	assert.Equal(t, "密码修改成功", data["message"])
 }
 
 func TestChangePassword_InvalidID(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("PUT", "/users/invalid/password?id=invalid", strings.NewReader(`{"old_password":"oldpass","new_password":"newpass123"}`))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	_ = h.ChangePassword(c)
+	body := `{"old_password":"oldpass","new_password":"newpass123"}`
+	c, rec := setupEchoContextWithParams("PUT", "/users/abc/password", body, "id", "abc")
 
-	if rec.Code != http.StatusBadRequest {
-		t.Errorf("expected status %d, got %d", http.StatusBadRequest, rec.Code)
-	}
+	err := h.ChangePassword(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusBadRequest, response.BadRequest)
 }
 
 func TestChangePassword_InvalidJSON(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("PUT", "/users/1/password?id=1", strings.NewReader(`{invalid}`))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	_ = h.ChangePassword(c)
+	body := `{invalid}`
+	c, rec := setupEchoContextWithParams("PUT", "/users/1/password", body, "id", "1")
 
-	if rec.Code != http.StatusBadRequest {
-		t.Errorf("expected status %d, got %d", http.StatusBadRequest, rec.Code)
-	}
+	err := h.ChangePassword(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusBadRequest, response.BadRequest)
 }
 
 func TestChangePassword_UserNotFound(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("PUT", "/users/999/password?id=999", strings.NewReader(`{"old_password":"oldpass","new_password":"newpass123"}`))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	h.svc.changePasswordErr = svc.ErrUserNotFound
-	_ = h.ChangePassword(c)
+	body := `{"old_password":"oldpass","new_password":"newpass123"}`
+	c, rec := setupEchoContextWithParams("PUT", "/users/999/password", body, "id", "999")
 
-	if rec.Code != http.StatusNotFound {
-		t.Errorf("expected status %d, got %d", http.StatusNotFound, rec.Code)
-	}
+	err := h.ChangePassword(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusNotFound, response.UserNotFound)
 }
 
 func TestChangePassword_WrongPassword(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("PUT", "/users/1/password?id=1", strings.NewReader(`{"old_password":"wrongpass","new_password":"newpass123"}`))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	hashedOld, _ := bcryptHash("correctpassword")
+	repo.addTestUser(1, "test@example.com", "testuser", hashedOld, models.UserTypeUser)
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	h.svc.changePasswordErr = svc.ErrInvalidPassword
-	_ = h.ChangePassword(c)
+	body := `{"old_password":"wrongpassword","new_password":"newpass123"}`
+	c, rec := setupEchoContextWithParams("PUT", "/users/1/password", body, "id", "1")
 
-	if rec.Code != http.StatusUnauthorized {
-		t.Errorf("expected status %d, got %d", http.StatusUnauthorized, rec.Code)
-	}
+	err := h.ChangePassword(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusUnauthorized, response.InvalidPassword)
 }
 
 func TestChangePassword_SamePassword(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("PUT", "/users/1/password?id=1", strings.NewReader(`{"old_password":"samepass","new_password":"samepass"}`))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	hashedOld, _ := bcryptHash("samepassword")
+	repo.addTestUser(1, "test@example.com", "testuser", hashedOld, models.UserTypeUser)
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	h.svc.changePasswordErr = svc.ErrSamePassword
-	_ = h.ChangePassword(c)
+	body := `{"old_password":"samepassword","new_password":"samepassword"}`
+	c, rec := setupEchoContextWithParams("PUT", "/users/1/password", body, "id", "1")
 
-	if rec.Code != http.StatusBadRequest {
-		t.Errorf("expected status %d, got %d", http.StatusBadRequest, rec.Code)
-	}
+	err := h.ChangePassword(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusBadRequest, response.SamePassword)
+}
+
+func TestChangePassword_ServiceError(t *testing.T) {
+	repo := newMockUserRepository()
+	hashedOld, _ := bcryptHash("oldpassword")
+	repo.addTestUser(1, "test@example.com", "testuser", hashedOld, models.UserTypeUser)
+	repo.updatePassErr = errors.New("database error")
+	h := createRealHandler(repo)
+
+	body := `{"old_password":"oldpassword","new_password":"newpass123"}`
+	c, rec := setupEchoContextWithParams("PUT", "/users/1/password", body, "id", "1")
+
+	err := h.ChangePassword(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusInternalServerError, response.InternalError)
 }
 
 func TestDeleteUser_Success(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("DELETE", "/users/1?id=1", nil)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	repo.addTestUser(1, "test@example.com", "testuser", "hash", models.UserTypeUser)
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	_ = h.DeleteUser(c)
+	c, rec := setupEchoContextWithParams("DELETE", "/users/1", "", "id", "1")
 
-	if rec.Code != http.StatusOK {
-		t.Errorf("expected status %d, got %d", http.StatusOK, rec.Code)
-	}
+	err := h.DeleteUser(c)
+	assert.NoError(t, err)
+
+	resp := assertSuccessResponse(t, rec, http.StatusOK)
+	data, ok := resp.Data.(map[string]interface{})
+	assert.True(t, ok)
+	assert.Equal(t, "删除成功", data["message"])
 }
 
 func TestDeleteUser_InvalidID(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("DELETE", "/users/invalid?id=invalid", nil)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	_ = h.DeleteUser(c)
+	c, rec := setupEchoContextWithParams("DELETE", "/users/abc", "", "id", "abc")
 
-	if rec.Code != http.StatusBadRequest {
-		t.Errorf("expected status %d, got %d", http.StatusBadRequest, rec.Code)
-	}
+	err := h.DeleteUser(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusBadRequest, response.BadRequest)
 }
 
 func TestDeleteUser_NotFound(t *testing.T) {
-	e := echo.New()
-	rec := httptest.NewRecorder()
-	req := httptest.NewRequest("DELETE", "/users/999?id=999", nil)
-	c := e.NewContext(req, rec)
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
 
-	h := newTestHandler()
-	h.svc.deleteUserErr = svc.ErrUserNotFound
-	_ = h.DeleteUser(c)
+	c, rec := setupEchoContextWithParams("DELETE", "/users/999", "", "id", "999")
 
-	if rec.Code != http.StatusNotFound {
-		t.Errorf("expected status %d, got %d", http.StatusNotFound, rec.Code)
+	err := h.DeleteUser(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusNotFound, response.UserNotFound)
+}
+
+func TestDeleteUser_ServiceError(t *testing.T) {
+	repo := newMockUserRepository()
+	repo.addTestUser(1, "test@example.com", "testuser", "hash", models.UserTypeUser)
+	repo.deleteErr = errors.New("database error")
+	h := createRealHandler(repo)
+
+	c, rec := setupEchoContextWithParams("DELETE", "/users/1", "", "id", "1")
+
+	err := h.DeleteUser(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusInternalServerError, response.InternalError)
+}
+
+func TestRefreshToken_Success(t *testing.T) {
+	env := setupTestEnv()
+	defer env.cleanup()
+
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
+
+	token, err := utils.GenerateRefreshToken(1, "test@example.com", "user")
+	assert.NoError(t, err)
+
+	body := `{"refresh_token":"` + token + `"}`
+	c, rec := setupEchoContext("POST", "/users/refresh", body)
+
+	err = h.RefreshToken(c)
+	assert.NoError(t, err)
+
+	resp := assertSuccessResponse(t, rec, http.StatusOK)
+	data, ok := resp.Data.(map[string]interface{})
+	assert.True(t, ok)
+	assert.NotEmpty(t, data["access_token"])
+	assert.NotEmpty(t, data["refresh_token"])
+	assert.NotEmpty(t, data["expires_in"])
+}
+
+func TestRefreshToken_InvalidJSON(t *testing.T) {
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
+
+	body := `{invalid}`
+	c, rec := setupEchoContext("POST", "/users/refresh", body)
+
+	err := h.RefreshToken(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusBadRequest, response.BadRequest)
+}
+
+func TestRefreshToken_EmptyToken(t *testing.T) {
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
+
+	body := `{"refresh_token":""}`
+	c, rec := setupEchoContext("POST", "/users/refresh", body)
+
+	err := h.RefreshToken(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusUnauthorized, response.TokenInvalid)
+}
+
+func TestRefreshToken_InvalidToken(t *testing.T) {
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
+
+	body := `{"refresh_token":"invalid.token.here"}`
+	c, rec := setupEchoContext("POST", "/users/refresh", body)
+
+	err := h.RefreshToken(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusUnauthorized, response.TokenInvalid)
+}
+
+func TestRefreshToken_ExpiredToken(t *testing.T) {
+	os.Setenv("JWT_REFRESH_EXPIRES", "1")
+	defer func() {
+		os.Setenv("JWT_REFRESH_EXPIRES", "604800")
+	}()
+
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
+
+	token, err := utils.GenerateRefreshToken(1, "test@example.com", "user")
+	assert.NoError(t, err)
+
+	time.Sleep(2 * time.Second)
+
+	body := `{"refresh_token":"` + token + `"}`
+	c, rec := setupEchoContext("POST", "/users/refresh", body)
+
+	err = h.RefreshToken(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusUnauthorized, response.TokenInvalid)
+}
+
+func TestRefreshToken_WrongTokenType(t *testing.T) {
+	env := setupTestEnv()
+	defer env.cleanup()
+
+	repo := newMockUserRepository()
+	h := createRealHandler(repo)
+
+	token, err := utils.GenerateAccessToken(1, "test@example.com", "user")
+	assert.NoError(t, err)
+
+	body := `{"refresh_token":"` + token + `"}`
+	c, rec := setupEchoContext("POST", "/users/refresh", body)
+
+	err = h.RefreshToken(c)
+	assert.NoError(t, err)
+
+	assertErrorResponse(t, rec, http.StatusUnauthorized, response.TokenInvalid)
+}
+
+func bcryptHash(password string) (string, error) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
 	}
+	return string(hash), nil
 }
