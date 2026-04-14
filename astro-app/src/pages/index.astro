@@ -11,17 +11,21 @@ import Footer from "@/components/Footer.astro";
 ---
 
 <Layout>
+	<!-- Header固定容器 -->
 	<Header />
+
+	<!-- Hero容器，展开时为正常文档流，收起时固定定位 -->
+	<div id="hero-container" class="collapsed relative cursor-pointer">
+		<Hero />
+		<button id="collapse-button" class="hero-collapse-button hidden absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-background/90 px-5 py-2 text-sm font-medium text-foreground shadow-lg transition-opacity duration-300 hover:bg-background">
+			收起
+		</button>
+	</div>
+
 	<Sidebar />
 
-	<main class="pt-4 w-full max-w-[1800px] mx-auto px-4 lg:px-6">
-		<div id="hero-container" class="collapsed relative cursor-pointer">
-			<Hero />
-			<button id="collapse-button" class="hero-collapse-button hidden absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-background/90 px-5 py-2 text-sm font-medium text-foreground shadow-lg transition-opacity duration-300 hover:bg-background">
-				收起
-			</button>
-		</div>
-
+	<!-- 内容容器：包含下面的所有内容 -->
+	<main class="w-full max-w-[1800px] mx-auto px-4 lg:px-6">
 		<div class="flex">
 			<div class="flex-1">
 				<FeatureSection />
@@ -60,7 +64,7 @@ import Footer from "@/components/Footer.astro";
 		heroContainer.classList.add('collapsed');
 		heroContainer.classList.remove('expanded');
 		heroContainer.style.position = 'fixed';
-		heroContainer.style.top = '68px';
+		heroContainer.style.top = '72px';
 		heroContainer.style.left = '0';
 		heroContainer.style.right = '0';
 		heroContainer.style.zIndex = '30';
@@ -71,7 +75,10 @@ import Footer from "@/components/Footer.astro";
 		heroContent.style.maxHeight = '60px';
 		heroContent.style.opacity = '1';
 		if (collapseButton) collapseButton.classList.add('hidden');
-		if (main) main.style.paddingTop = '90px';
+		// 设置内容容器的padding-top，确保不被固定的hero遮挡
+		if (main) {
+			main.style.paddingTop = '162px'; // Header高度72px + 收起的hero高度90px
+		}
 		isExpanded = false;
 	};
 
@@ -80,12 +87,20 @@ import Footer from "@/components/Footer.astro";
 		heroContainer.classList.add('expanded');
 		heroContainer.style.position = 'relative';
 		heroContainer.style.top = 'auto';
+		heroContainer.style.left = 'auto';
+		heroContainer.style.right = 'auto';
+		heroContainer.style.zIndex = 'auto';
+		heroContainer.style.background = 'transparent';
+		heroContainer.style.backdropFilter = 'none';
 		heroContainer.style.maxHeight = '100vh';
 		heroContainer.style.overflow = 'hidden';
 		heroContent.style.maxHeight = heroContent.scrollHeight + 'px';
 		heroContent.style.opacity = '1';
 		if (collapseButton) collapseButton.classList.remove('hidden');
-		if (main) main.style.paddingTop = '1rem';
+		// 展开时取消内容容器的padding-top，让内容自然跟随在hero下方
+		if (main) {
+			main.style.paddingTop = '0';
+		}
 		isExpanded = true;
 	};
 
