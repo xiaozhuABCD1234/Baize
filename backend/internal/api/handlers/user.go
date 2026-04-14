@@ -57,7 +57,7 @@ func (h *UserHandler) Register(c *echo.Context) error {
 			return c.JSON(http.StatusConflict, response.Fail(response.UserEmailExists, "邮箱已被注册"))
 		}
 		if errors.Is(err, svc.ErrInvalidRole) {
-			return c.JSON(http.StatusBadRequest, response.Fail(response.BadRequest, "无效的角色，只能为 admin 或 user"))
+			return c.JSON(http.StatusBadRequest, response.Fail(response.BadRequest, "无效的角色类型，只能为 user/master/institution/admin"))
 		}
 		return c.JSON(http.StatusInternalServerError, response.Fail(response.InternalError, err.Error()))
 	}

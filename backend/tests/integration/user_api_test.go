@@ -250,7 +250,7 @@ func (s *IntegrationSuite) TestChangePassword_NoAuth() {
 func (s *IntegrationSuite) TestRefreshToken_Success() {
 	user, _ := s.CreateUserAndLogin("refresh@example.com", "password123")
 
-	tokenPair, _ := utils.GenerateTokenPair(user.ID, user.Email, user.Role)
+	tokenPair, _ := utils.GenerateTokenPair(user.ID, user.Email, string(user.UserType))
 	body := map[string]string{
 		"refresh_token": tokenPair.RefreshToken,
 	}
@@ -269,7 +269,7 @@ func (s *IntegrationSuite) TestRefreshToken_InvalidToken() {
 
 func (s *IntegrationSuite) TestRefreshToken_WrongTokenType() {
 	user, _ := s.CreateUserAndLogin("wrongtype@example.com", "password123")
-	tokenPair, _ := utils.GenerateTokenPair(user.ID, user.Email, user.Role)
+	tokenPair, _ := utils.GenerateTokenPair(user.ID, user.Email, string(user.UserType))
 
 	body := map[string]string{
 		"refresh_token": tokenPair.AccessToken,

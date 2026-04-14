@@ -39,8 +39,8 @@ func TestGenerateAccessToken(t *testing.T) {
 	if claims.Email != email {
 		t.Errorf("Email mismatch: got %s, want %s", claims.Email, email)
 	}
-	if claims.Role != role {
-		t.Errorf("Role mismatch: got %s, want %s", claims.Role, role)
+	if claims.UserType != role {
+		t.Errorf("UserType mismatch: got %s, want %s", claims.UserType, role)
 	}
 	if claims.Type != AccessToken {
 		t.Errorf("TokenType mismatch: got %s, want %s", claims.Type, AccessToken)

@@ -833,3 +833,194 @@ func TestUserService_ForceDeleteUser(t *testing.T) {
 		})
 	}
 }
+
+func TestUserService_GetUserByEmail(t *testing.T) {
+	tests := []struct {
+		name      string
+		email     string
+		setupMock func(*mockUserRepository)
+		wantErr   error
+	}{
+		{
+			name:  "success",
+			email: "test@example.com",
+			setupMock: func(m *mockUserRepository) {
+				m.users[1] = createTestUser(1, "test@example.com", "hash")
+				m.usersByEmail["test@example.com"] = m.users[1]
+			},
+			wantErr: nil,
+		},
+		{
+			name:      "user not found",
+			email:     "notfound@example.com",
+			setupMock: func(m *mockUserRepository) {},
+			wantErr:   nil,
+		},
+		{
+			name:  "get by email error",
+			email: "error@example.com",
+			setupMock: func(m *mockUserRepository) {
+				m.getByEmailErr = errors.New("database error")
+			},
+			wantErr: errors.New("database error"),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			repo := newMockUserRepository()
+			tt.setupMock(repo)
+			svc := NewUserService(repo)
+
+			user, err := svc.GetUserByEmail(context.Background(), tt.email)
+
+			if tt.wantErr != nil {
+				if err == nil || err.Error() != tt.wantErr.Error() {
+					t.Errorf("GetUserByEmail() error = %v, want %v", err, tt.wantErr)
+				}
+				return
+			}
+
+			if err != nil {
+				t.Errorf("GetUserByEmail() unexpected error: %v", err)
+				return
+			}
+
+			if tt.wantErr == nil && user == nil && tt.email == "notfound@example.com" {
+				return
+			}
+		})
+	}
+}
+
+func TestUserService_Login_Success(t *testing.T) {
+	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte("password123"), bcrypt.DefaultCost)
+
+	repo := newMockUserRepository()
+	repo.users[1] = createTestUser(1, "test@example.com", string(hashedPassword))
+	repo.users[1].Username = "testuser"
+	repo.users[1].UserType = models.UserTypeUser
+	repo.users[1].Status = models.UserStatusActive
+	repo.usersByEmail["test@example.com"] = repo.users[1]
+
+	svc := NewUserService(repo)
+
+	resp, err := svc.Login(context.Background(), LoginRequest{
+		Email:    "test@example.com",
+		Password: "password123",
+	})
+
+	if err != nil {
+		t.Errorf("Login() unexpected error: %v", err)
+		return
+	}
+
+	if resp.Email != "test@example.com" {
+		t.Errorf("Login() email = %v, want test@example.com", resp.Email)
+	}
+	if resp.Username != "testuser" {
+		t.Errorf("Login() username = %v, want testuser", resp.Username)
+	}
+	if resp.Token == "" {
+		t.Error("Login() token should not be empty")
+	}
+}
+
+func TestUserService_UpdateUser_UpdateError(t *testing.T) {
+	repo := newMockUserRepository()
+	repo.users[1] = createTestUser(1, "test@example.com", "hash")
+	repo.usersByEmail["test@example.com"] = repo.users[1]
+	repo.updateErr = errors.New("update failed")
+
+	svc := NewUserService(repo)
+
+	err := svc.UpdateUser(context.Background(), UpdateUserRequest{
+		ID:    1,
+		Email: "new@example.com",
+	})
+
+	if err == nil {
+		t.Error("UpdateUser() expected error, got nil")
+	}
+}
+
+func TestUserService_UpdateUser_InvalidRole(t *testing.T) {
+	repo := newMockUserRepository()
+	repo.users[1] = createTestUser(1, "test@example.com", "hash")
+	repo.usersByEmail["test@example.com"] = repo.users[1]
+
+	svc := NewUserService(repo)
+
+	err := svc.UpdateUser(context.Background(), UpdateUserRequest{
+		ID:       1,
+		UserType: "invalid_role",
+	})
+
+	if !errors.Is(err, ErrInvalidRole) {
+		t.Errorf("UpdateUser() error = %v, want %v", err, ErrInvalidRole)
+	}
+}
+
+func TestUserService_UpdateUser_InvalidStatus(t *testing.T) {
+	repo := newMockUserRepository()
+	repo.users[1] = createTestUser(1, "test@example.com", "hash")
+	repo.usersByEmail["test@example.com"] = repo.users[1]
+
+	svc := NewUserService(repo)
+
+	err := svc.UpdateUser(context.Background(), UpdateUserRequest{
+		ID:     1,
+		Status: "invalid_status",
+	})
+
+	if err == nil {
+		t.Error("UpdateUser() expected error for invalid status, got nil")
+	}
+}
+
+func TestUserService_Register_GetByUsernameError(t *testing.T) {
+	repo := newMockUserRepository()
+	repo.getByUsernameErr = errors.New("database error")
+
+	svc := NewUserService(repo)
+
+	_, err := svc.Register(context.Background(), RegisterRequest{
+		Username: "testuser",
+		Email:    "test@example.com",
+		Password: "password123",
+	})
+
+	if err == nil {
+		t.Error("Register() expected error, got nil")
+	}
+}
+
+func TestUserService_Register_GetByEmailError(t *testing.T) {
+	repo := newMockUserRepository()
+	repo.getByEmailErr = errors.New("database error")
+
+	svc := NewUserService(repo)
+
+	_, err := svc.Register(context.Background(), RegisterRequest{
+		Username: "testuser",
+		Email:    "test@example.com",
+		Password: "password123",
+	})
+
+	if err == nil {
+		t.Error("Register() expected error, got nil")
+	}
+}
+
+func TestUserService_DeleteUser_GetByIDError(t *testing.T) {
+	repo := newMockUserRepository()
+	repo.getByIDErr = errors.New("database error")
+
+	svc := NewUserService(repo)
+
+	err := svc.DeleteUser(context.Background(), 1)
+
+	if err == nil {
+		t.Error("DeleteUser() expected error, got nil")
+	}
+}
