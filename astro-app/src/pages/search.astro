@@ -54,7 +54,7 @@ import Footer from "../components/Footer.astro";
           </div>
           <h3 class="text-lg font-semibold mb-2 line-clamp-1">上海剪纸</h3>
           <p class="text-sm text-muted-foreground mb-3 line-clamp-2">上海剪纸是中国传统民间艺术之一，以其精细的刀法和独特的艺术风格而闻名。</p>
-          <a href="/knowledge/1" class="text-sm text-primary hover:underline">查看详情</a>
+          <a href="/knowledge/1?ref=/search" class="text-sm text-primary hover:underline">查看详情</a>
         </div>
       </div>
 
@@ -67,7 +67,7 @@ import Footer from "../components/Footer.astro";
           </div>
           <h3 class="text-lg font-semibold mb-2 line-clamp-1">昆曲</h3>
           <p class="text-sm text-muted-foreground mb-3 line-clamp-2">昆曲是中国最古老的戏曲剧种之一，被列入世界非物质文化遗产名录。</p>
-          <a href="/knowledge/2" class="text-sm text-primary hover:underline">查看详情</a>
+          <a href="/knowledge/2?ref=/search" class="text-sm text-primary hover:underline">查看详情</a>
         </div>
       </div>
 
@@ -80,7 +80,7 @@ import Footer from "../components/Footer.astro";
           </div>
           <h3 class="text-lg font-semibold mb-2 line-clamp-1">评弹</h3>
           <p class="text-sm text-muted-foreground mb-3 line-clamp-2">评弹是苏州地区的传统曲艺形式，以说、噱、弹、唱为主要表现手段。</p>
-          <a href="/knowledge/3" class="text-sm text-primary hover:underline">查看详情</a>
+          <a href="/knowledge/3?ref=/search" class="text-sm text-primary hover:underline">查看详情</a>
         </div>
       </div>
 
@@ -93,7 +93,7 @@ import Footer from "../components/Footer.astro";
           </div>
           <h3 class="text-lg font-semibold mb-2 line-clamp-1">张小泉剪刀</h3>
           <p class="text-sm text-muted-foreground mb-3 line-clamp-2">张小泉剪刀是中国传统手工剪刀的代表，以其锋利耐用而闻名。</p>
-          <a href="/knowledge/4" class="text-sm text-primary hover:underline">查看详情</a>
+          <a href="/knowledge/4?ref=/search" class="text-sm text-primary hover:underline">查看详情</a>
         </div>
       </div>
 
@@ -106,7 +106,7 @@ import Footer from "../components/Footer.astro";
           </div>
           <h3 class="text-lg font-semibold mb-2 line-clamp-1">顾绣</h3>
           <p class="text-sm text-muted-foreground mb-3 line-clamp-2">顾绣是上海地区的传统刺绣工艺，以其精细的针法和独特的艺术风格而闻名。</p>
-          <a href="/knowledge/5" class="text-sm text-primary hover:underline">查看详情</a>
+          <a href="/knowledge/5?ref=/search" class="text-sm text-primary hover:underline">查看详情</a>
         </div>
       </div>
 
@@ -119,7 +119,7 @@ import Footer from "../components/Footer.astro";
           </div>
           <h3 class="text-lg font-semibold mb-2 line-clamp-1">豫园灯会</h3>
           <p class="text-sm text-muted-foreground mb-3 line-clamp-2">豫园灯会是上海地区的传统节日活动，以其精美的灯彩和浓厚的节日氛围而闻名。</p>
-          <a href="/knowledge/6" class="text-sm text-primary hover:underline">查看详情</a>
+          <a href="/knowledge/6?ref=/search" class="text-sm text-primary hover:underline">查看详情</a>
         </div>
       </div>
     </div>
@@ -149,8 +149,8 @@ import Footer from "../components/Footer.astro";
 
 <script>
   // 搜索功能
-  const searchInput = document.getElementById('search-input') as HTMLInputElement;
-  if (searchInput) {
+  const searchInput = document.getElementById('search-input');
+  if (searchInput && searchInput instanceof HTMLInputElement) {
     searchInput.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         // 跳转到搜索结果页面
@@ -163,19 +163,23 @@ import Footer from "../components/Footer.astro";
   const categoryButtons = document.querySelectorAll('.flex.flex-wrap.gap-4 button');
   categoryButtons.forEach(button => {
     button.addEventListener('click', function(e) {
-      const target = e.currentTarget as HTMLElement;
+      const target = e.currentTarget;
       // 移除所有按钮的激活状态
-      categoryButtons.forEach(btn => {
-        btn.classList.remove('bg-primary', 'text-primary-foreground');
-        btn.classList.add('bg-muted', 'text-muted-foreground');
+      categoryButtons.forEach((btn) => {
+        if (btn instanceof HTMLElement) {
+          btn.classList.remove('bg-primary', 'text-primary-foreground');
+          btn.classList.add('bg-muted', 'text-muted-foreground');
+        }
       });
       
       // 添加当前按钮的激活状态
-      target.classList.remove('bg-muted', 'text-muted-foreground');
-      target.classList.add('bg-primary', 'text-primary-foreground');
-      
-      // 这里可以添加分类筛选逻辑
-      console.log('分类:', target.textContent?.trim());
+      if (target instanceof HTMLElement) {
+        target.classList.remove('bg-muted', 'text-muted-foreground');
+        target.classList.add('bg-primary', 'text-primary-foreground');
+        
+        // 这里可以添加分类筛选逻辑
+        console.log('分类:', target.textContent?.trim());
+      }
     });
   });
 </script>

@@ -152,26 +152,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const currentPath = window.location.pathname;
     const navLinks = document.querySelectorAll('[data-nav-link]');
     
-    navLinks.forEach(link => {
-      link.classList.remove('text-primary', 'font-semibold');
-      link.classList.add('text-foreground/80', 'hover:text-primary');
+    navLinks.forEach((link) => {
+      if (link instanceof HTMLElement) {
+        link.classList.remove('text-primary', 'font-semibold');
+        link.classList.add('text-foreground/80', 'hover:text-primary');
+      }
     });
     
     if (currentPath === '/') {
       const homeLink = document.querySelector('[data-nav-link="home"]');
-      if (homeLink) {
+      if (homeLink && homeLink instanceof HTMLElement) {
         homeLink.classList.remove('text-foreground/80', 'hover:text-primary');
         homeLink.classList.add('text-primary', 'font-semibold');
       }
     } else if (currentPath === '/knowledge') {
       const knowledgeLink = document.querySelector('[data-nav-link="knowledge"]');
-      if (knowledgeLink) {
+      if (knowledgeLink && knowledgeLink instanceof HTMLElement) {
         knowledgeLink.classList.remove('text-foreground/80', 'hover:text-primary');
         knowledgeLink.classList.add('text-primary', 'font-semibold');
       }
     } else if (currentPath === '/community') {
       const communityLink = document.querySelector('[data-nav-link="community"]');
-      if (communityLink) {
+      if (communityLink && communityLink instanceof HTMLElement) {
         communityLink.classList.remove('text-foreground/80', 'hover:text-primary');
         communityLink.classList.add('text-primary', 'font-semibold');
       }
@@ -201,7 +203,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // 打开/关闭菜单
     menuBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      sidebar.classList.toggle("translate-x-full");
+      if (sidebar instanceof HTMLElement) {
+        sidebar.classList.toggle("translate-x-full");
+      }
     });
 
     // 点击侧边栏不关闭
@@ -211,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 点击空白关闭 → 只在移动端生效，不影响电脑端链接
     document.addEventListener("click", (e) => {
-      if (window.innerWidth < 768) {
+      if (window.innerWidth < 768 && sidebar instanceof HTMLElement) {
         sidebar.classList.add("translate-x-full");
       }
     });
@@ -227,14 +231,18 @@ document.addEventListener("DOMContentLoaded", () => {
   if (searchPanel && mobileSearchBtn && closeSearchBtn) {
     // 显示搜索面板
     const showSearchPanel = () => {
-      searchPanel.classList.remove("hidden");
-      document.body.style.overflow = "hidden"; // 防止背景滚动
+      if (searchPanel instanceof HTMLElement) {
+        searchPanel.classList.remove("hidden");
+        document.body.style.overflow = "hidden"; // 防止背景滚动
+      }
     };
 
     // 隐藏搜索面板
     const hideSearchPanel = () => {
-      searchPanel.classList.add("hidden");
-      document.body.style.overflow = "auto"; // 恢复背景滚动
+      if (searchPanel instanceof HTMLElement) {
+        searchPanel.classList.add("hidden");
+        document.body.style.overflow = "auto"; // 恢复背景滚动
+      }
     };
 
     // 手机搜索按钮点击

@@ -388,9 +388,13 @@ import Footer from "@/components/Footer.astro";
 					const typeMatch = currentType === 'all' || type === currentType;
 
 					if (filterMatch && typeMatch) {
-						(card as HTMLElement).style.display = 'block';
+						if (card instanceof HTMLElement) {
+							card.style.display = 'block';
+						}
 					} else {
-						(card as HTMLElement).style.display = 'none';
+						if (card instanceof HTMLElement) {
+							card.style.display = 'none';
+						}
 					}
 				});
 			}
@@ -398,40 +402,48 @@ import Footer from "@/components/Footer.astro";
 			// 顶部筛选按钮点击事件
 			filterButtons.forEach(button => {
 				button.addEventListener('click', (event) => {
-					const target = event.currentTarget as HTMLElement;
+					const target = event.currentTarget;
 					// 移除所有按钮的活跃状态
-					filterButtons.forEach(btn => {
-						btn.classList.remove('bg-primary', 'text-primary-foreground');
-						btn.classList.add('bg-card', 'hover:bg-muted');
+					filterButtons.forEach((btn) => {
+						if (btn instanceof HTMLElement) {
+							btn.classList.remove('bg-primary', 'text-primary-foreground');
+							btn.classList.add('bg-card', 'hover:bg-muted');
+						}
 					});
 
 					// 添加当前按钮的活跃状态
-					target.classList.remove('bg-card', 'hover:bg-muted');
-					target.classList.add('bg-primary', 'text-primary-foreground');
+					if (target instanceof HTMLElement) {
+						target.classList.remove('bg-card', 'hover:bg-muted');
+						target.classList.add('bg-primary', 'text-primary-foreground');
 
-					// 更新当前筛选条件
-					currentFilter = target.getAttribute('data-filter') || 'all';
-					filterCards();
+						// 更新当前筛选条件
+						currentFilter = target.getAttribute('data-filter') || 'all';
+						filterCards();
+					}
 				});
 			});
 
 			// 内容类型筛选按钮点击事件
 			typeButtons.forEach(button => {
 				button.addEventListener('click', (event) => {
-					const target = event.currentTarget as HTMLElement;
+					const target = event.currentTarget;
 					// 移除所有按钮的活跃状态
-					typeButtons.forEach(btn => {
-						btn.classList.remove('bg-primary', 'text-primary-foreground');
-						btn.classList.add('bg-card', 'hover:bg-muted');
+					typeButtons.forEach((btn) => {
+						if (btn instanceof HTMLElement) {
+							btn.classList.remove('bg-primary', 'text-primary-foreground');
+							btn.classList.add('bg-card', 'hover:bg-muted');
+						}
 					});
 
 					// 添加当前按钮的活跃状态
-					target.classList.remove('bg-card', 'hover:bg-muted');
-					target.classList.add('bg-primary', 'text-primary-foreground');
+					if (target instanceof HTMLElement) {
+						target.classList.remove('bg-card', 'hover:bg-muted');
+						target.classList.add('bg-primary', 'text-primary-foreground');
 
-					// 更新当前筛选条件
-					currentType = target.getAttribute('data-type') || 'all';
-					filterCards();
+						// 更新当前筛选条件
+						currentType = target.getAttribute('data-type') || 'all';
+						filterCards();
+					}
 				});
 			});
 		});

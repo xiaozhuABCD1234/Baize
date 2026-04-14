@@ -55,12 +55,28 @@ if (!person) {
 	<main class="pt-[100px] w-full max-w-[1800px] mx-auto px-4 lg:px-6 relative z-50">
 		<!-- 返回按钮 -->
 		<div class="mb-6 relative z-50">
-			<a href="/knowledge" class="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-card text-foreground hover:bg-muted border border-border transition-all">
+			<script>
+				// 获取 URL 中的 ref 参数
+				const urlParams = new URLSearchParams(window.location.search);
+				const ref = urlParams.get('ref');
+				// 设置返回链接
+				const backLink = ref || '/knowledge';
+				// 检查元素是否存在
+				const backButton = document.querySelector('.back-button');
+				const backText = document.querySelector('.back-text');
+				if (backButton && backButton instanceof HTMLAnchorElement) {
+					backButton.href = backLink;
+				}
+				if (backText && backText instanceof HTMLElement) {
+					backText.textContent = ref ? '返回搜索结果' : '返回传承人列表';
+				}
+			</script>
+			<a href="" class="back-button inline-flex items-center gap-2 px-3 py-2 rounded-md bg-card text-foreground hover:bg-muted border border-border transition-all">
 				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 					<path d="M19 12H5"></path>
 					<path d="M12 19l-7-7 7-7"></path>
 				</svg>
-				<span>返回传承人列表</span>
+				<span class="back-text">返回传承人列表</span>
 			</a>
 		</div>
 
