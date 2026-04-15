@@ -10,6 +10,12 @@ import (
 	"github.com/labstack/echo/v5"
 )
 
+const (
+	ContextKeyUserID   = "user_id"
+	ContextKeyEmail    = "email"
+	ContextKeyUserType = "user_type"
+)
+
 func JWTAuth() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c *echo.Context) error {
@@ -33,11 +39,63 @@ func JWTAuth() echo.MiddlewareFunc {
 				return c.JSON(http.StatusUnauthorized, response.Fail(response.TokenTypeInvalid, "无效的 Token 类型"))
 			}
 
-			c.Set("user_id", claims.UserID)
-			c.Set("email", claims.Email)
-			c.Set("user_type", claims.UserType)
+			c.Set(ContextKeyUserID, claims.UserID)
+			c.Set(ContextKeyEmail, claims.Email)
+			c.Set(ContextKeyUserType, claims.UserType)
 
 			return next(c)
 		}
 	}
+}
+
+func RequireAuth() echo.MiddlewareFunc {
+	return JWTAuth()
+}
+
+func RequireRole(roles ...string) echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c *echo.Context) error {
+			userType, ok := c.Get(ContextKeyUserType).(string)
+			if !ok || userType == "" {
+				return c.JSON(http.StatusUnauthorized, response.Fail(response.TokenInvalid, "用户未认证"))
+			}
+
+			for _, role := range roles {
+				if userType == role {
+					return next(c)
+				}
+			}
+
+			return c.JSON(http.StatusForbidden, response.Fail(response.Forbidden, "无权访问此资源"))
+		}
+	}
+}
+
+func RequireAdmin() echo.MiddlewareFunc {
+	return RequireRole("admin")
+}
+
+func GetUserID(c *echo.Context) uint {
+	if id, ok := c.Get(ContextKeyUserID).(uint); ok {
+		return id
+	}
+	return 0
+}
+
+func GetEmail(c *echo.Context) string {
+	if email, ok := c.Get(ContextKeyEmail).(string); ok {
+		return email
+	}
+	return ""
+}
+
+func GetUserType(c *echo.Context) string {
+	if userType, ok := c.Get(ContextKeyUserType).(string); ok {
+		return userType
+	}
+	return ""
+}
+
+func IsAdmin(c *echo.Context) bool {
+	return GetUserType(c) == "admin"
 }

@@ -1,5 +1,280 @@
-basePath: /api/v1
 definitions:
+  backend_internal_models.Craft:
+    properties:
+      category:
+        $ref: '#/definitions/backend_internal_models.ICHCategory'
+      categoryID:
+        type: integer
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        description: 工艺概况
+        type: string
+      difficulty:
+        description: 技艺难度等级
+        type: integer
+      history:
+        description: 历史沿革
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      regionFeatures:
+        description: 不同地域的表现形式差异
+        items:
+          type: integer
+        type: array
+      tools:
+        description: 所需核心工具列表
+        items:
+          type: integer
+        type: array
+      updatedAt:
+        type: string
+    type: object
+  backend_internal_models.CreateCommentRequest:
+    properties:
+      content:
+        maxLength: 1000
+        type: string
+      media_url:
+        type: string
+      parent_id:
+        description: 回复某条评论
+        type: integer
+      root_id:
+        description: 所属楼层根 ID
+        type: integer
+      work_id:
+        type: integer
+    required:
+    - content
+    - work_id
+    type: object
+  backend_internal_models.CreateWorkRequest:
+    properties:
+      category_id:
+        type: integer
+      content:
+        type: string
+      content_type:
+        enum:
+        - 1
+        - 2
+        - 3
+        type: integer
+      craft_id:
+        type: integer
+      creation_time:
+        description: 作品实际创作时间
+        type: string
+      materials:
+        description: 材料
+        items:
+          type: string
+        type: array
+      media:
+        items:
+          $ref: '#/definitions/backend_internal_models.MediaItem'
+        type: array
+      region_id:
+        type: integer
+      technique_tags:
+        description: 技艺标签
+        items:
+          type: string
+        type: array
+      title:
+        maxLength: 200
+        type: string
+    required:
+    - content
+    - content_type
+    - media
+    - title
+    type: object
+  backend_internal_models.FavoriteRequest:
+    properties:
+      folder_id:
+        type: integer
+      remark:
+        type: string
+      work_id:
+        type: integer
+    required:
+    - work_id
+    type: object
+  backend_internal_models.ICHCategory:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      iconURL:
+        type: string
+      id:
+        type: integer
+      level:
+        type: integer
+      name:
+        type: string
+      parentID:
+        type: integer
+      regionCode:
+        description: 分类的地域特色标识
+        type: string
+      sortOrder:
+        description: 排序权重
+        type: integer
+      status:
+        description: 分类启用状态
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  backend_internal_models.MediaItem:
+    properties:
+      description:
+        type: string
+      media_type:
+        enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        type: integer
+      sort_order:
+        type: integer
+      thumbnail_url:
+        type: string
+      url:
+        type: string
+    required:
+    - media_type
+    - url
+    type: object
+  backend_internal_models.Region:
+    properties:
+      code:
+        description: 行政区划代码（如 110101）
+        type: string
+      createdAt:
+        type: string
+      cultureDesc:
+        description: 地域文化背景描述
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      isHeritageCenter:
+        description: 是否为非遗重点保护区域
+        type: boolean
+      level:
+        description: 级别：省/市/县
+        type: integer
+      name:
+        type: string
+      parentID:
+        description: 上级区域 ID
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  backend_internal_models.UserStatus:
+    enum:
+    - 0
+    - 1
+    - 2
+    format: int32
+    type: integer
+    x-enum-comments:
+      UserStatusActive: 正常可用
+      UserStatusDisabled: 封禁状态
+      UserStatusPending: 注册待激活或资料审核中
+    x-enum-descriptions:
+    - 封禁状态
+    - 正常可用
+    - 注册待激活或资料审核中
+    x-enum-varnames:
+    - UserStatusDisabled
+    - UserStatusActive
+    - UserStatusPending
+  backend_internal_services.ChangePasswordRequest:
+    properties:
+      new_password:
+        maxLength: 32
+        minLength: 6
+        type: string
+      old_password:
+        type: string
+      user_id:
+        type: integer
+    required:
+    - new_password
+    - old_password
+    - user_id
+    type: object
+  backend_internal_services.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  backend_internal_services.RegisterRequest:
+    properties:
+      email:
+        type: string
+      password:
+        maxLength: 32
+        minLength: 6
+        type: string
+      phone:
+        type: string
+      status:
+        $ref: '#/definitions/backend_internal_models.UserStatus'
+      user_type:
+        type: string
+      username:
+        maxLength: 50
+        minLength: 3
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  backend_internal_services.UpdateUserRequest:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      status:
+        enum:
+        - "0"
+        - "1"
+        - "2"
+        type: string
+      user_type:
+        enum:
+        - user
+        - master
+        - institution
+        - admin
+        type: string
+    required:
+    - id
+    type: object
   backend_pkg_response.ErrorField:
     properties:
       code:
@@ -29,22 +304,1785 @@ definitions:
       request_id:
         type: string
     type: object
-host: localhost:1323
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
 info:
-  contact:
-    email: support@example.com
-    name: Baize Team
-    url: https://github.com/your-org/baize
-  description: 用户管理API，提供用户注册、登录、信息管理等功能，基于JWT令牌认证。
-  license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
-  termsOfService: https://example.com/terms/
-  title: User Management API
-  version: 1.0.0
+  contact: {}
 paths:
+  /auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: 使用Refresh Token获取新的Access Token
+      parameters:
+      - description: Refresh Token
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刷新成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "401":
+          description: 无效的Refresh Token
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 刷新Access Token
+      tags:
+      - auth
+  /categories:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有非遗分类列表
+      parameters:
+      - description: 排序字段
+        in: query
+        name: order_by
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取分类列表
+      tags:
+      - categories
+    post:
+      consumes:
+      - application/json
+      description: 创建新的非遗分类（仅管理员可操作）
+      parameters:
+      - description: 分类信息
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/backend_internal_models.ICHCategory'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 创建成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误或无效的分类级别
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "409":
+          description: 分类名称已存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 创建分类
+      tags:
+      - categories
+  /categories/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除分类（仅管理员可操作）
+      parameters:
+      - description: 分类ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误或无法删除有子节点的分类
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 分类不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 删除分类
+      tags:
+      - categories
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取分类信息
+      parameters:
+      - description: 分类ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的分类ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 分类不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取分类
+      tags:
+      - categories
+    put:
+      consumes:
+      - application/json
+      description: 更新分类信息（仅管理员可操作）
+      parameters:
+      - description: 分类ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 分类信息
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/backend_internal_models.ICHCategory'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 分类不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "409":
+          description: 分类名称已存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 更新分类
+      tags:
+      - categories
+  /categories/{id}/with-children:
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取分类信息及其所有子分类
+      parameters:
+      - description: 分类ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的分类ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 分类不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取分类及子分类
+      tags:
+      - categories
+  /categories/active:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有状态为启用的分类
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取启用分类
+      tags:
+      - categories
+  /categories/name/{name}:
+    get:
+      consumes:
+      - application/json
+      description: 根据分类名称获取分类信息
+      parameters:
+      - description: 分类名称
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 分类不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 根据名称获取分类
+      tags:
+      - categories
+  /categories/parent/{parent_id}:
+    get:
+      consumes:
+      - application/json
+      description: 根据父分类ID获取子分类列表
+      parameters:
+      - description: 父分类ID
+        in: path
+        name: parent_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的分类ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取子分类
+      tags:
+      - categories
+  /categories/region/{region_code}:
+    get:
+      consumes:
+      - application/json
+      description: 根据地区编码获取该地区的分类列表
+      parameters:
+      - description: 地区编码
+        in: path
+        name: region_code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取地区分类
+      tags:
+      - categories
+  /categories/root:
+    get:
+      consumes:
+      - application/json
+      description: 获取一级分类（无父级的分类）
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取根分类
+      tags:
+      - categories
+  /comments:
+    post:
+      consumes:
+      - application/json
+      description: 对作品发表评论或回复
+      parameters:
+      - description: 评论请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/backend_internal_models.CreateCommentRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 评论成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误、作品不存在、父评论不存在或不能回复二级及以下的评论
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 发表评论
+      tags:
+      - comments
+  /comments/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除评论
+      parameters:
+      - description: 评论ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的评论ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 评论不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 删除评论
+      tags:
+      - comments
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取评论详情
+      parameters:
+      - description: 评论ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的评论ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 评论不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取评论
+      tags:
+      - comments
+    put:
+      consumes:
+      - application/json
+      description: 更新评论内容
+      parameters:
+      - description: 评论ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 评论内容
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 评论不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 更新评论
+      tags:
+      - comments
+  /comments/{id}/like:
+    put:
+      consumes:
+      - application/json
+      description: 更新评论的点赞数量
+      parameters:
+      - description: 评论ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 增量
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 点赞更新成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 评论不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 更新评论点赞数
+      tags:
+      - comments
+  /comments/{id}/status:
+    put:
+      consumes:
+      - application/json
+      description: 更新评论审核状态（仅管理员可操作）
+      parameters:
+      - description: 评论ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: '状态: 0删除 1正常 2审核中'
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 状态更新成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误或无效的评论状态
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 评论不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 更新评论状态
+      tags:
+      - comments
+  /comments/user/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定用户的所有评论
+      parameters:
+      - description: 用户ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的用户ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取用户评论
+      tags:
+      - comments
+  /comments/work/{work_id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定作品的所有评论（带分页）
+      parameters:
+      - description: 作品ID
+        in: path
+        name: work_id
+        required: true
+        type: integer
+      - default: 1
+        description: 页码
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: 每页数量
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的作品ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取作品评论列表
+      tags:
+      - comments
+  /comments/work/{work_id}/root:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定作品的一级评论（不带分页，返回树形结构）
+      parameters:
+      - description: 作品ID
+        in: path
+        name: work_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的作品ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取作品根评论
+      tags:
+      - comments
+  /crafts:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有技艺列表
+      parameters:
+      - description: 排序字段
+        in: query
+        name: order_by
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取技艺列表
+      tags:
+      - crafts
+    post:
+      consumes:
+      - application/json
+      description: 创建新的技艺（仅管理员可操作）
+      parameters:
+      - description: 技艺信息
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/backend_internal_models.Craft'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 创建成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误、技艺名称已存在、分类不存在或无效的难度等级
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 创建技艺
+      tags:
+      - crafts
+  /crafts/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除技艺（仅管理员可操作）
+      parameters:
+      - description: 技艺ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的技艺ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 技艺不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 删除技艺
+      tags:
+      - crafts
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取技艺信息
+      parameters:
+      - description: 技艺ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的技艺ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 技艺不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取技艺
+      tags:
+      - crafts
+    put:
+      consumes:
+      - application/json
+      description: 更新技艺信息（仅管理员可操作）
+      parameters:
+      - description: 技艺ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 技艺信息
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/backend_internal_models.Craft'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 技艺不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "409":
+          description: 技艺名称已存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 更新技艺
+      tags:
+      - crafts
+  /crafts/{id}/with-category:
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取技艺信息及其所属分类
+      parameters:
+      - description: 技艺ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的技艺ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 技艺不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取技艺及分类
+      tags:
+      - crafts
+  /crafts/category/{category_id}:
+    get:
+      consumes:
+      - application/json
+      description: 根据分类ID获取该分类下的所有技艺
+      parameters:
+      - description: 分类ID
+        in: path
+        name: category_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的分类ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取分类下的技艺
+      tags:
+      - crafts
+  /crafts/difficulty/{level}:
+    get:
+      consumes:
+      - application/json
+      description: 根据难度等级获取技艺列表
+      parameters:
+      - description: 难度等级
+        in: path
+        name: level
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的难度等级
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取指定难度技艺
+      tags:
+      - crafts
+  /favorites:
+    post:
+      consumes:
+      - application/json
+      description: 收藏指定作品
+      parameters:
+      - description: 收藏请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/backend_internal_models.FavoriteRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 收藏成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误或作品不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "409":
+          description: 已经收藏过该作品
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 收藏作品
+      tags:
+      - favorites
+  /favorites/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 取消收藏指定作品
+      parameters:
+      - description: 收藏ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 取消收藏成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的收藏ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 收藏不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 取消收藏
+      tags:
+      - favorites
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取收藏详情
+      parameters:
+      - description: 收藏ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的收藏ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 收藏不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取收藏
+      tags:
+      - favorites
+  /favorites/{id}/folder:
+    put:
+      consumes:
+      - application/json
+      description: 将收藏移动到指定文件夹
+      parameters:
+      - description: 收藏ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 文件夹ID
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 移动成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 收藏不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 移动收藏
+      tags:
+      - favorites
+  /favorites/check/{work_id}:
+    get:
+      consumes:
+      - application/json
+      description: 检查当前用户是否收藏了指定作品
+      parameters:
+      - description: 作品ID
+        in: path
+        name: work_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的作品ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 检查收藏状态
+      tags:
+      - favorites
+  /favorites/user/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定用户的收藏列表（带分页）
+      parameters:
+      - description: 用户ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      - default: 1
+        description: 页码
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: 每页数量
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的用户ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取用户收藏列表
+      tags:
+      - favorites
+  /favorites/work/{work_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据作品ID取消收藏
+      parameters:
+      - description: 作品ID
+        in: path
+        name: work_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 取消收藏成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的作品ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 收藏不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 取消收藏作品
+      tags:
+      - favorites
+    get:
+      consumes:
+      - application/json
+      description: 获取收藏了指定作品的用户列表
+      parameters:
+      - description: 作品ID
+        in: path
+        name: work_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的作品ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取作品收藏列表
+      tags:
+      - favorites
+  /follows:
+    post:
+      consumes:
+      - application/json
+      description: 当前用户关注指定用户
+      parameters:
+      - description: 关注的用户ID
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 关注成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误、不能关注自己或用户不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "409":
+          description: 已经关注过该用户
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 关注用户
+      tags:
+      - follows
+  /follows/{user_id}:
+    delete:
+      consumes:
+      - application/json
+      description: 取消关注指定用户
+      parameters:
+      - description: 要取消关注的用户ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 取消关注成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的用户ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 未关注该用户
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 取消关注
+      tags:
+      - follows
+  /follows/check/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: 检查当前用户是否关注了指定用户
+      parameters:
+      - description: 用户ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的用户ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 检查是否关注
+      tags:
+      - follows
+  /follows/followers/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定用户的粉丝列表
+      parameters:
+      - description: 用户ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的用户ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取粉丝列表
+      tags:
+      - follows
+  /follows/followers/{user_id}/count:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定用户的粉丝数量
+      parameters:
+      - description: 用户ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的用户ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取粉丝数
+      tags:
+      - follows
+  /follows/following/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定用户的关注列表
+      parameters:
+      - description: 用户ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的用户ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取关注列表
+      tags:
+      - follows
+  /follows/following/{user_id}/count:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定用户的关注数量
+      parameters:
+      - description: 用户ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的用户ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取关注数
+      tags:
+      - follows
+  /regions:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有地区列表
+      parameters:
+      - description: 排序字段
+        in: query
+        name: order_by
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取地区列表
+      tags:
+      - regions
+    post:
+      consumes:
+      - application/json
+      description: 创建新的地区（仅管理员可操作）
+      parameters:
+      - description: 地区信息
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/backend_internal_models.Region'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 创建成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误或无效的地区级别
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "409":
+          description: 地区代码已存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 创建地区
+      tags:
+      - regions
+  /regions/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除地区（仅管理员可操作）
+      parameters:
+      - description: 地区ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误或无法删除有子节点的地区
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 地区不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 删除地区
+      tags:
+      - regions
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取地区信息
+      parameters:
+      - description: 地区ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的地区ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 地区不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取地区
+      tags:
+      - regions
+    put:
+      consumes:
+      - application/json
+      description: 更新地区信息（仅管理员可操作）
+      parameters:
+      - description: 地区ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 地区信息
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/backend_internal_models.Region'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 地区不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "409":
+          description: 地区代码已存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 更新地区
+      tags:
+      - regions
+  /regions/{id}/with-children:
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取地区信息及其所有子地区
+      parameters:
+      - description: 地区ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的地区ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 地区不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取地区及子地区
+      tags:
+      - regions
+  /regions/code/{code}:
+    get:
+      consumes:
+      - application/json
+      description: 根据地区编码获取地区信息
+      parameters:
+      - description: 地区编码
+        in: path
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 地区不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 根据编码获取地区
+      tags:
+      - regions
+  /regions/heritage-centers:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有非遗保护中心地区
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取非遗保护中心
+      tags:
+      - regions
+  /regions/level/{level}:
+    get:
+      consumes:
+      - application/json
+      description: 根据级别获取地区列表
+      parameters:
+      - description: 地区级别
+        in: path
+        name: level
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的地区级别
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取指定级别地区
+      tags:
+      - regions
+  /regions/parent/{parent_id}:
+    get:
+      consumes:
+      - application/json
+      description: 根据父地区ID获取子地区列表
+      parameters:
+      - description: 父地区ID
+        in: path
+        name: parent_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的地区ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取子地区
+      tags:
+      - regions
+  /regions/root:
+    get:
+      consumes:
+      - application/json
+      description: 获取一级地区（无父级的地区）
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取根地区
+      tags:
+      - regions
   /users:
     get:
+      consumes:
+      - application/json
       description: 分页获取用户列表
       parameters:
       - default: 1
@@ -61,17 +2099,21 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: 获取成功
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
-      security:
-      - BearerAuth: []
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
       summary: 获取用户列表
       tags:
       - users
   /users/{id}:
     delete:
-      description: 根据ID删除用户
+      consumes:
+      - application/json
+      description: 删除用户账号（仅本人或管理员可操作）
       parameters:
       - description: 用户ID
         in: path
@@ -82,15 +2124,23 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: 删除成功
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
         "400":
-          description: Bad Request
+          description: 无效的用户ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "403":
+          description: 无权删除此用户
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
         "404":
-          description: Not Found
+          description: 用户不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
       security:
@@ -99,6 +2149,8 @@ paths:
       tags:
       - users
     get:
+      consumes:
+      - application/json
       description: 根据ID获取用户信息
       parameters:
       - description: 用户ID
@@ -110,26 +2162,28 @@ paths:
       - application/json
       responses:
         "200":
-          description: OK
+          description: 获取成功
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
         "400":
-          description: Bad Request
+          description: 无效的用户ID
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
         "404":
-          description: Not Found
+          description: 用户不存在
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
-      security:
-      - BearerAuth: []
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
       summary: 获取用户
       tags:
       - users
     put:
       consumes:
       - application/json
-      description: 更新用户信息
+      description: 更新用户信息（仅本人或管理员可操作）
       parameters:
       - description: 用户ID
         in: path
@@ -141,29 +2195,32 @@ paths:
         name: request
         required: true
         schema:
-          properties:
-            email:
-              type: string
-            name:
-              type: string
-          type: object
+          $ref: '#/definitions/backend_internal_services.UpdateUserRequest'
       produces:
       - application/json
       responses:
         "200":
-          description: OK
+          description: 更新成功
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
         "400":
-          description: Bad Request
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "403":
+          description: 无权修改此用户
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
         "404":
-          description: Not Found
+          description: 用户不存在
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
         "409":
-          description: Conflict
+          description: 邮箱已被使用
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
       security:
@@ -171,45 +2228,87 @@ paths:
       summary: 更新用户
       tags:
       - users
-  /users/{id}/password:
-    put:
+  /users/{id}/force:
+    delete:
       consumes:
       - application/json
-      description: 修改用户密码
+      description: 永久删除用户账号（仅管理员可操作）
       parameters:
       - description: 用户ID
         in: path
         name: id
         required: true
         type: integer
-      - description: 修改密码请求
-        in: body
-        name: request
-        required: true
-        schema:
-          properties:
-            new_password:
-              type: string
-            old_password:
-              type: string
-          type: object
       produces:
       - application/json
       responses:
         "200":
-          description: OK
+          description: 永久删除成功
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
         "400":
-          description: Bad Request
+          description: 无效的用户ID
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
-        "401":
-          description: Unauthorized
+        "403":
+          description: 无权限执行此操作
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
         "404":
-          description: Not Found
+          description: 用户不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 永久删除用户
+      tags:
+      - users
+  /users/{id}/password:
+    put:
+      consumes:
+      - application/json
+      description: 修改用户密码（仅本人或管理员可操作）
+      parameters:
+      - description: 用户ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 密码修改请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/backend_internal_services.ChangePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 密码修改成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误或新密码不能与旧密码相同
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "401":
+          description: 旧密码错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "403":
+          description: 无权修改此用户密码
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 用户不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
       security:
@@ -221,32 +2320,31 @@ paths:
     post:
       consumes:
       - application/json
-      description: 用户登录获取Token
+      description: 用户登录获取Access Token和Refresh Token
       parameters:
       - description: 登录请求
         in: body
         name: request
         required: true
         schema:
-          properties:
-            email:
-              type: string
-            password:
-              type: string
-          type: object
+          $ref: '#/definitions/backend_internal_services.LoginRequest'
       produces:
       - application/json
       responses:
         "200":
-          description: OK
+          description: 登录成功
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
         "400":
-          description: Bad Request
+          description: 请求参数错误
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
         "401":
-          description: Unauthorized
+          description: 用户不存在或密码错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
       summary: 用户登录
@@ -263,37 +2361,391 @@ paths:
         name: request
         required: true
         schema:
-          properties:
-            email:
-              type: string
-            password:
-              type: string
-          type: object
+          $ref: '#/definitions/backend_internal_services.RegisterRequest'
       produces:
       - application/json
       responses:
         "200":
-          description: OK
+          description: 注册成功
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
         "400":
-          description: Bad Request
+          description: 请求参数错误或无效的角色类型
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
         "409":
-          description: Conflict
+          description: 用户名或邮箱已被使用
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
           schema:
             $ref: '#/definitions/backend_pkg_response.Response'
       summary: 用户注册
       tags:
       - users
-schemes:
-- http
-- https
-securityDefinitions:
-  BearerAuth:
-    description: 输入 "Bearer {token}" 进行JWT认证
-    in: header
-    name: Authorization
-    type: apiKey
+  /works:
+    get:
+      consumes:
+      - application/json
+      description: 分页获取作品列表，支持筛选和排序
+      parameters:
+      - description: 用户ID筛选
+        in: query
+        name: user_id
+        type: integer
+      - description: 技艺ID筛选
+        in: query
+        name: craft_id
+        type: integer
+      - description: 地区ID筛选
+        in: query
+        name: region_id
+        type: integer
+      - description: 是否只看大师作品
+        in: query
+        name: is_master
+        type: boolean
+      - default: newest
+        description: '排序方式: newest, hot, weight'
+        in: query
+        name: order_by
+        type: string
+      - default: 1
+        description: 页码
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: 每页数量
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取作品列表
+      tags:
+      - works
+    post:
+      consumes:
+      - application/json
+      description: 发布新作品或动态
+      parameters:
+      - description: 创建作品请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/backend_internal_models.CreateWorkRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 创建成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误、技艺不存在、分类不存在或地区不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 创建作品
+      tags:
+      - works
+  /works/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除作品
+      parameters:
+      - description: 作品ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误或无法删除已发布的作品
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 作品不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 删除作品
+      tags:
+      - works
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取作品信息
+      parameters:
+      - description: 作品ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的作品ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 作品不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取作品
+      tags:
+      - works
+    put:
+      consumes:
+      - application/json
+      description: 更新作品信息
+      parameters:
+      - description: 作品ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 更新作品请求
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/backend_internal_models.CreateWorkRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 作品不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 更新作品
+      tags:
+      - works
+  /works/{id}/count:
+    put:
+      consumes:
+      - application/json
+      description: 更新作品的浏览、点赞、评论等计数
+      parameters:
+      - description: 作品ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 计数字段和增量
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 计数更新成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 作品不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 更新作品计数
+      tags:
+      - works
+  /works/{id}/detailed:
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取作品详细信息（包括媒体资源）
+      parameters:
+      - description: 作品ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 无效的作品ID
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 作品不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取作品详情
+      tags:
+      - works
+  /works/{id}/status:
+    put:
+      consumes:
+      - application/json
+      description: 更新作品审核状态（仅管理员可操作）
+      parameters:
+      - description: 作品ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: '状态: 0草稿 1已发布 2审核中 3未通过 4下架'
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 状态更新成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "400":
+          description: 请求参数错误或无效的作品状态
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "404":
+          description: 作品不存在
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      security:
+      - BearerAuth: []
+      summary: 更新作品状态
+      tags:
+      - works
+  /works/recommended:
+    get:
+      consumes:
+      - application/json
+      description: 获取推荐的作品列表
+      parameters:
+      - default: 10
+        description: 返回数量
+        in: query
+        maximum: 50
+        minimum: 1
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取推荐作品
+      tags:
+      - works
+  /works/top:
+    get:
+      consumes:
+      - application/json
+      description: 获取置顶的优秀作品列表
+      parameters:
+      - default: 10
+        description: 返回数量
+        in: query
+        maximum: 50
+        minimum: 1
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+        "500":
+          description: 服务器内部错误
+          schema:
+            $ref: '#/definitions/backend_pkg_response.Response'
+      summary: 获取精选作品
+      tags:
+      - works
 swagger: "2.0"

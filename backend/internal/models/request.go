@@ -4,7 +4,6 @@ import (
 	"time"
 )
 
-
 // =================================================================
 // 1. 用户与权限模块 (User & Auth)
 // =================================================================
@@ -81,13 +80,13 @@ type MediaItem struct {
 
 // WorkListRequest 作品列表查询（带复杂筛选）
 type WorkListRequest struct {
-	UserID   uint   `form:"user_id"`
-	CraftID  uint   `form:"craft_id"`
-	RegionID uint   `form:"region_id"`
-	IsMaster bool   `form:"is_master"` // 是否只看大师作品
-	OrderBy  string `form:"order_by" binding:"oneof=newest hot weight"`
-	Page     int    `form:"page,default=1"`
-	PageSize int    `form:"page_size,default=10"`
+	UserID   uint   `query:"user_id"`
+	CraftID  uint   `query:"craft_id"`
+	RegionID uint   `query:"region_id"`
+	IsMaster bool   `query:"is_master"` // 是否只看大师作品
+	OrderBy  string `query:"order_by" binding:"oneof=newest hot weight"`
+	Page     int    `query:"page"`
+	PageSize int    `query:"page_size"`
 }
 
 // =================================================================
