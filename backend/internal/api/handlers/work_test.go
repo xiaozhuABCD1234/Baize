@@ -784,7 +784,7 @@ func TestWorkHandler_GetWork_NotFound(t *testing.T) {
 
 	err := h.GetWork(c)
 	assert.NoError(t, err)
-	assertErrorResponse(t, rec, http.StatusNotFound, response.UserNotFound)
+	assertErrorResponse(t, rec, http.StatusNotFound, response.WorkNotFound)
 }
 
 func TestWorkHandler_GetWork_ServiceError(t *testing.T) {
@@ -842,7 +842,7 @@ func TestWorkHandler_GetWorkDetailed_NotFound(t *testing.T) {
 
 	err := h.GetWorkDetailed(c)
 	assert.NoError(t, err)
-	assertErrorResponse(t, rec, http.StatusNotFound, response.UserNotFound)
+	assertErrorResponse(t, rec, http.StatusNotFound, response.WorkNotFound)
 }
 
 // ================================================================================
@@ -955,7 +955,7 @@ func TestWorkHandler_UpdateWork_NotFound(t *testing.T) {
 
 	err := h.UpdateWork(c)
 	assert.NoError(t, err)
-	assertErrorResponse(t, rec, http.StatusNotFound, response.UserNotFound)
+	assertErrorResponse(t, rec, http.StatusNotFound, response.WorkNotFound)
 }
 
 func TestWorkHandler_UpdateWork_ServiceError(t *testing.T) {
@@ -1015,7 +1015,7 @@ func TestWorkHandler_DeleteWork_NotFound(t *testing.T) {
 
 	err := h.DeleteWork(c)
 	assert.NoError(t, err)
-	assertErrorResponse(t, rec, http.StatusNotFound, response.UserNotFound)
+	assertErrorResponse(t, rec, http.StatusNotFound, response.WorkNotFound)
 }
 
 func TestWorkHandler_DeleteWork_CannotDeletePublished(t *testing.T) {
@@ -1091,7 +1091,7 @@ func TestWorkHandler_UpdateStatus_NotFound(t *testing.T) {
 
 	err := h.UpdateStatus(c)
 	assert.NoError(t, err)
-	assertErrorResponse(t, rec, http.StatusNotFound, response.UserNotFound)
+	assertErrorResponse(t, rec, http.StatusNotFound, response.WorkNotFound)
 }
 
 func TestWorkHandler_UpdateStatus_InvalidStatus(t *testing.T) {
@@ -1153,7 +1153,7 @@ func TestWorkHandler_IncrementCount_NotFound(t *testing.T) {
 
 	err := h.IncrementCount(c)
 	assert.NoError(t, err)
-	assertErrorResponse(t, rec, http.StatusNotFound, response.UserNotFound)
+	assertErrorResponse(t, rec, http.StatusNotFound, response.WorkNotFound)
 }
 
 func TestWorkHandler_IncrementCount_ServiceError(t *testing.T) {
@@ -1229,7 +1229,7 @@ func TestWorkHandler_GetWork_ZeroID(t *testing.T) {
 
 	err := h.GetWork(c)
 	assert.NoError(t, err)
-	assertErrorResponse(t, rec, http.StatusNotFound, response.UserNotFound)
+	assertErrorResponse(t, rec, http.StatusNotFound, response.WorkNotFound)
 }
 
 func TestWorkHandler_GetWork_MaxUint32(t *testing.T) {
@@ -1242,7 +1242,7 @@ func TestWorkHandler_GetWork_MaxUint32(t *testing.T) {
 
 	err := h.GetWork(c)
 	assert.NoError(t, err)
-	assertErrorResponse(t, rec, http.StatusNotFound, response.UserNotFound)
+	assertErrorResponse(t, rec, http.StatusNotFound, response.WorkNotFound)
 }
 
 func TestWorkHandler_UpdateWork_ZeroID(t *testing.T) {
@@ -1431,7 +1431,7 @@ func TestWorkHandler_ErrorResponse_Format(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, http.StatusNotFound, rec.Code)
 	assert.NotNil(t, resp.Error)
-	assert.Equal(t, response.UserNotFound, resp.Error.Code)
+	assert.Equal(t, response.WorkNotFound, resp.Error.Code)
 }
 
 // ================================================================================

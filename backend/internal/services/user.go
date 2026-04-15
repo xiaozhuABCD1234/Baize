@@ -145,6 +145,9 @@ type LoginResponse struct {
 func (s *UserService) Login(ctx context.Context, req LoginRequest) (*LoginResponse, error) {
 	user, err := s.repo.GetByEmail(ctx, req.Email)
 	if err != nil {
+		if errors.Is(err, repository.ErrUserNotFound) {
+			return nil, ErrUserNotFound
+		}
 		return nil, fmt.Errorf("查询用户失败: %w", err)
 	}
 	if user == nil {

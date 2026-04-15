@@ -7,6 +7,8 @@ const (
 	SamePassword    = "USER_004"
 	UserNameExists  = "USER_005"
 
+	WorkNotFound = "WORK_001"
+
 	TokenInvalid     = "AUTH_001"
 	TokenExpired     = "AUTH_002"
 	TokenTypeInvalid = "AUTH_003"

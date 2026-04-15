@@ -146,7 +146,7 @@ func (h *WorkHandler) GetWork(c *echo.Context) error {
 	work, err := h.svc.GetByID(c.Request().Context(), uint(id))
 	if err != nil {
 		if errors.Is(err, svc.ErrWorkNotFound) {
-			return c.JSON(http.StatusNotFound, response.Fail(response.UserNotFound, "作品不存在"))
+			return c.JSON(http.StatusNotFound, response.Fail(response.WorkNotFound, "作品不存在"))
 		}
 		return c.JSON(http.StatusInternalServerError, response.Fail(response.InternalError, err.Error()))
 	}
@@ -176,7 +176,7 @@ func (h *WorkHandler) GetWorkDetailed(c *echo.Context) error {
 	work, err := h.svc.GetByIDDetailed(c.Request().Context(), uint(id))
 	if err != nil {
 		if errors.Is(err, svc.ErrWorkNotFound) {
-			return c.JSON(http.StatusNotFound, response.Fail(response.UserNotFound, "作品不存在"))
+			return c.JSON(http.StatusNotFound, response.Fail(response.WorkNotFound, "作品不存在"))
 		}
 		return c.JSON(http.StatusInternalServerError, response.Fail(response.InternalError, err.Error()))
 	}
@@ -250,7 +250,7 @@ func (h *WorkHandler) UpdateWork(c *echo.Context) error {
 	work, err := h.svc.Update(c.Request().Context(), uint(id), &req)
 	if err != nil {
 		if errors.Is(err, svc.ErrWorkNotFound) {
-			return c.JSON(http.StatusNotFound, response.Fail(response.UserNotFound, "作品不存在"))
+			return c.JSON(http.StatusNotFound, response.Fail(response.WorkNotFound, "作品不存在"))
 		}
 		return c.JSON(http.StatusInternalServerError, response.Fail(response.InternalError, err.Error()))
 	}
@@ -280,7 +280,7 @@ func (h *WorkHandler) DeleteWork(c *echo.Context) error {
 
 	if err := h.svc.Delete(c.Request().Context(), uint(id)); err != nil {
 		if errors.Is(err, svc.ErrWorkNotFound) {
-			return c.JSON(http.StatusNotFound, response.Fail(response.UserNotFound, "作品不存在"))
+			return c.JSON(http.StatusNotFound, response.Fail(response.WorkNotFound, "作品不存在"))
 		}
 		if errors.Is(err, svc.ErrCannotDeleteWork) {
 			return c.JSON(http.StatusBadRequest, response.Fail(response.BadRequest, "无法删除已发布的作品"))
@@ -321,7 +321,7 @@ func (h *WorkHandler) UpdateStatus(c *echo.Context) error {
 
 	if err := h.svc.UpdateStatus(c.Request().Context(), uint(id), models.WorkStatus(req.Status)); err != nil {
 		if errors.Is(err, svc.ErrWorkNotFound) {
-			return c.JSON(http.StatusNotFound, response.Fail(response.UserNotFound, "作品不存在"))
+			return c.JSON(http.StatusNotFound, response.Fail(response.WorkNotFound, "作品不存在"))
 		}
 		if errors.Is(err, svc.ErrInvalidWorkStatus) {
 			return c.JSON(http.StatusBadRequest, response.Fail(response.BadRequest, "无效的作品状态"))
@@ -363,7 +363,7 @@ func (h *WorkHandler) IncrementCount(c *echo.Context) error {
 
 	if err := h.svc.IncrementCount(c.Request().Context(), uint(id), req.Field, req.Delta); err != nil {
 		if errors.Is(err, svc.ErrWorkNotFound) {
-			return c.JSON(http.StatusNotFound, response.Fail(response.UserNotFound, "作品不存在"))
+			return c.JSON(http.StatusNotFound, response.Fail(response.WorkNotFound, "作品不存在"))
 		}
 		return c.JSON(http.StatusInternalServerError, response.Fail(response.InternalError, err.Error()))
 	}

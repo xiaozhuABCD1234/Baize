@@ -129,7 +129,7 @@ func (s *workService) Update(ctx context.Context, id uint, req *model.CreateWork
 	work, err := s.workRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrWorkNotFound) {
-			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrWorkNotFound)
+			return nil, fmt.Errorf("%s: %w", response.WorkNotFound, ErrWorkNotFound)
 		}
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -203,7 +203,7 @@ func (s *workService) Delete(ctx context.Context, id uint) error {
 	work, err := s.workRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrWorkNotFound) {
-			return fmt.Errorf("%s: %w", response.UserNotFound, ErrWorkNotFound)
+			return fmt.Errorf("%s: %w", response.WorkNotFound, ErrWorkNotFound)
 		}
 		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -232,7 +232,7 @@ func (s *workService) GetByID(ctx context.Context, id uint) (*model.WorkResponse
 	work, err := s.workRepo.GetByIDWithSelect(ctx, id, "User", "Craft")
 	if err != nil {
 		if errors.Is(err, repository.ErrWorkNotFound) {
-			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrWorkNotFound)
+			return nil, fmt.Errorf("%s: %w", response.WorkNotFound, ErrWorkNotFound)
 		}
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -249,7 +249,7 @@ func (s *workService) GetByIDDetailed(ctx context.Context, id uint) (*model.Work
 	work, err := s.workRepo.GetByIDWithAll(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrWorkNotFound) {
-			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrWorkNotFound)
+			return nil, fmt.Errorf("%s: %w", response.WorkNotFound, ErrWorkNotFound)
 		}
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -366,7 +366,7 @@ func (s *workService) UpdateStatus(ctx context.Context, id uint, status model.Wo
 	_, err := s.workRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrWorkNotFound) {
-			return fmt.Errorf("%s: %w", response.UserNotFound, ErrWorkNotFound)
+			return fmt.Errorf("%s: %w", response.WorkNotFound, ErrWorkNotFound)
 		}
 		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -387,7 +387,7 @@ func (s *workService) IncrementCount(ctx context.Context, id uint, field string,
 	_, err := s.workRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrWorkNotFound) {
-			return fmt.Errorf("%s: %w", response.UserNotFound, ErrWorkNotFound)
+			return fmt.Errorf("%s: %w", response.WorkNotFound, ErrWorkNotFound)
 		}
 		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
