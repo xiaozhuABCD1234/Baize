@@ -41,7 +41,7 @@ func (h *UserHandler) RegisterRoutes(g *echo.Group) {
 // @Tags        users
 // @Accept      application/json
 // @Produce     application/json
-// @Param       request body map[string]interface{} true "注册请求"
+// @Param       request body svc.RegisterRequest true "注册请求"
 // @Success     200 {object} response.Response "注册成功"
 // @Failure     400 {object} response.Response "请求参数错误或无效的角色类型"
 // @Failure     409 {object} response.Response "用户名或邮箱已被使用"
@@ -76,7 +76,7 @@ func (h *UserHandler) Register(c *echo.Context) error {
 // @Tags        users
 // @Accept      application/json
 // @Produce     application/json
-// @Param       request body map[string]interface{} true "登录请求"
+// @Param       request body svc.LoginRequest true "登录请求"
 // @Success     200 {object} response.Response "登录成功"
 // @Failure     400 {object} response.Response "请求参数错误"
 // @Failure     401 {object} response.Response "用户不存在或密码错误"
@@ -108,7 +108,7 @@ func (h *UserHandler) Login(c *echo.Context) error {
 // @Tags        users
 // @Accept      application/json
 // @Produce     application/json
-// @Param       id path int true "用户ID"
+// @Param       id path uint true "用户ID"
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     400 {object} response.Response "无效的用户ID"
 // @Failure     404 {object} response.Response "用户不存在"
@@ -169,8 +169,8 @@ func (h *UserHandler) ListUsers(c *echo.Context) error {
 // @Accept      application/json
 // @Produce     application/json
 // @Security    BearerAuth
-// @Param       id path int true "用户ID"
-// @Param       request body map[string]interface{} true "更新请求"
+// @Param       id path uint true "用户ID"
+// @Param       request body svc.UpdateUserRequest true "更新请求"
 // @Success     200 {object} response.Response "更新成功"
 // @Failure     400 {object} response.Response "请求参数错误"
 // @Failure     403 {object} response.Response "无权修改此用户"
@@ -219,8 +219,8 @@ func (h *UserHandler) UpdateUser(c *echo.Context) error {
 // @Accept      application/json
 // @Produce     application/json
 // @Security    BearerAuth
-// @Param       id path int true "用户ID"
-// @Param       request body map[string]string true "密码修改请求"
+// @Param       id path uint true "用户ID"
+// @Param       request body svc.ChangePasswordRequest true "密码修改请求"
 // @Success     200 {object} response.Response "密码修改成功"
 // @Failure     400 {object} response.Response "请求参数错误或新密码不能与旧密码相同"
 // @Failure     401 {object} response.Response "旧密码错误"
@@ -272,7 +272,7 @@ func (h *UserHandler) ChangePassword(c *echo.Context) error {
 // @Accept      application/json
 // @Produce     application/json
 // @Security    BearerAuth
-// @Param       id path int true "用户ID"
+// @Param       id path uint true "用户ID"
 // @Success     200 {object} response.Response "删除成功"
 // @Failure     400 {object} response.Response "无效的用户ID"
 // @Failure     403 {object} response.Response "无权删除此用户"
@@ -311,9 +311,10 @@ func (h *UserHandler) DeleteUser(c *echo.Context) error {
 // @Accept      application/json
 // @Produce     application/json
 // @Security    BearerAuth
-// @Param       id path int true "用户ID"
+// @Param       id path uint true "用户ID"
 // @Success     200 {object} response.Response "永久删除成功"
 // @Failure     400 {object} response.Response "无效的用户ID"
+// @Failure     403 {object} response.Response "无权限执行此操作"
 // @Failure     404 {object} response.Response "用户不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
 // @Router      /users/{id}/force [delete]

@@ -46,25 +46,25 @@ const docTemplate = `{
                     "200": {
                         "description": "刷新成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "401": {
                         "description": "无效的Refresh Token",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -95,13 +95,13 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -130,7 +130,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.ICHCategory"
+                            "$ref": "#/definitions/backend_internal_models.ICHCategory"
                         }
                     }
                 ],
@@ -138,25 +138,25 @@ const docTemplate = `{
                     "201": {
                         "description": "创建成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误或无效的分类级别",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "409": {
                         "description": "分类名称已存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -179,13 +179,13 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -217,19 +217,19 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "分类不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -261,19 +261,19 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的分类ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -305,13 +305,13 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -334,13 +334,13 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -372,25 +372,25 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的分类ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "分类不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -426,7 +426,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.ICHCategory"
+                            "$ref": "#/definitions/backend_internal_models.ICHCategory"
                         }
                     }
                 ],
@@ -434,31 +434,31 @@ const docTemplate = `{
                     "200": {
                         "description": "更新成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "分类不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "409": {
                         "description": "分类名称已存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -493,25 +493,25 @@ const docTemplate = `{
                     "200": {
                         "description": "删除成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误或无法删除有子节点的分类",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "分类不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -543,25 +543,25 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的分类ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "分类不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -592,7 +592,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.CreateCommentRequest"
+                            "$ref": "#/definitions/backend_internal_models.CreateCommentRequest"
                         }
                     }
                 ],
@@ -600,19 +600,19 @@ const docTemplate = `{
                     "201": {
                         "description": "评论成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误、作品不存在、父评论不存在或不能回复二级及以下的评论",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -644,19 +644,19 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的用户ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -702,19 +702,19 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的作品ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -746,19 +746,19 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的作品ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -790,25 +790,25 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的评论ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "评论不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -855,25 +855,25 @@ const docTemplate = `{
                     "200": {
                         "description": "更新成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "评论不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -908,25 +908,25 @@ const docTemplate = `{
                     "200": {
                         "description": "删除成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的评论ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "评论不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -973,25 +973,25 @@ const docTemplate = `{
                     "200": {
                         "description": "点赞更新成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "评论不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -1038,25 +1038,25 @@ const docTemplate = `{
                     "200": {
                         "description": "状态更新成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误或无效的评论状态",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "评论不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -1087,13 +1087,13 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -1122,7 +1122,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Craft"
+                            "$ref": "#/definitions/backend_internal_models.Craft"
                         }
                     }
                 ],
@@ -1130,19 +1130,19 @@ const docTemplate = `{
                     "201": {
                         "description": "创建成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误、技艺名称已存在、分类不存在或无效的难度等级",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -1174,19 +1174,19 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的分类ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -1218,19 +1218,19 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的难度等级",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -1262,25 +1262,25 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的技艺ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "技艺不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -1316,7 +1316,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Craft"
+                            "$ref": "#/definitions/backend_internal_models.Craft"
                         }
                     }
                 ],
@@ -1324,31 +1324,31 @@ const docTemplate = `{
                     "200": {
                         "description": "更新成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "技艺不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "409": {
                         "description": "技艺名称已存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -1383,25 +1383,25 @@ const docTemplate = `{
                     "200": {
                         "description": "删除成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的技艺ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "技艺不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -1433,25 +1433,25 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的技艺ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "技艺不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -1482,7 +1482,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.FavoriteRequest"
+                            "$ref": "#/definitions/backend_internal_models.FavoriteRequest"
                         }
                     }
                 ],
@@ -1490,25 +1490,25 @@ const docTemplate = `{
                     "201": {
                         "description": "收藏成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误或作品不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "409": {
                         "description": "已经收藏过该作品",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -1545,19 +1545,19 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的作品ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -1603,19 +1603,19 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的用户ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -1647,19 +1647,19 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的作品ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -1694,25 +1694,25 @@ const docTemplate = `{
                     "200": {
                         "description": "取消收藏成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的作品ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "收藏不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -1744,25 +1744,25 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的收藏ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "收藏不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -1797,25 +1797,25 @@ const docTemplate = `{
                     "200": {
                         "description": "取消收藏成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的收藏ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "收藏不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -1862,25 +1862,25 @@ const docTemplate = `{
                     "200": {
                         "description": "移动成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "收藏不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -1920,25 +1920,25 @@ const docTemplate = `{
                     "201": {
                         "description": "关注成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误、不能关注自己或用户不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "409": {
                         "description": "已经关注过该用户",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -1975,19 +1975,19 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的用户ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2019,19 +2019,19 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的用户ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2063,19 +2063,19 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的用户ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2107,19 +2107,19 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的用户ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2151,19 +2151,19 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的用户ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2200,25 +2200,25 @@ const docTemplate = `{
                     "200": {
                         "description": "取消关注成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的用户ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "未关注该用户",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2249,13 +2249,13 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2284,7 +2284,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Region"
+                            "$ref": "#/definitions/backend_internal_models.Region"
                         }
                     }
                 ],
@@ -2292,25 +2292,25 @@ const docTemplate = `{
                     "201": {
                         "description": "创建成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误或无效的地区级别",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "409": {
                         "description": "地区代码已存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2342,19 +2342,19 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "地区不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2377,13 +2377,13 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2415,19 +2415,19 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的地区级别",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2459,19 +2459,19 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的地区ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2494,13 +2494,13 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2532,25 +2532,25 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的地区ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "地区不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2586,7 +2586,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Region"
+                            "$ref": "#/definitions/backend_internal_models.Region"
                         }
                     }
                 ],
@@ -2594,31 +2594,31 @@ const docTemplate = `{
                     "200": {
                         "description": "更新成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "地区不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "409": {
                         "description": "地区代码已存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2653,25 +2653,25 @@ const docTemplate = `{
                     "200": {
                         "description": "删除成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误或无法删除有子节点的地区",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "地区不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2703,25 +2703,25 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的地区ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "地区不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2760,13 +2760,13 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2792,8 +2792,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/backend_internal_services.LoginRequest"
                         }
                     }
                 ],
@@ -2801,25 +2800,25 @@ const docTemplate = `{
                     "200": {
                         "description": "登录成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "401": {
                         "description": "用户不存在或密码错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2845,8 +2844,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/backend_internal_services.RegisterRequest"
                         }
                     }
                 ],
@@ -2854,25 +2852,25 @@ const docTemplate = `{
                     "200": {
                         "description": "注册成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误或无效的角色类型",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "409": {
                         "description": "用户名或邮箱已被使用",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2904,25 +2902,25 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的用户ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "用户不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -2958,8 +2956,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/backend_internal_services.UpdateUserRequest"
                         }
                     }
                 ],
@@ -2967,37 +2964,37 @@ const docTemplate = `{
                     "200": {
                         "description": "更新成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "403": {
                         "description": "无权修改此用户",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "用户不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "409": {
                         "description": "邮箱已被使用",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -3032,31 +3029,31 @@ const docTemplate = `{
                     "200": {
                         "description": "删除成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的用户ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "403": {
                         "description": "无权删除此用户",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "用户不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -3093,25 +3090,31 @@ const docTemplate = `{
                     "200": {
                         "description": "永久删除成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的用户ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
+                        }
+                    },
+                    "403": {
+                        "description": "无权限执行此操作",
+                        "schema": {
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "用户不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -3149,10 +3152,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
+                            "$ref": "#/definitions/backend_internal_services.ChangePasswordRequest"
                         }
                     }
                 ],
@@ -3160,37 +3160,37 @@ const docTemplate = `{
                     "200": {
                         "description": "密码修改成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误或新密码不能与旧密码相同",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "401": {
                         "description": "旧密码错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "403": {
                         "description": "无权修改此用户密码",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "用户不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -3260,19 +3260,19 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -3301,7 +3301,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.CreateWorkRequest"
+                            "$ref": "#/definitions/backend_internal_models.CreateWorkRequest"
                         }
                     }
                 ],
@@ -3309,19 +3309,19 @@ const docTemplate = `{
                     "201": {
                         "description": "创建成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误、技艺不存在、分类不存在或地区不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -3355,13 +3355,13 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -3395,13 +3395,13 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -3433,25 +3433,25 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的作品ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "作品不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -3487,7 +3487,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.CreateWorkRequest"
+                            "$ref": "#/definitions/backend_internal_models.CreateWorkRequest"
                         }
                     }
                 ],
@@ -3495,25 +3495,25 @@ const docTemplate = `{
                     "200": {
                         "description": "更新成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "作品不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -3548,25 +3548,25 @@ const docTemplate = `{
                     "200": {
                         "description": "删除成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误或无法删除已发布的作品",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "作品不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -3613,25 +3613,25 @@ const docTemplate = `{
                     "200": {
                         "description": "计数更新成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "作品不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -3663,25 +3663,25 @@ const docTemplate = `{
                     "200": {
                         "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "无效的作品ID",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "作品不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -3728,25 +3728,25 @@ const docTemplate = `{
                     "200": {
                         "description": "状态更新成功",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "400": {
                         "description": "请求参数错误或无效的作品状态",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "404": {
                         "description": "作品不存在",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     },
                     "500": {
                         "description": "服务器内部错误",
                         "schema": {
-                            "$ref": "#/definitions/response.Response"
+                            "$ref": "#/definitions/backend_pkg_response.Response"
                         }
                     }
                 }
@@ -3754,10 +3754,59 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.Craft": {
-            "type": "object"
+        "backend_internal_models.Craft": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "$ref": "#/definitions/backend_internal_models.ICHCategory"
+                },
+                "categoryID": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "description": {
+                    "description": "工艺概况",
+                    "type": "string"
+                },
+                "difficulty": {
+                    "description": "技艺难度等级",
+                    "type": "integer"
+                },
+                "history": {
+                    "description": "历史沿革",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "regionFeatures": {
+                    "description": "不同地域的表现形式差异",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "tools": {
+                    "description": "所需核心工具列表",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
         },
-        "models.CreateCommentRequest": {
+        "backend_internal_models.CreateCommentRequest": {
             "type": "object",
             "required": [
                 "content",
@@ -3784,7 +3833,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.CreateWorkRequest": {
+        "backend_internal_models.CreateWorkRequest": {
             "type": "object",
             "required": [
                 "content",
@@ -3824,7 +3873,7 @@ const docTemplate = `{
                 "media": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.MediaItem"
+                        "$ref": "#/definitions/backend_internal_models.MediaItem"
                     }
                 },
                 "region_id": {
@@ -3843,7 +3892,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.FavoriteRequest": {
+        "backend_internal_models.FavoriteRequest": {
             "type": "object",
             "required": [
                 "work_id"
@@ -3860,10 +3909,51 @@ const docTemplate = `{
                 }
             }
         },
-        "models.ICHCategory": {
-            "type": "object"
+        "backend_internal_models.ICHCategory": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "iconURL": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "level": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "parentID": {
+                    "type": "integer"
+                },
+                "regionCode": {
+                    "description": "分类的地域特色标识",
+                    "type": "string"
+                },
+                "sortOrder": {
+                    "description": "排序权重",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "分类启用状态",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
         },
-        "models.MediaItem": {
+        "backend_internal_models.MediaItem": {
             "type": "object",
             "required": [
                 "media_type",
@@ -3893,10 +3983,170 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Region": {
-            "type": "object"
+        "backend_internal_models.Region": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "行政区划代码（如 110101）",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "cultureDesc": {
+                    "description": "地域文化背景描述",
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "isHeritageCenter": {
+                    "description": "是否为非遗重点保护区域",
+                    "type": "boolean"
+                },
+                "level": {
+                    "description": "级别：省/市/县",
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "parentID": {
+                    "description": "上级区域 ID",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
         },
-        "response.ErrorField": {
+        "backend_internal_models.UserStatus": {
+            "type": "integer",
+            "format": "int32",
+            "enum": [
+                0,
+                1,
+                2
+            ],
+            "x-enum-comments": {
+                "UserStatusActive": "正常可用",
+                "UserStatusDisabled": "封禁状态",
+                "UserStatusPending": "注册待激活或资料审核中"
+            },
+            "x-enum-descriptions": [
+                "封禁状态",
+                "正常可用",
+                "注册待激活或资料审核中"
+            ],
+            "x-enum-varnames": [
+                "UserStatusDisabled",
+                "UserStatusActive",
+                "UserStatusPending"
+            ]
+        },
+        "backend_internal_services.ChangePasswordRequest": {
+            "type": "object",
+            "required": [
+                "new_password",
+                "old_password",
+                "user_id"
+            ],
+            "properties": {
+                "new_password": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 6
+                },
+                "old_password": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "backend_internal_services.LoginRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "backend_internal_services.RegisterRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password",
+                "username"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 6
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/backend_internal_models.UserStatus"
+                },
+                "user_type": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 50,
+                    "minLength": 3
+                }
+            }
+        },
+        "backend_internal_services.UpdateUserRequest": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "0",
+                        "1",
+                        "2"
+                    ]
+                },
+                "user_type": {
+                    "type": "string",
+                    "enum": [
+                        "user",
+                        "master",
+                        "institution",
+                        "admin"
+                    ]
+                }
+            }
+        },
+        "backend_pkg_response.ErrorField": {
             "type": "object",
             "properties": {
                 "code": {
@@ -3910,7 +4160,7 @@ const docTemplate = `{
                 }
             }
         },
-        "response.PageInfo": {
+        "backend_pkg_response.PageInfo": {
             "type": "object",
             "properties": {
                 "page_num": {
@@ -3924,20 +4174,32 @@ const docTemplate = `{
                 }
             }
         },
-        "response.Response": {
+        "backend_pkg_response.Response": {
             "type": "object",
             "properties": {
                 "data": {
                     "type": "object"
                 },
                 "error": {
-                    "$ref": "#/definitions/response.ErrorField"
+                    "$ref": "#/definitions/backend_pkg_response.ErrorField"
                 },
                 "page": {
-                    "$ref": "#/definitions/response.PageInfo"
+                    "$ref": "#/definitions/backend_pkg_response.PageInfo"
                 },
                 "request_id": {
                     "type": "string"
+                }
+            }
+        },
+        "gorm.DeletedAt": {
+            "type": "object",
+            "properties": {
+                "time": {
+                    "type": "string"
+                },
+                "valid": {
+                    "description": "Valid is true if Time is not NULL",
+                    "type": "boolean"
                 }
             }
         }
