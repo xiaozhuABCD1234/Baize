@@ -14,4 +14,5 @@ const (
 	BadRequest       = "COMMON_001"
 	InternalError    = "COMMON_002"
 	ResourceConflict = "COMMON_003"
+	Forbidden        = "COMMON_004"
 )

@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"log/slog"
 	"os"
 
-	"backend/internal/api/handlers"
 	"backend/internal/api/routes"
 	"backend/internal/config"
 	"backend/internal/models"
@@ -39,9 +39,39 @@ func main() {
 
 	userRepo := repository.NewUserRepository(db)
 	userSvc := svc.NewUserService(userRepo)
-	userHandler := handlers.NewUserHandler(userSvc)
 
-	routes.SetupRouter(e, userHandler)
+	commentRepo := repository.NewCommentRepository(db)
+	workRepo := repository.NewWorkRepository(db)
+	workMediaRepo := repository.NewWorkMediaRepository(db)
+	craftRepo := repository.NewCraftRepository(db)
+	favoriteRepo := repository.NewFavoriteRepository(db)
+	followRepo := repository.NewFollowRepository(db)
+	regionRepo := repository.NewRegionRepository(db)
+	categoryRepo := repository.NewICHCategoryRepository(db)
+
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+
+	workSvc := svc.NewWorkService(workRepo, workMediaRepo, craftRepo, userRepo, logger)
+	commentSvc := svc.NewCommentService(commentRepo, workRepo, userRepo, logger)
+	favoriteSvc := svc.NewFavoriteService(favoriteRepo, workRepo, userRepo, logger)
+	followSvc := svc.NewFollowService(followRepo, userRepo, logger)
+	craftSvc := svc.NewCraftService(craftRepo, categoryRepo, logger)
+	regionSvc := svc.NewRegionService(regionRepo, logger)
+	categorySvc := svc.NewICHCategoryService(categoryRepo, logger)
+
+	deps := routes.HandlerDeps{
+		UserService:     userSvc,
+		WorkService:     workSvc,
+		CommentService:  commentSvc,
+		FavoriteService: favoriteSvc,
+		FollowService:   followSvc,
+		CraftService:    craftSvc,
+		RegionService:   regionSvc,
+		CategoryService: categorySvc,
+		Logger:          logger,
+	}
+
+	routes.SetupRouter(e, deps)
 
 	e.Use(middleware.RequestLogger())
 	e.Use(middleware.CORS("*"))
