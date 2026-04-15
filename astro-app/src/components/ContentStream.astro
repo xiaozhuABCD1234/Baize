@@ -1,73 +1,73 @@
 ---
 import ContentCard from "./ContentCard.astro";
 
-const works = [
+const inheritors = [
   {
-    id: "1",
-    title: "蜀绣·熊猫",
-    author: "李秀英",
+    id: "p1",
+    name: "陈少芳",
+    title: "国家级非物质文化遗产代表性传承人",
+    specialty: "上海剪纸",
     imageUrl: "https://images.unsplash.com/photo-1604881991720-f91add269bed?w=400&h=300&fit=crop",
-    likes: 328,
-    category: "刺绣"
+    experience: "60年"
   },
   {
-    id: "2",
-    title: "景德镇青花瓷瓶",
-    author: "张建国",
+    id: "p2",
+    name: "张灯",
+    title: "上海市非物质文化遗产代表性传承人",
+    specialty: "豫园灯会",
     imageUrl: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=400&h=300&fit=crop",
-    likes: 256,
-    category: "陶瓷"
+    experience: "50年"
   },
   {
-    id: "3",
-    title: "皮影戏《西游记》",
-    author: "王老班",
+    id: "p3",
+    name: "余红仙",
+    title: "国家级非物质文化遗产代表性传承人",
+    specialty: "上海评弹",
     imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop",
-    likes: 189,
-    category: "戏曲"
+    experience: "70年"
   },
   {
-    id: "4",
-    title: "苏州缂丝挂件",
-    author: "陈阿姨",
+    id: "p4",
+    name: "秦建国",
+    title: "上海市非物质文化遗产代表性传承人",
+    specialty: "上海评弹",
     imageUrl: "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=400&h=300&fit=crop",
-    likes: 412,
-    category: "织锦"
+    experience: "50年"
   }
 ];
 
-const articles = [
+const projects = [
   {
     id: "1",
-    title: "走进蜀绣：四大名绣之首",
-    category: "传统技艺",
-    summary: "蜀绣历史悠久，以其精湛的针法和绚丽的色彩著称于世...",
+    title: "上海剪纸",
+    category: "传统工艺",
+    summary: "上海剪纸是一种传统民间艺术，以其精细的工艺和独特的风格著称，历史悠久，是上海地区重要的非物质文化遗产。",
     coverUrl: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?w=400&h=300&fit=crop",
-    readTime: "5分钟"
+    likes: 328
   },
   {
     id: "2",
-    title: "青瓷烧制技艺的秘密",
-    category: "陶瓷艺术",
-    summary: "从釉料到窑火，揭秘龙泉青瓷千年传承的烧制奥秘...",
+    title: "上海豫园灯会",
+    category: "民俗活动",
+    summary: "豫园灯会是上海传统的民俗活动，每年元宵节期间举办，以其精美的灯彩和浓郁的节日氛围闻名，是上海的文化名片。",
     coverUrl: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=400&h=300&fit=crop",
-    readTime: "8分钟"
+    likes: 256
   },
   {
     id: "3",
-    title: "古琴斫制：匠人的修行",
-    category: "音乐艺术",
-    summary: "一张好琴的诞生，需要经过选材、制胎、髹漆等上百道工序...",
+    title: "上海评弹",
+    category: "传统曲艺",
+    summary: "上海评弹是一种传统说唱艺术，融合了说、噱、弹、唱等多种表演形式，具有独特的艺术魅力，是江南地区的代表性曲艺形式。",
     coverUrl: "https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=400&h=300&fit=crop",
-    readTime: "6分钟"
+    likes: 189
   },
   {
     id: "4",
-    title: "端午节：艾草与粽香",
-    category: "民俗文化",
-    summary: "追溯端午节的起源，了解艾草、粽子背后的文化含义...",
+    title: "上海龙华庙会",
+    category: "民俗活动",
+    summary: "龙华庙会是上海历史悠久的传统民俗活动，每年农历三月初三举行，集宗教、文化、商业于一体，是上海地区重要的文化遗产。",
     coverUrl: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=traditional%20chinese%20embroidery%20art%20work&image_size=square_hd",
-    readTime: "4分钟"
+    likes: 412
   }
 ];
 ---
@@ -81,34 +81,57 @@ const articles = [
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
       <div>
-        <div class="flex items-center justify-between mb-6">
-        <h3 class="font-heading text-2xl font-semibold text-foreground flex items-center gap-3">
-          <span class="w-1.5 h-8 bg-primary rounded-full"></span>
-          精选作品
-        </h3>
-        <a href="/community" class="text-base text-primary hover:underline font-medium">查看更多 →</a>
-      </div>
+        <div class="flex items-center mb-6">
+          <h3 class="font-heading text-2xl font-semibold text-foreground flex items-center gap-3">
+            <span class="w-1.5 h-8 bg-primary rounded-full"></span>
+            非遗传承人
+          </h3>
+        </div>
         <div class="grid grid-cols-2 gap-4">
-          {works.map(work => (
-            <ContentCard type="work" data={work} />
+          {inheritors.map(inheritor => (
+            <div class="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <img src={inheritor.imageUrl} alt={inheritor.name} class="w-full h-32 object-cover">
+              <div class="p-3">
+                <h4 class="text-sm font-medium line-clamp-1">{inheritor.name}</h4>
+                <p class="text-xs text-muted-foreground mb-2">{inheritor.title}</p>
+                <div class="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>{inheritor.specialty}</span>
+                  <span>从业{inheritor.experience}</span>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </div>
 
       <div>
-        <div class="flex items-center justify-between mb-6">
-        <h3 class="font-heading text-2xl font-semibold text-foreground flex items-center gap-3">
-          <span class="w-1.5 h-8 bg-secondary rounded-full"></span>
-          知识科普
-        </h3>
-        <a href="/community" class="text-base text-secondary hover:underline font-medium">查看更多 →</a>
-      </div>
+        <div class="flex items-center mb-6">
+          <h3 class="font-heading text-2xl font-semibold text-foreground flex items-center gap-3">
+            <span class="w-1.5 h-8 bg-secondary rounded-full"></span>
+            非遗项目
+          </h3>
+        </div>
         <div class="grid grid-cols-2 gap-4">
-          {articles.map(article => (
-            <ContentCard type="article" data={article} />
+          {projects.map(project => (
+            <div class="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+              <img src={project.coverUrl} alt={project.title} class="w-full h-32 object-cover">
+              <div class="p-3">
+                <h4 class="text-sm font-medium line-clamp-1">{project.title}</h4>
+                <p class="text-xs text-muted-foreground mb-2">{project.category}</p>
+                <div class="flex items-center justify-between text-xs text-muted-foreground">
+                  <span class="flex items-center gap-1">❤️ {project.likes}</span>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </div>
+    </div>
+
+    <div class="mt-10 text-center">
+      <a href="/knowledge" class="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-colors font-medium">
+        进入科普界面
+      </a>
     </div>
   </div>
 </section>

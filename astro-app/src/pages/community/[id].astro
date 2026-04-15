@@ -1,0 +1,659 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import "@/styles/global.css";
+import Header from "@/components/Header.astro";
+import Sidebar from "@/components/Sidebar.astro";
+import ActivityFeed from "@/components/ActivityFeed.astro";
+import Footer from "@/components/Footer.astro";
+
+const contentData = {
+  "1": {
+    id: "1",
+    title: "2025非遗传承计划启动，面向全国招募青年传承人",
+    author: "国家级非遗传承中心",
+    authorType: "official",
+    type: "video",
+    category: "official",
+    coverImage: "https://images.unsplash.com/photo-1604881991720-f91add269bed?w=800&h=450&fit=crop",
+    content: `
+      <p class="mb-4">助力传统技艺年轻化传播，让非遗走进生活、走向世界。本次传承计划将面向全国招募100名青年传承人，提供专业培训和展示平台。</p>
+      <p class="mb-4">我们希望通过这次计划，让更多年轻人了解和热爱非遗文化，将传统技艺与现代生活相结合，创造出更多可能性。</p>
+      <p class="mb-4">报名通道已经开启，欢迎符合条件的青年传承人踊跃参与。</p>
+    `,
+    tags: ["官方", "传承计划", "青年传承人"],
+    likes: 256,
+    comments: 48,
+    saves: 120,
+    time: "1小时前",
+    views: "1.2k"
+  },
+  "2": {
+    id: "2",
+    title: "耗时一个月完成的苏绣作品，每一针都是传承",
+    author: "苏绣手作-小李",
+    authorType: "user",
+    type: "image",
+    category: "skill",
+    coverImage: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=800&h=450&fit=crop",
+    content: `
+      <p class="mb-4">传统苏绣花鸟图，纯手工制作，希望更多人喜欢这门手艺。</p>
+      <p class="mb-4">这件作品耗时一个月完成，每一针都凝聚着对传统技艺的热爱和坚持。</p>
+      <p class="mb-4">苏绣作为中国四大名绣之一，有着悠久的历史和精湛的技艺，希望这门手艺能一直传承下去。</p>
+    `,
+    tags: ["苏绣", "手工技艺"],
+    likes: 428,
+    comments: 76,
+    saves: 199,
+    time: "3小时前",
+    views: "2.5k"
+  },
+  "3": {
+    id: "3",
+    title: "中国传统制茶技艺及其相关习俗入选世界非遗",
+    author: "中国非遗保护中心",
+    authorType: "official",
+    type: "report",
+    category: "official",
+    coverImage: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=450&fit=crop",
+    content: `
+      <p class="mb-4">茶文化传承千年，是中华民族的文化瑰宝，值得被世界看见。</p>
+      <p class="mb-4">中国传统制茶技艺及其相关习俗成功入选联合国教科文组织人类非物质文化遗产代表作名录，这是对中国茶文化的高度认可。</p>
+      <p class="mb-4">中国是茶的故乡，茶文化深深植根于中华民族的日常生活和精神世界。从采茶、制茶到品茶，每一个环节都蕴含着深厚的文化内涵。</p>
+      <p class="mb-4">此次入选世界非遗，将有助于推动中国茶文化的国际传播和保护，让更多人了解和喜爱中国茶文化。</p>
+    `,
+    tags: ["茶文化", "世界非遗"],
+    likes: 1200,
+    comments: 320,
+    saves: 566,
+    time: "昨天",
+    views: "5.8k"
+  }
+};
+
+export async function getStaticPaths() {
+  return [
+    { params: { id: "1" } },
+    { params: { id: "2" } },
+    { params: { id: "3" } }
+  ];
+}
+
+const { id } = Astro.params;
+const content = contentData[id as keyof typeof contentData] || contentData["1"];
+---
+
+<Layout>
+  <Header />
+  <Sidebar />
+
+  <aside id="activity-sidebar" class="fixed -right-80 top-[72px] h-[calc(100vh-72px)] w-80 bg-background border-l border-border/50 transition-all duration-300 ease-in-out hover:right-0 z-40">
+    <div class="p-4 h-full overflow-y-auto">
+      <ActivityFeed />
+    </div>
+  </aside>
+
+  <main class="pt-[100px] w-full max-w-[1800px] mx-auto px-4 lg:px-6 relative z-50">
+    <!-- 返回按钮 -->
+    <div class="mb-6 relative z-50">
+      <a href="/community" class="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-card text-foreground hover:bg-muted border border-border transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5"></path>
+          <path d="M12 19l-7-7 7-7"></path>
+        </svg>
+        <span>返回社区动态</span>
+      </a>
+    </div>
+
+    <!-- 详情页内容 -->
+    <section class="py-5 bg-background min-h-screen">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        
+        <!-- 视频类型样式 -->
+        {content.type === 'video' && (
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
+            <!-- 视频内容 -->
+            <div class="lg:col-span-2">
+              <!-- 视频标题 -->
+              <h1 class="text-3xl font-bold mb-6">{content.title}</h1>
+
+              <!-- 视频封面 -->
+              <div class="bg-card rounded-2xl overflow-hidden shadow-lg border border-border mb-6">
+                <div class="relative aspect-video bg-muted/30">
+                  <img src={content.coverImage} alt={content.title} class="w-full h-full object-cover" />
+                  <div class="absolute inset-0 flex items-center justify-center bg-black/40">
+                    <div class="w-20 h-20 rounded-full bg-primary/90 flex items-center justify-center cursor-pointer hover:bg-primary transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="white" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="absolute top-4 left-4 bg-primary/90 text-white text-sm font-bold px-3 py-1.5 rounded-lg flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                      <rect width="15" height="15" x="1" y="5" rx="2" ry="2"></rect>
+                    </svg>
+                    视频
+                  </div>
+                </div>
+
+                <!-- 视频简介 -->
+                <div class="p-6">
+                  <div class="bg-muted/50 p-4 rounded-lg mb-6">
+                    <h3 class="font-medium mb-2">视频简介</h3>
+                    <div class="prose prose-sm max-w-none text-muted-foreground" set:html={content.content} />
+                  </div>
+
+                  <!-- 互动数据 -->
+                  <div class="flex items-center justify-between mt-6 pt-6 border-t border-border">
+                    <div class="flex items-center gap-6">
+                      <button class="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0-7.78z"></path>
+                        </svg>
+                        <span>{content.likes}</span>
+                      </button>
+                      <button class="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v16z"></path>
+                        </svg>
+                        <span>{content.comments}</span>
+                      </button>
+                      <button class="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v16z"></path>
+                        </svg>
+                        <span>{content.saves}</span>
+                      </button>
+                    </div>
+                    <span class="text-sm text-muted-foreground">{content.time}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 评论区 -->
+              <div class="bg-card rounded-2xl overflow-hidden shadow-lg border border-border">
+                <!-- 固定的评论输入框 -->
+                <div class="sticky top-0 z-10 bg-card border-b border-border p-4 shadow-sm">
+                  <div class="flex gap-3">
+                    <div class="w-10 h-10 rounded-full bg-muted"></div>
+                    <div class="flex-1">
+                      <textarea class="w-full p-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none" rows="2" placeholder="写下你的评论..."></textarea>
+                      <div class="flex justify-end mt-2">
+                        <button class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors">发布评论</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="p-6">
+                  <h2 class="text-xl font-bold mb-6">评论 ({content.comments})</h2>
+                  
+                  <!-- 评论列表 -->
+                  <div class="space-y-6">
+                    <!-- 评论1 -->
+                    <div class="flex gap-3">
+                      <div class="w-10 h-10 rounded-full bg-muted"></div>
+                      <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                          <span class="font-medium">用户1</span>
+                          <span class="text-xs text-muted-foreground">2小时前</span>
+                        </div>
+                        <p class="text-muted-foreground mb-2">这个传承计划非常有意义，希望能帮助更多年轻人了解非遗文化！</p>
+                        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+                          <button class="hover:text-primary transition-colors">👍 12</button>
+                          <button class="hover:text-primary transition-colors">回复</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 评论2 -->
+                    <div class="flex gap-3">
+                      <div class="w-10 h-10 rounded-full bg-muted"></div>
+                      <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                          <span class="font-medium">用户2</span>
+                          <span class="text-xs text-muted-foreground">3小时前</span>
+                        </div>
+                        <p class="text-muted-foreground mb-2">作为一名非遗爱好者，我非常期待这次计划的开展，希望能有机会参与其中。</p>
+                        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+                          <button class="hover:text-primary transition-colors">👍 8</button>
+                          <button class="hover:text-primary transition-colors">回复</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 评论3 -->
+                    <div class="flex gap-3">
+                      <div class="w-10 h-10 rounded-full bg-muted"></div>
+                      <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                          <span class="font-medium">用户3</span>
+                          <span class="text-xs text-muted-foreground">4小时前</span>
+                        </div>
+                        <p class="text-muted-foreground mb-2">国家级非遗传承中心做了很多有益的工作，点赞！</p>
+                        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+                          <button class="hover:text-primary transition-colors">👍 5</button>
+                          <button class="hover:text-primary transition-colors">回复</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 评论4 -->
+                    <div class="flex gap-3">
+                      <div class="w-10 h-10 rounded-full bg-muted"></div>
+                      <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                          <span class="font-medium">用户4</span>
+                          <span class="text-xs text-muted-foreground">5小时前</span>
+                        </div>
+                        <p class="text-muted-foreground mb-2">非遗文化是我们民族的瑰宝，应该得到更多的关注和保护。这个计划很好！</p>
+                        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+                          <button class="hover:text-primary transition-colors">👍 15</button>
+                          <button class="hover:text-primary transition-colors">回复</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 评论5 -->
+                    <div class="flex gap-3">
+                      <div class="w-10 h-10 rounded-full bg-muted"></div>
+                      <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                          <span class="font-medium">用户5</span>
+                          <span class="text-xs text-muted-foreground">6小时前</span>
+                        </div>
+                        <p class="text-muted-foreground mb-2">希望这个计划能够覆盖更多的非遗项目，让更多的传统技艺得到传承。</p>
+                        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+                          <button class="hover:text-primary transition-colors">👍 9</button>
+                          <button class="hover:text-primary transition-colors">回复</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 评论6 -->
+                    <div class="flex gap-3">
+                      <div class="w-10 h-10 rounded-full bg-muted"></div>
+                      <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                          <span class="font-medium">用户6</span>
+                          <span class="text-xs text-muted-foreground">7小时前</span>
+                        </div>
+                        <p class="text-muted-foreground mb-2">作为一名学生，我希望能有更多机会了解和学习非遗文化，这个计划对我们很有帮助。</p>
+                        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+                          <button class="hover:text-primary transition-colors">👍 7</button>
+                          <button class="hover:text-primary transition-colors">回复</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 评论7 -->
+                    <div class="flex gap-3">
+                      <div class="w-10 h-10 rounded-full bg-muted"></div>
+                      <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                          <span class="font-medium">用户7</span>
+                          <span class="text-xs text-muted-foreground">8小时前</span>
+                        </div>
+                        <p class="text-muted-foreground mb-2">国家级非遗传承中心的工作非常重要，感谢他们为保护和传承非遗文化所做的努力。</p>
+                        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+                          <button class="hover:text-primary transition-colors">👍 11</button>
+                          <button class="hover:text-primary transition-colors">回复</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 评论8 -->
+                    <div class="flex gap-3">
+                      <div class="w-10 h-10 rounded-full bg-muted"></div>
+                      <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                          <span class="font-medium">用户8</span>
+                          <span class="text-xs text-muted-foreground">9小时前</span>
+                        </div>
+                        <p class="text-muted-foreground mb-2">这个传承计划的实施将有助于非遗文化的传播和发展，期待看到更多的成果。</p>
+                        <div class="flex items-center gap-4 text-sm text-muted-foreground">
+                          <button class="hover:text-primary transition-colors">👍 6</button>
+                          <button class="hover:text-primary transition-colors">回复</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 底部固定评论条 -->
+              <div id="bottom-comment-bar" class="fixed bottom-0 left-0 right-0 lg:max-w-7xl px-6 lg:px-8 mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  <div class="lg:col-span-2 bg-card border-t border-border p-3 shadow-lg">
+                    <div class="flex gap-3 items-center">
+                      <div class="w-10 h-10 rounded-full bg-muted"></div>
+                      <div class="flex-1">
+                        <textarea class="w-full p-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none" rows="1" placeholder="写下你的评论..."></textarea>
+                      </div>
+                      <button class="h-full px-4 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors flex items-center">发布评论</button>
+                    </div>
+                  </div>
+                  <div class="lg:col-span-1 pointer-events-none"></div>
+                </div>
+              </div>
+
+              <script>
+                // 控制底部评论条的显示和隐藏
+                const bottomCommentBar = document.getElementById('bottom-comment-bar');
+                const topCommentBar = document.querySelector('.sticky.top-0');
+
+                function toggleBottomCommentBar() {
+                  if (topCommentBar && bottomCommentBar) {
+                    const rect = topCommentBar.getBoundingClientRect();
+                    // 当顶部评论条完全划出屏幕时，显示底部评论条
+                    if (rect.bottom < 0) {
+                      bottomCommentBar.style.display = 'block';
+                    } else {
+                      bottomCommentBar.style.display = 'none';
+                    }
+                  }
+                }
+
+                // 初始检查
+                toggleBottomCommentBar();
+
+                // 滚动时检查
+                window.addEventListener('scroll', toggleBottomCommentBar);
+              </script>
+            </div>
+
+            <!-- 右侧固定区域 -->
+            <div class="lg:col-span-1 lg:sticky lg:top-[100px] h-fit">
+              <!-- 发布者信息 -->
+              <div class="bg-card rounded-2xl overflow-hidden shadow-lg border border-border p-6 mb-6">
+                <h3 class="text-lg font-bold mb-4">发布者</h3>
+                <div class="flex items-center gap-4">
+                  <div class="w-16 h-16 rounded-full bg-primary/20"></div>
+                  <div>
+                    <p class="text-base font-medium flex items-center gap-2">
+                      {content.author}
+                      {content.authorType === 'official' && <span class="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded-full">✓ 官方</span>}
+                    </p>
+                    <p class="text-sm text-muted-foreground">{content.authorType === 'official' ? '官方账号' : '非遗爱好者'}</p>
+                  </div>
+                </div>
+                <div class="flex gap-2 mt-4 flex-wrap">
+                  {content.tags.map(tag => (
+                    <span class="text-xs px-3 py-1 bg-muted rounded-full text-muted-foreground">#{tag}</span>
+                  ))}
+                </div>
+              </div>
+
+              <!-- 内容推荐 -->
+              <div class="bg-card rounded-2xl overflow-hidden shadow-lg border border-border p-6">
+                <h3 class="text-lg font-bold mb-4">推荐内容</h3>
+                <div class="space-y-4">
+                  <!-- 推荐1 -->
+                  <div class="flex gap-3">
+                    <div class="w-24 h-16 bg-muted/30 rounded-md overflow-hidden flex-shrink-0">
+                      <img src="https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=120&h=80&fit=crop" alt="推荐内容" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <h4 class="text-sm font-medium line-clamp-2 mb-1">耗时一个月完成的苏绣作品，每一针都是传承</h4>
+                      <p class="text-xs text-muted-foreground">苏绣手作-小李 · 3小时前</p>
+                    </div>
+                  </div>
+
+                  <!-- 推荐2 -->
+                  <div class="flex gap-3">
+                    <div class="w-24 h-16 bg-muted/30 rounded-md overflow-hidden flex-shrink-0">
+                      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=120&h=80&fit=crop" alt="推荐内容" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <h4 class="text-sm font-medium line-clamp-2 mb-1">中国传统制茶技艺及其相关习俗入选世界非遗</h4>
+                      <p class="text-xs text-muted-foreground">中国非遗保护中心 · 昨天</p>
+                    </div>
+                  </div>
+
+                  <!-- 推荐3 -->
+                  <div class="flex gap-3">
+                    <div class="w-24 h-16 bg-muted/30 rounded-md overflow-hidden flex-shrink-0">
+                      <img src="https://images.unsplash.com/photo-1604881991720-f91add269bed?w=120&h=80&fit=crop" alt="推荐内容" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <h4 class="text-sm font-medium line-clamp-2 mb-1">2025非遗传承计划启动，面向全国招募青年传承人</h4>
+                      <p class="text-xs text-muted-foreground">国家级非遗传承中心 · 1小时前</p>
+                    </div>
+                  </div>
+
+                  <!-- 推荐4 -->
+                  <div class="flex gap-3">
+                    <div class="w-24 h-16 bg-muted/30 rounded-md overflow-hidden flex-shrink-0">
+                      <img src="https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=120&h=80&fit=crop" alt="推荐内容" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <h4 class="text-sm font-medium line-clamp-2 mb-1">传统手工艺品的现代创新与传承</h4>
+                      <p class="text-xs text-muted-foreground">非遗研究中心 · 2天前</p>
+                    </div>
+                  </div>
+
+                  <!-- 推荐5 -->
+                  <div class="flex gap-3">
+                    <div class="w-24 h-16 bg-muted/30 rounded-md overflow-hidden flex-shrink-0">
+                      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=120&h=80&fit=crop" alt="推荐内容" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <h4 class="text-sm font-medium line-clamp-2 mb-1">茶文化与现代生活的融合之道</h4>
+                      <p class="text-xs text-muted-foreground">茶道研究会 · 3天前</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <!-- 报道类型样式 -->
+        {content.type === 'report' && (
+          <div class="bg-card rounded-2xl overflow-hidden shadow-lg border border-border mb-6">
+            <!-- 报道封面 -->
+            <div class="relative h-80 bg-muted/30">
+              <img src={content.coverImage} alt={content.title} class="w-full h-full object-cover" />
+              <div class="absolute top-4 left-4 bg-blue-500/90 text-white text-sm font-bold px-3 py-1.5 rounded-lg flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" x2="8" y1="13" y2="13"></line>
+                  <line x1="16" x2="8" y1="17" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                报道
+              </div>
+            </div>
+
+            <!-- 内容信息 -->
+            <div class="p-8">
+              <div class="flex items-center gap-3 mb-6">
+                <div class="w-12 h-12 rounded-full bg-primary/20"></div>
+                <div>
+                  <p class="text-base font-medium flex items-center gap-2">
+                    {content.author}
+                    {content.authorType === 'official' && <span class="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded-full">✓ 官方</span>}
+                  </p>
+                  <p class="text-sm text-muted-foreground">{content.authorType === 'official' ? '官方账号' : '非遗爱好者'}</p>
+                </div>
+              </div>
+
+              <h1 class="text-3xl font-bold mb-6">{content.title}</h1>
+
+              <div class="flex gap-2 mb-8 flex-wrap">
+                {content.tags.map(tag => (
+                  <span class="text-sm px-4 py-1.5 bg-blue-50 text-blue-700 rounded-full">#{tag}</span>
+                ))}
+              </div>
+
+              <div class="prose prose-lg max-w-none text-foreground leading-relaxed" set:html={content.content} />
+
+              <!-- 互动数据 -->
+              <div class="flex items-center justify-between mt-8 pt-8 border-t border-border">
+                <div class="flex items-center gap-6">
+                  <button class="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0-7.78z"></path>
+                    </svg>
+                    <span>{content.likes}</span>
+                  </button>
+                  <button class="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v16z"></path>
+                    </svg>
+                    <span>{content.comments}</span>
+                  </button>
+                  <button class="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v16z"></path>
+                    </svg>
+                    <span>{content.saves}</span>
+                  </button>
+                </div>
+                <span class="text-sm text-muted-foreground">{content.time}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <!-- 图文类型样式 -->
+        {content.type === 'image' && (
+          <div class="bg-card rounded-2xl overflow-hidden shadow-lg border border-border mb-6">
+            <!-- 图文封面 -->
+            <div class="relative h-80 bg-muted/30">
+              <img src={content.coverImage} alt={content.title} class="w-full h-full object-cover" />
+              <div class="absolute top-4 right-4 bg-green-500/90 text-white text-sm font-bold px-3 py-1.5 rounded-lg flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+                </svg>
+                图文
+              </div>
+            </div>
+
+            <!-- 内容信息 -->
+            <div class="p-6">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-12 h-12 rounded-full bg-muted"></div>
+                <div>
+                  <p class="text-base font-medium">{content.author}</p>
+                  <p class="text-sm text-muted-foreground">{content.authorType === 'official' ? '官方账号' : '非遗爱好者'}</p>
+                </div>
+              </div>
+
+              <h1 class="text-2xl font-bold mb-4">{content.title}</h1>
+
+              <div class="flex gap-2 mb-6 flex-wrap">
+                {content.tags.map(tag => (
+                  <span class="text-xs px-3 py-1 bg-muted rounded-full text-muted-foreground">#{tag}</span>
+                ))}
+              </div>
+
+              <div class="prose prose-sm max-w-none text-muted-foreground" set:html={content.content} />
+
+              <!-- 互动数据 -->
+              <div class="flex items-center justify-between mt-6 pt-6 border-t border-border">
+                <div class="flex items-center gap-6">
+                  <button class="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0-7.78z"></path>
+                    </svg>
+                    <span>{content.likes}</span>
+                  </button>
+                  <button class="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v16z"></path>
+                    </svg>
+                    <span>{content.comments}</span>
+                  </button>
+                  <button class="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v16z"></path>
+                    </svg>
+                    <span>{content.saves}</span>
+                  </button>
+                </div>
+                <span class="text-sm text-muted-foreground">{content.time}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <!-- 评论区（适用于报道和图文类型） -->
+        {(content.type === 'report' || content.type === 'image') && (
+          <div class="bg-card rounded-2xl overflow-hidden shadow-lg border border-border">
+            <div class="p-6">
+              <h2 class="text-xl font-bold mb-6">评论 ({content.comments})</h2>
+              
+              <!-- 评论输入框 -->
+              <div class="flex gap-3 mb-8">
+                <div class="w-10 h-10 rounded-full bg-muted"></div>
+                <div class="flex-1">
+                  <textarea class="w-full p-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none" rows="3" placeholder="写下你的评论..."></textarea>
+                  <div class="flex justify-end mt-2">
+                    <button class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors">发布评论</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 评论列表 -->
+              <div class="space-y-6">
+                <!-- 评论1 -->
+                <div class="flex gap-3">
+                  <div class="w-10 h-10 rounded-full bg-muted"></div>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                      <span class="font-medium">用户1</span>
+                      <span class="text-xs text-muted-foreground">2小时前</span>
+                    </div>
+                    <p class="text-muted-foreground mb-2">这个内容非常有意义，希望能看到更多类似的报道！</p>
+                    <div class="flex items-center gap-4 text-sm text-muted-foreground">
+                      <button class="hover:text-primary transition-colors">👍 12</button>
+                      <button class="hover:text-primary transition-colors">回复</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 评论2 -->
+                <div class="flex gap-3">
+                  <div class="w-10 h-10 rounded-full bg-muted"></div>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                      <span class="font-medium">用户2</span>
+                      <span class="text-xs text-muted-foreground">3小时前</span>
+                    </div>
+                    <p class="text-muted-foreground mb-2">作为一名非遗爱好者，我非常喜欢这个内容，学到了很多知识。</p>
+                    <div class="flex items-center gap-4 text-sm text-muted-foreground">
+                      <button class="hover:text-primary transition-colors">👍 8</button>
+                      <button class="hover:text-primary transition-colors">回复</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 评论3 -->
+                <div class="flex gap-3">
+                  <div class="w-10 h-10 rounded-full bg-muted"></div>
+                  <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1">
+                      <span class="font-medium">用户3</span>
+                      <span class="text-xs text-muted-foreground">4小时前</span>
+                    </div>
+                    <p class="text-muted-foreground mb-2">感谢分享这么精彩的内容，期待更多关于非遗文化的报道。</p>
+                    <div class="flex items-center gap-4 text-sm text-muted-foreground">
+                      <button class="hover:text-primary transition-colors">👍 5</button>
+                      <button class="hover:text-primary transition-colors">回复</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+      </div>
+    </section>
+  </main>
+
+</Layout>

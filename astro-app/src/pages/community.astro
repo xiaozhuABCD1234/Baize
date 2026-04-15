@@ -96,7 +96,7 @@ import Footer from "@/components/Footer.astro";
 					<!-- ====================== -->
 					<!-- 卡片 1 · 官方账号 -->
 					<!-- ====================== -->
-					<div class="card-item" data-category="official" data-type="video">
+					<a href="/community/1" class="card-item block" data-category="official" data-type="video">
 						<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
 							<!-- 封面 -->
 							<div class="h-52 bg-muted/30 relative">
@@ -139,12 +139,12 @@ import Footer from "@/components/Footer.astro";
 								</div>
 							</div>
 						</div>
-					</div>
+					</a>
 
 					<!-- ====================== -->
 					<!-- 卡片 2 · 普通用户 -->
 					<!-- ====================== -->
-					<div class="card-item" data-category="skill" data-type="image">
+					<a href="/community/2" class="card-item block" data-category="skill" data-type="image">
 						<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
 							<div class="h-52 bg-muted/30 relative">
 								<div class="absolute top-2 right-2 bg-green-500/90 text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1">
@@ -180,12 +180,12 @@ import Footer from "@/components/Footer.astro";
 								</div>
 							</div>
 						</div>
-					</div>
+					</a>
 
 					<!-- ====================== -->
 					<!-- 卡片 3 · 官方账号 -->
 					<!-- ====================== -->
-					<div class="card-item" data-category="official" data-type="report">
+					<a href="/community/3" class="card-item block" data-category="official" data-type="report">
 						<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
 							<div class="h-52 bg-muted/30 relative">
 								<div class="absolute top-2 left-2 bg-primary/90 text-white text-xs font-bold px-2 py-1 rounded-md">官方</div>
@@ -227,12 +227,12 @@ import Footer from "@/components/Footer.astro";
 								</div>
 							</div>
 						</div>
-					</div>
+					</a>
 
 					<!-- ====================== -->
 					<!-- 卡片 4 · 普通用户 -->
 					<!-- ====================== -->
-					<div class="card-item" data-category="skill" data-type="image">
+					<a href="/community/2" class="card-item block" data-category="skill" data-type="image">
 						<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
 							<div class="h-52 bg-muted/30 relative">
 								<div class="absolute top-2 right-2 bg-green-500/90 text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1">
@@ -268,12 +268,12 @@ import Footer from "@/components/Footer.astro";
 								</div>
 							</div>
 						</div>
-					</div>
+					</a>
 
 					<!-- ====================== -->
 					<!-- 卡片 5 · 普通用户 -->
 					<!-- ====================== -->
-					<div class="card-item" data-category="culture" data-type="image">
+					<a href="/community/2" class="card-item block" data-category="culture" data-type="image">
 						<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
 							<div class="h-52 bg-muted/30 relative">
 								<div class="absolute top-2 right-2 bg-green-500/90 text-white text-xs font-bold px-2 py-1 rounded-md flex items-center gap-1">
@@ -309,12 +309,12 @@ import Footer from "@/components/Footer.astro";
 								</div>
 							</div>
 						</div>
-					</div>
+					</a>
 
 					<!-- ====================== -->
 					<!-- 卡片 6 · 官方账号 -->
 					<!-- ====================== -->
-					<div class="card-item" data-category="official" data-type="video">
+					<a href="/community/1" class="card-item block" data-category="official" data-type="video">
 						<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border">
 							<div class="h-52 bg-muted/30 relative">
 								<div class="absolute top-2 left-2 bg-primary/90 text-white text-xs font-bold px-2 py-1 rounded-md">官方</div>
@@ -359,7 +359,7 @@ import Footer from "@/components/Footer.astro";
 
 				<!-- 加载更多 -->
 				<div class="mt-12 text-center">
-					<button class="px-6 py-3 bg-card hover:bg-muted border border-border rounded-lg text-sm font-medium transition-all">
+					<button class="px-6 py-3 bg-card hover:bg-muted border border-border rounded-lg text-sm font-medium transition-all" onclick="return false;">
 						加载更多动态
 					</button>
 				</div>
@@ -367,8 +367,6 @@ import Footer from "@/components/Footer.astro";
 			</div>
 		</section>
 	</main>
-
-	<Footer />
 
 	<script>
 			// 筛选功能实现
