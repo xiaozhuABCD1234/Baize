@@ -48,7 +48,7 @@ func (h *RegionHandler) RegisterRoutes(g *echo.Group) {
 // @Param       order_by query string false "排序字段"
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /regions [get]
+// @Router      /api/v1/regions [get]
 func (h *RegionHandler) ListRegions(c *echo.Context) error {
 	orderBy := c.QueryParam("order_by")
 
@@ -68,7 +68,7 @@ func (h *RegionHandler) ListRegions(c *echo.Context) error {
 // @Produce     application/json
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /regions/root [get]
+// @Router      /api/v1/regions/root [get]
 func (h *RegionHandler) ListRoot(c *echo.Context) error {
 	regions, err := h.svc.ListRoot(c.Request().Context())
 	if err != nil {
@@ -88,7 +88,7 @@ func (h *RegionHandler) ListRoot(c *echo.Context) error {
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     400 {object} response.Response "无效的地区ID"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /regions/parent/{parent_id} [get]
+// @Router      /api/v1/regions/parent/{parent_id} [get]
 func (h *RegionHandler) ListByParentID(c *echo.Context) error {
 	parentIDStr := c.Param("parent_id")
 	parentID, err := strconv.ParseUint(parentIDStr, 10, 32)
@@ -114,7 +114,7 @@ func (h *RegionHandler) ListByParentID(c *echo.Context) error {
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     400 {object} response.Response "无效的地区级别"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /regions/level/{level} [get]
+// @Router      /api/v1/regions/level/{level} [get]
 func (h *RegionHandler) ListByLevel(c *echo.Context) error {
 	levelStr := c.Param("level")
 	level, err := strconv.ParseInt(levelStr, 10, 8)
@@ -141,7 +141,7 @@ func (h *RegionHandler) ListByLevel(c *echo.Context) error {
 // @Produce     application/json
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /regions/heritage-centers [get]
+// @Router      /api/v1/regions/heritage-centers [get]
 func (h *RegionHandler) ListHeritageCenters(c *echo.Context) error {
 	regions, err := h.svc.ListHeritageCenters(c.Request().Context())
 	if err != nil {
@@ -162,7 +162,7 @@ func (h *RegionHandler) ListHeritageCenters(c *echo.Context) error {
 // @Failure     400 {object} response.Response "无效的地区ID"
 // @Failure     404 {object} response.Response "地区不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /regions/{id} [get]
+// @Router      /api/v1/regions/{id} [get]
 func (h *RegionHandler) GetRegion(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -192,7 +192,7 @@ func (h *RegionHandler) GetRegion(c *echo.Context) error {
 // @Failure     400 {object} response.Response "无效的地区ID"
 // @Failure     404 {object} response.Response "地区不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /regions/{id}/with-children [get]
+// @Router      /api/v1/regions/{id}/with-children [get]
 func (h *RegionHandler) GetRegionWithChildren(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -221,7 +221,7 @@ func (h *RegionHandler) GetRegionWithChildren(c *echo.Context) error {
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     404 {object} response.Response "地区不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /regions/code/{code} [get]
+// @Router      /api/v1/regions/code/{code} [get]
 func (h *RegionHandler) GetRegionByCode(c *echo.Context) error {
 	code := c.Param("code")
 
@@ -248,7 +248,7 @@ func (h *RegionHandler) GetRegionByCode(c *echo.Context) error {
 // @Failure     400 {object} response.Response "请求参数错误或无效的地区级别"
 // @Failure     409 {object} response.Response "地区代码已存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /regions [post]
+// @Router      /api/v1/regions [post]
 func (h *RegionHandler) CreateRegion(c *echo.Context) error {
 	var region models.Region
 	if err := c.Bind(&region); err != nil {
@@ -283,7 +283,7 @@ func (h *RegionHandler) CreateRegion(c *echo.Context) error {
 // @Failure     404 {object} response.Response "地区不存在"
 // @Failure     409 {object} response.Response "地区代码已存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /regions/{id} [put]
+// @Router      /api/v1/regions/{id} [put]
 func (h *RegionHandler) UpdateRegion(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -322,7 +322,7 @@ func (h *RegionHandler) UpdateRegion(c *echo.Context) error {
 // @Failure     400 {object} response.Response "请求参数错误或无法删除有子节点的地区"
 // @Failure     404 {object} response.Response "地区不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /regions/{id} [delete]
+// @Router      /api/v1/regions/{id} [delete]
 func (h *RegionHandler) DeleteRegion(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)

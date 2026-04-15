@@ -4,7 +4,7 @@
         "contact": {}
     },
     "paths": {
-        "/auth/refresh": {
+        "/api/v1/auth/refresh": {
             "post": {
                 "description": "使用Refresh Token获取新的Access Token",
                 "consumes": [
@@ -59,7 +59,7 @@
                 }
             }
         },
-        "/categories": {
+        "/api/v1/categories": {
             "get": {
                 "description": "获取所有非遗分类列表",
                 "consumes": [
@@ -151,7 +151,7 @@
                 }
             }
         },
-        "/categories/active": {
+        "/api/v1/categories/active": {
             "get": {
                 "description": "获取所有状态为启用的分类",
                 "consumes": [
@@ -180,7 +180,7 @@
                 }
             }
         },
-        "/categories/name/{name}": {
+        "/api/v1/categories/name/{name}": {
             "get": {
                 "description": "根据分类名称获取分类信息",
                 "consumes": [
@@ -224,7 +224,7 @@
                 }
             }
         },
-        "/categories/parent/{parent_id}": {
+        "/api/v1/categories/parent/{parent_id}": {
             "get": {
                 "description": "根据父分类ID获取子分类列表",
                 "consumes": [
@@ -268,7 +268,7 @@
                 }
             }
         },
-        "/categories/region/{region_code}": {
+        "/api/v1/categories/region/{region_code}": {
             "get": {
                 "description": "根据地区编码获取该地区的分类列表",
                 "consumes": [
@@ -306,7 +306,7 @@
                 }
             }
         },
-        "/categories/root": {
+        "/api/v1/categories/root": {
             "get": {
                 "description": "获取一级分类（无父级的分类）",
                 "consumes": [
@@ -335,7 +335,7 @@
                 }
             }
         },
-        "/categories/{id}": {
+        "/api/v1/categories/{id}": {
             "get": {
                 "description": "根据ID获取分类信息",
                 "consumes": [
@@ -506,7 +506,7 @@
                 }
             }
         },
-        "/categories/{id}/with-children": {
+        "/api/v1/categories/{id}/with-children": {
             "get": {
                 "description": "根据ID获取分类信息及其所有子分类",
                 "consumes": [
@@ -556,7 +556,7 @@
                 }
             }
         },
-        "/comments": {
+        "/api/v1/comments": {
             "post": {
                 "security": [
                     {
@@ -607,7 +607,7 @@
                 }
             }
         },
-        "/comments/user/{user_id}": {
+        "/api/v1/comments/user/{user_id}": {
             "get": {
                 "description": "获取指定用户的所有评论",
                 "consumes": [
@@ -651,7 +651,7 @@
                 }
             }
         },
-        "/comments/work/{work_id}": {
+        "/api/v1/comments/work/{work_id}": {
             "get": {
                 "description": "获取指定作品的所有评论（带分页）",
                 "consumes": [
@@ -709,7 +709,7 @@
                 }
             }
         },
-        "/comments/work/{work_id}/root": {
+        "/api/v1/comments/work/{work_id}/root": {
             "get": {
                 "description": "获取指定作品的一级评论（不带分页，返回树形结构）",
                 "consumes": [
@@ -753,7 +753,7 @@
                 }
             }
         },
-        "/comments/{id}": {
+        "/api/v1/comments/{id}": {
             "get": {
                 "description": "根据ID获取评论详情",
                 "consumes": [
@@ -921,7 +921,7 @@
                 }
             }
         },
-        "/comments/{id}/like": {
+        "/api/v1/comments/{id}/like": {
             "put": {
                 "security": [
                     {
@@ -986,7 +986,7 @@
                 }
             }
         },
-        "/comments/{id}/status": {
+        "/api/v1/comments/{id}/status": {
             "put": {
                 "security": [
                     {
@@ -1051,7 +1051,7 @@
                 }
             }
         },
-        "/crafts": {
+        "/api/v1/crafts": {
             "get": {
                 "description": "获取所有技艺列表",
                 "consumes": [
@@ -1137,7 +1137,7 @@
                 }
             }
         },
-        "/crafts/category/{category_id}": {
+        "/api/v1/crafts/category/{category_id}": {
             "get": {
                 "description": "根据分类ID获取该分类下的所有技艺",
                 "consumes": [
@@ -1181,7 +1181,7 @@
                 }
             }
         },
-        "/crafts/difficulty/{level}": {
+        "/api/v1/crafts/difficulty/{level}": {
             "get": {
                 "description": "根据难度等级获取技艺列表",
                 "consumes": [
@@ -1225,7 +1225,7 @@
                 }
             }
         },
-        "/crafts/{id}": {
+        "/api/v1/crafts/{id}": {
             "get": {
                 "description": "根据ID获取技艺信息",
                 "consumes": [
@@ -1396,7 +1396,7 @@
                 }
             }
         },
-        "/crafts/{id}/with-category": {
+        "/api/v1/crafts/{id}/with-category": {
             "get": {
                 "description": "根据ID获取技艺信息及其所属分类",
                 "consumes": [
@@ -1446,7 +1446,7 @@
                 }
             }
         },
-        "/favorites": {
+        "/api/v1/favorites": {
             "post": {
                 "security": [
                     {
@@ -1503,7 +1503,7 @@
                 }
             }
         },
-        "/favorites/check/{work_id}": {
+        "/api/v1/favorites/check/{work_id}": {
             "get": {
                 "security": [
                     {
@@ -1552,7 +1552,7 @@
                 }
             }
         },
-        "/favorites/user/{user_id}": {
+        "/api/v1/favorites/user/{user_id}": {
             "get": {
                 "description": "获取指定用户的收藏列表（带分页）",
                 "consumes": [
@@ -1610,7 +1610,7 @@
                 }
             }
         },
-        "/favorites/work/{work_id}": {
+        "/api/v1/favorites/work/{work_id}": {
             "get": {
                 "description": "获取收藏了指定作品的用户列表",
                 "consumes": [
@@ -1707,7 +1707,7 @@
                 }
             }
         },
-        "/favorites/{id}": {
+        "/api/v1/favorites/{id}": {
             "get": {
                 "description": "根据ID获取收藏详情",
                 "consumes": [
@@ -1810,7 +1810,7 @@
                 }
             }
         },
-        "/favorites/{id}/folder": {
+        "/api/v1/favorites/{id}/folder": {
             "put": {
                 "security": [
                     {
@@ -1875,7 +1875,7 @@
                 }
             }
         },
-        "/follows": {
+        "/api/v1/follows": {
             "post": {
                 "security": [
                     {
@@ -1933,7 +1933,7 @@
                 }
             }
         },
-        "/follows/check/{user_id}": {
+        "/api/v1/follows/check/{user_id}": {
             "get": {
                 "security": [
                     {
@@ -1982,7 +1982,7 @@
                 }
             }
         },
-        "/follows/followers/{user_id}": {
+        "/api/v1/follows/followers/{user_id}": {
             "get": {
                 "description": "获取指定用户的粉丝列表",
                 "consumes": [
@@ -2026,7 +2026,7 @@
                 }
             }
         },
-        "/follows/followers/{user_id}/count": {
+        "/api/v1/follows/followers/{user_id}/count": {
             "get": {
                 "description": "获取指定用户的粉丝数量",
                 "consumes": [
@@ -2070,7 +2070,7 @@
                 }
             }
         },
-        "/follows/following/{user_id}": {
+        "/api/v1/follows/following/{user_id}": {
             "get": {
                 "description": "获取指定用户的关注列表",
                 "consumes": [
@@ -2114,7 +2114,7 @@
                 }
             }
         },
-        "/follows/following/{user_id}/count": {
+        "/api/v1/follows/following/{user_id}/count": {
             "get": {
                 "description": "获取指定用户的关注数量",
                 "consumes": [
@@ -2158,7 +2158,7 @@
                 }
             }
         },
-        "/follows/{user_id}": {
+        "/api/v1/follows/{user_id}": {
             "delete": {
                 "security": [
                     {
@@ -2213,7 +2213,7 @@
                 }
             }
         },
-        "/regions": {
+        "/api/v1/regions": {
             "get": {
                 "description": "获取所有地区列表",
                 "consumes": [
@@ -2305,7 +2305,7 @@
                 }
             }
         },
-        "/regions/code/{code}": {
+        "/api/v1/regions/code/{code}": {
             "get": {
                 "description": "根据地区编码获取地区信息",
                 "consumes": [
@@ -2349,7 +2349,7 @@
                 }
             }
         },
-        "/regions/heritage-centers": {
+        "/api/v1/regions/heritage-centers": {
             "get": {
                 "description": "获取所有非遗保护中心地区",
                 "consumes": [
@@ -2378,7 +2378,7 @@
                 }
             }
         },
-        "/regions/level/{level}": {
+        "/api/v1/regions/level/{level}": {
             "get": {
                 "description": "根据级别获取地区列表",
                 "consumes": [
@@ -2422,7 +2422,7 @@
                 }
             }
         },
-        "/regions/parent/{parent_id}": {
+        "/api/v1/regions/parent/{parent_id}": {
             "get": {
                 "description": "根据父地区ID获取子地区列表",
                 "consumes": [
@@ -2466,7 +2466,7 @@
                 }
             }
         },
-        "/regions/root": {
+        "/api/v1/regions/root": {
             "get": {
                 "description": "获取一级地区（无父级的地区）",
                 "consumes": [
@@ -2495,7 +2495,7 @@
                 }
             }
         },
-        "/regions/{id}": {
+        "/api/v1/regions/{id}": {
             "get": {
                 "description": "根据ID获取地区信息",
                 "consumes": [
@@ -2666,7 +2666,7 @@
                 }
             }
         },
-        "/regions/{id}/with-children": {
+        "/api/v1/regions/{id}/with-children": {
             "get": {
                 "description": "根据ID获取地区信息及其所有子地区",
                 "consumes": [
@@ -2716,7 +2716,7 @@
                 }
             }
         },
-        "/users": {
+        "/api/v1/users": {
             "get": {
                 "description": "分页获取用户列表",
                 "consumes": [
@@ -2761,7 +2761,7 @@
                 }
             }
         },
-        "/users/login": {
+        "/api/v1/users/login": {
             "post": {
                 "description": "用户登录获取Access Token和Refresh Token",
                 "consumes": [
@@ -2813,7 +2813,7 @@
                 }
             }
         },
-        "/users/register": {
+        "/api/v1/users/register": {
             "post": {
                 "description": "创建新用户账号",
                 "consumes": [
@@ -2865,7 +2865,7 @@
                 }
             }
         },
-        "/users/{id}": {
+        "/api/v1/users/{id}": {
             "get": {
                 "description": "根据ID获取用户信息",
                 "consumes": [
@@ -3048,7 +3048,7 @@
                 }
             }
         },
-        "/users/{id}/force": {
+        "/api/v1/users/{id}/force": {
             "delete": {
                 "security": [
                     {
@@ -3109,7 +3109,7 @@
                 }
             }
         },
-        "/users/{id}/password": {
+        "/api/v1/users/{id}/password": {
             "put": {
                 "security": [
                     {
@@ -3185,7 +3185,7 @@
                 }
             }
         },
-        "/works": {
+        "/api/v1/works": {
             "get": {
                 "description": "分页获取作品列表，支持筛选和排序",
                 "consumes": [
@@ -3316,7 +3316,7 @@
                 }
             }
         },
-        "/works/recommended": {
+        "/api/v1/works/recommended": {
             "get": {
                 "description": "获取推荐的作品列表",
                 "consumes": [
@@ -3356,7 +3356,7 @@
                 }
             }
         },
-        "/works/top": {
+        "/api/v1/works/top": {
             "get": {
                 "description": "获取置顶的优秀作品列表",
                 "consumes": [
@@ -3396,7 +3396,7 @@
                 }
             }
         },
-        "/works/{id}": {
+        "/api/v1/works/{id}": {
             "get": {
                 "description": "根据ID获取作品信息",
                 "consumes": [
@@ -3561,7 +3561,7 @@
                 }
             }
         },
-        "/works/{id}/count": {
+        "/api/v1/works/{id}/count": {
             "put": {
                 "security": [
                     {
@@ -3626,7 +3626,7 @@
                 }
             }
         },
-        "/works/{id}/detailed": {
+        "/api/v1/works/{id}/detailed": {
             "get": {
                 "description": "根据ID获取作品详细信息（包括媒体资源）",
                 "consumes": [
@@ -3676,7 +3676,7 @@
                 }
             }
         },
-        "/works/{id}/status": {
+        "/api/v1/works/{id}/status": {
             "put": {
                 "security": [
                     {

@@ -46,7 +46,7 @@ func (h *UserHandler) RegisterRoutes(g *echo.Group) {
 // @Failure     400 {object} response.Response "请求参数错误或无效的角色类型"
 // @Failure     409 {object} response.Response "用户名或邮箱已被使用"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /users/register [post]
+// @Router      /api/v1/users/register [post]
 func (h *UserHandler) Register(c *echo.Context) error {
 	var req svc.RegisterRequest
 	if err := c.Bind(&req); err != nil {
@@ -81,7 +81,7 @@ func (h *UserHandler) Register(c *echo.Context) error {
 // @Failure     400 {object} response.Response "请求参数错误"
 // @Failure     401 {object} response.Response "用户不存在或密码错误"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /users/login [post]
+// @Router      /api/v1/users/login [post]
 func (h *UserHandler) Login(c *echo.Context) error {
 	var req svc.LoginRequest
 	if err := c.Bind(&req); err != nil {
@@ -113,7 +113,7 @@ func (h *UserHandler) Login(c *echo.Context) error {
 // @Failure     400 {object} response.Response "无效的用户ID"
 // @Failure     404 {object} response.Response "用户不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /users/{id} [get]
+// @Router      /api/v1/users/{id} [get]
 func (h *UserHandler) GetUser(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -142,7 +142,7 @@ func (h *UserHandler) GetUser(c *echo.Context) error {
 // @Param       page_size query int false "每页数量" default(10)
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /users [get]
+// @Router      /api/v1/users [get]
 func (h *UserHandler) ListUsers(c *echo.Context) error {
 	page, _ := strconv.Atoi(c.QueryParam("page"))
 	pageSize, _ := strconv.Atoi(c.QueryParam("page_size"))
@@ -177,7 +177,7 @@ func (h *UserHandler) ListUsers(c *echo.Context) error {
 // @Failure     404 {object} response.Response "用户不存在"
 // @Failure     409 {object} response.Response "邮箱已被使用"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /users/{id} [put]
+// @Router      /api/v1/users/{id} [put]
 func (h *UserHandler) UpdateUser(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -227,7 +227,7 @@ func (h *UserHandler) UpdateUser(c *echo.Context) error {
 // @Failure     403 {object} response.Response "无权修改此用户密码"
 // @Failure     404 {object} response.Response "用户不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /users/{id}/password [put]
+// @Router      /api/v1/users/{id}/password [put]
 func (h *UserHandler) ChangePassword(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -278,7 +278,7 @@ func (h *UserHandler) ChangePassword(c *echo.Context) error {
 // @Failure     403 {object} response.Response "无权删除此用户"
 // @Failure     404 {object} response.Response "用户不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /users/{id} [delete]
+// @Router      /api/v1/users/{id} [delete]
 func (h *UserHandler) DeleteUser(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -317,7 +317,7 @@ func (h *UserHandler) DeleteUser(c *echo.Context) error {
 // @Failure     403 {object} response.Response "无权限执行此操作"
 // @Failure     404 {object} response.Response "用户不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /users/{id}/force [delete]
+// @Router      /api/v1/users/{id}/force [delete]
 func (h *UserHandler) ForceDeleteUser(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)

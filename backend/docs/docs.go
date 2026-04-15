@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/auth/refresh": {
+        "/api/v1/auth/refresh": {
             "post": {
                 "description": "使用Refresh Token获取新的Access Token",
                 "consumes": [
@@ -70,7 +70,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/categories": {
+        "/api/v1/categories": {
             "get": {
                 "description": "获取所有非遗分类列表",
                 "consumes": [
@@ -162,7 +162,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/categories/active": {
+        "/api/v1/categories/active": {
             "get": {
                 "description": "获取所有状态为启用的分类",
                 "consumes": [
@@ -191,7 +191,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/categories/name/{name}": {
+        "/api/v1/categories/name/{name}": {
             "get": {
                 "description": "根据分类名称获取分类信息",
                 "consumes": [
@@ -235,7 +235,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/categories/parent/{parent_id}": {
+        "/api/v1/categories/parent/{parent_id}": {
             "get": {
                 "description": "根据父分类ID获取子分类列表",
                 "consumes": [
@@ -279,7 +279,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/categories/region/{region_code}": {
+        "/api/v1/categories/region/{region_code}": {
             "get": {
                 "description": "根据地区编码获取该地区的分类列表",
                 "consumes": [
@@ -317,7 +317,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/categories/root": {
+        "/api/v1/categories/root": {
             "get": {
                 "description": "获取一级分类（无父级的分类）",
                 "consumes": [
@@ -346,7 +346,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/categories/{id}": {
+        "/api/v1/categories/{id}": {
             "get": {
                 "description": "根据ID获取分类信息",
                 "consumes": [
@@ -517,7 +517,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/categories/{id}/with-children": {
+        "/api/v1/categories/{id}/with-children": {
             "get": {
                 "description": "根据ID获取分类信息及其所有子分类",
                 "consumes": [
@@ -567,7 +567,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/comments": {
+        "/api/v1/comments": {
             "post": {
                 "security": [
                     {
@@ -618,7 +618,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/comments/user/{user_id}": {
+        "/api/v1/comments/user/{user_id}": {
             "get": {
                 "description": "获取指定用户的所有评论",
                 "consumes": [
@@ -662,7 +662,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/comments/work/{work_id}": {
+        "/api/v1/comments/work/{work_id}": {
             "get": {
                 "description": "获取指定作品的所有评论（带分页）",
                 "consumes": [
@@ -720,7 +720,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/comments/work/{work_id}/root": {
+        "/api/v1/comments/work/{work_id}/root": {
             "get": {
                 "description": "获取指定作品的一级评论（不带分页，返回树形结构）",
                 "consumes": [
@@ -764,7 +764,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/comments/{id}": {
+        "/api/v1/comments/{id}": {
             "get": {
                 "description": "根据ID获取评论详情",
                 "consumes": [
@@ -932,7 +932,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/comments/{id}/like": {
+        "/api/v1/comments/{id}/like": {
             "put": {
                 "security": [
                     {
@@ -997,7 +997,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/comments/{id}/status": {
+        "/api/v1/comments/{id}/status": {
             "put": {
                 "security": [
                     {
@@ -1062,7 +1062,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/crafts": {
+        "/api/v1/crafts": {
             "get": {
                 "description": "获取所有技艺列表",
                 "consumes": [
@@ -1148,7 +1148,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/crafts/category/{category_id}": {
+        "/api/v1/crafts/category/{category_id}": {
             "get": {
                 "description": "根据分类ID获取该分类下的所有技艺",
                 "consumes": [
@@ -1192,7 +1192,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/crafts/difficulty/{level}": {
+        "/api/v1/crafts/difficulty/{level}": {
             "get": {
                 "description": "根据难度等级获取技艺列表",
                 "consumes": [
@@ -1236,7 +1236,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/crafts/{id}": {
+        "/api/v1/crafts/{id}": {
             "get": {
                 "description": "根据ID获取技艺信息",
                 "consumes": [
@@ -1407,7 +1407,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/crafts/{id}/with-category": {
+        "/api/v1/crafts/{id}/with-category": {
             "get": {
                 "description": "根据ID获取技艺信息及其所属分类",
                 "consumes": [
@@ -1457,7 +1457,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/favorites": {
+        "/api/v1/favorites": {
             "post": {
                 "security": [
                     {
@@ -1514,7 +1514,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/favorites/check/{work_id}": {
+        "/api/v1/favorites/check/{work_id}": {
             "get": {
                 "security": [
                     {
@@ -1563,7 +1563,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/favorites/user/{user_id}": {
+        "/api/v1/favorites/user/{user_id}": {
             "get": {
                 "description": "获取指定用户的收藏列表（带分页）",
                 "consumes": [
@@ -1621,7 +1621,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/favorites/work/{work_id}": {
+        "/api/v1/favorites/work/{work_id}": {
             "get": {
                 "description": "获取收藏了指定作品的用户列表",
                 "consumes": [
@@ -1718,7 +1718,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/favorites/{id}": {
+        "/api/v1/favorites/{id}": {
             "get": {
                 "description": "根据ID获取收藏详情",
                 "consumes": [
@@ -1821,7 +1821,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/favorites/{id}/folder": {
+        "/api/v1/favorites/{id}/folder": {
             "put": {
                 "security": [
                     {
@@ -1886,7 +1886,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/follows": {
+        "/api/v1/follows": {
             "post": {
                 "security": [
                     {
@@ -1944,7 +1944,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/follows/check/{user_id}": {
+        "/api/v1/follows/check/{user_id}": {
             "get": {
                 "security": [
                     {
@@ -1993,7 +1993,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/follows/followers/{user_id}": {
+        "/api/v1/follows/followers/{user_id}": {
             "get": {
                 "description": "获取指定用户的粉丝列表",
                 "consumes": [
@@ -2037,7 +2037,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/follows/followers/{user_id}/count": {
+        "/api/v1/follows/followers/{user_id}/count": {
             "get": {
                 "description": "获取指定用户的粉丝数量",
                 "consumes": [
@@ -2081,7 +2081,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/follows/following/{user_id}": {
+        "/api/v1/follows/following/{user_id}": {
             "get": {
                 "description": "获取指定用户的关注列表",
                 "consumes": [
@@ -2125,7 +2125,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/follows/following/{user_id}/count": {
+        "/api/v1/follows/following/{user_id}/count": {
             "get": {
                 "description": "获取指定用户的关注数量",
                 "consumes": [
@@ -2169,7 +2169,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/follows/{user_id}": {
+        "/api/v1/follows/{user_id}": {
             "delete": {
                 "security": [
                     {
@@ -2224,7 +2224,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/regions": {
+        "/api/v1/regions": {
             "get": {
                 "description": "获取所有地区列表",
                 "consumes": [
@@ -2316,7 +2316,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/regions/code/{code}": {
+        "/api/v1/regions/code/{code}": {
             "get": {
                 "description": "根据地区编码获取地区信息",
                 "consumes": [
@@ -2360,7 +2360,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/regions/heritage-centers": {
+        "/api/v1/regions/heritage-centers": {
             "get": {
                 "description": "获取所有非遗保护中心地区",
                 "consumes": [
@@ -2389,7 +2389,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/regions/level/{level}": {
+        "/api/v1/regions/level/{level}": {
             "get": {
                 "description": "根据级别获取地区列表",
                 "consumes": [
@@ -2433,7 +2433,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/regions/parent/{parent_id}": {
+        "/api/v1/regions/parent/{parent_id}": {
             "get": {
                 "description": "根据父地区ID获取子地区列表",
                 "consumes": [
@@ -2477,7 +2477,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/regions/root": {
+        "/api/v1/regions/root": {
             "get": {
                 "description": "获取一级地区（无父级的地区）",
                 "consumes": [
@@ -2506,7 +2506,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/regions/{id}": {
+        "/api/v1/regions/{id}": {
             "get": {
                 "description": "根据ID获取地区信息",
                 "consumes": [
@@ -2677,7 +2677,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/regions/{id}/with-children": {
+        "/api/v1/regions/{id}/with-children": {
             "get": {
                 "description": "根据ID获取地区信息及其所有子地区",
                 "consumes": [
@@ -2727,7 +2727,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users": {
+        "/api/v1/users": {
             "get": {
                 "description": "分页获取用户列表",
                 "consumes": [
@@ -2772,7 +2772,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/login": {
+        "/api/v1/users/login": {
             "post": {
                 "description": "用户登录获取Access Token和Refresh Token",
                 "consumes": [
@@ -2824,7 +2824,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/register": {
+        "/api/v1/users/register": {
             "post": {
                 "description": "创建新用户账号",
                 "consumes": [
@@ -2876,7 +2876,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/{id}": {
+        "/api/v1/users/{id}": {
             "get": {
                 "description": "根据ID获取用户信息",
                 "consumes": [
@@ -3059,7 +3059,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/{id}/force": {
+        "/api/v1/users/{id}/force": {
             "delete": {
                 "security": [
                     {
@@ -3120,7 +3120,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/{id}/password": {
+        "/api/v1/users/{id}/password": {
             "put": {
                 "security": [
                     {
@@ -3196,7 +3196,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/works": {
+        "/api/v1/works": {
             "get": {
                 "description": "分页获取作品列表，支持筛选和排序",
                 "consumes": [
@@ -3327,7 +3327,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/works/recommended": {
+        "/api/v1/works/recommended": {
             "get": {
                 "description": "获取推荐的作品列表",
                 "consumes": [
@@ -3367,7 +3367,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/works/top": {
+        "/api/v1/works/top": {
             "get": {
                 "description": "获取置顶的优秀作品列表",
                 "consumes": [
@@ -3407,7 +3407,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/works/{id}": {
+        "/api/v1/works/{id}": {
             "get": {
                 "description": "根据ID获取作品信息",
                 "consumes": [
@@ -3572,7 +3572,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/works/{id}/count": {
+        "/api/v1/works/{id}/count": {
             "put": {
                 "security": [
                     {
@@ -3637,7 +3637,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/works/{id}/detailed": {
+        "/api/v1/works/{id}/detailed": {
             "get": {
                 "description": "根据ID获取作品详细信息（包括媒体资源）",
                 "consumes": [
@@ -3687,7 +3687,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/works/{id}/status": {
+        "/api/v1/works/{id}/status": {
             "put": {
                 "security": [
                     {

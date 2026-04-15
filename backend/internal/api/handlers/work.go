@@ -54,7 +54,7 @@ func (h *WorkHandler) RegisterRoutes(g *echo.Group) {
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     400 {object} response.Response "请求参数错误"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /works [get]
+// @Router      /api/v1/works [get]
 func (h *WorkHandler) ListWorks(c *echo.Context) error {
 	var req models.WorkListRequest
 	if err := c.Bind(&req); err != nil {
@@ -85,7 +85,7 @@ func (h *WorkHandler) ListWorks(c *echo.Context) error {
 // @Param       limit query int false "返回数量" default(10) minimum(1) maximum(50)
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /works/top [get]
+// @Router      /api/v1/works/top [get]
 func (h *WorkHandler) ListTopWorks(c *echo.Context) error {
 	limit, _ := strconv.Atoi(c.QueryParam("limit"))
 	if limit < 1 || limit > 50 {
@@ -109,7 +109,7 @@ func (h *WorkHandler) ListTopWorks(c *echo.Context) error {
 // @Param       limit query int false "返回数量" default(10) minimum(1) maximum(50)
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /works/recommended [get]
+// @Router      /api/v1/works/recommended [get]
 func (h *WorkHandler) ListRecommendedWorks(c *echo.Context) error {
 	limit, _ := strconv.Atoi(c.QueryParam("limit"))
 	if limit < 1 || limit > 50 {
@@ -135,7 +135,7 @@ func (h *WorkHandler) ListRecommendedWorks(c *echo.Context) error {
 // @Failure     400 {object} response.Response "无效的作品ID"
 // @Failure     404 {object} response.Response "作品不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /works/{id} [get]
+// @Router      /api/v1/works/{id} [get]
 func (h *WorkHandler) GetWork(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -165,7 +165,7 @@ func (h *WorkHandler) GetWork(c *echo.Context) error {
 // @Failure     400 {object} response.Response "无效的作品ID"
 // @Failure     404 {object} response.Response "作品不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /works/{id}/detailed [get]
+// @Router      /api/v1/works/{id}/detailed [get]
 func (h *WorkHandler) GetWorkDetailed(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -195,7 +195,7 @@ func (h *WorkHandler) GetWorkDetailed(c *echo.Context) error {
 // @Success     201 {object} response.Response "创建成功"
 // @Failure     400 {object} response.Response "请求参数错误、技艺不存在、分类不存在或地区不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /works [post]
+// @Router      /api/v1/works [post]
 func (h *WorkHandler) CreateWork(c *echo.Context) error {
 	userID := middleware.GetUserID(c)
 
@@ -234,7 +234,7 @@ func (h *WorkHandler) CreateWork(c *echo.Context) error {
 // @Failure     400 {object} response.Response "请求参数错误"
 // @Failure     404 {object} response.Response "作品不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /works/{id} [put]
+// @Router      /api/v1/works/{id} [put]
 func (h *WorkHandler) UpdateWork(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -270,7 +270,7 @@ func (h *WorkHandler) UpdateWork(c *echo.Context) error {
 // @Failure     400 {object} response.Response "请求参数错误或无法删除已发布的作品"
 // @Failure     404 {object} response.Response "作品不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /works/{id} [delete]
+// @Router      /api/v1/works/{id} [delete]
 func (h *WorkHandler) DeleteWork(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -304,7 +304,7 @@ func (h *WorkHandler) DeleteWork(c *echo.Context) error {
 // @Failure     400 {object} response.Response "请求参数错误或无效的作品状态"
 // @Failure     404 {object} response.Response "作品不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /works/{id}/status [put]
+// @Router      /api/v1/works/{id}/status [put]
 func (h *WorkHandler) UpdateStatus(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -345,7 +345,7 @@ func (h *WorkHandler) UpdateStatus(c *echo.Context) error {
 // @Failure     400 {object} response.Response "请求参数错误"
 // @Failure     404 {object} response.Response "作品不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /works/{id}/count [put]
+// @Router      /api/v1/works/{id}/count [put]
 func (h *WorkHandler) IncrementCount(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)

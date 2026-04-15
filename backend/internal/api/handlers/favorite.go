@@ -46,7 +46,7 @@ func (h *FavoriteHandler) RegisterRoutes(g *echo.Group) {
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     400 {object} response.Response "无效的作品ID"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /favorites/work/{work_id} [get]
+// @Router      /api/v1/favorites/work/{work_id} [get]
 func (h *FavoriteHandler) ListByWorkID(c *echo.Context) error {
 	workIDStr := c.Param("work_id")
 	workID, err := strconv.ParseUint(workIDStr, 10, 32)
@@ -73,7 +73,7 @@ func (h *FavoriteHandler) ListByWorkID(c *echo.Context) error {
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     400 {object} response.Response "无效的作品ID"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /favorites/check/{work_id} [get]
+// @Router      /api/v1/favorites/check/{work_id} [get]
 func (h *FavoriteHandler) CheckExists(c *echo.Context) error {
 	workIDStr := c.Param("work_id")
 	workID, err := strconv.ParseUint(workIDStr, 10, 32)
@@ -102,7 +102,7 @@ func (h *FavoriteHandler) CheckExists(c *echo.Context) error {
 // @Failure     400 {object} response.Response "无效的收藏ID"
 // @Failure     404 {object} response.Response "收藏不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /favorites/{id} [get]
+// @Router      /api/v1/favorites/{id} [get]
 func (h *FavoriteHandler) GetFavorite(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -133,7 +133,7 @@ func (h *FavoriteHandler) GetFavorite(c *echo.Context) error {
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     400 {object} response.Response "无效的用户ID"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /favorites/user/{user_id} [get]
+// @Router      /api/v1/favorites/user/{user_id} [get]
 func (h *FavoriteHandler) ListByUserID(c *echo.Context) error {
 	userIDStr := c.Param("user_id")
 	userID, err := strconv.ParseUint(userIDStr, 10, 32)
@@ -170,7 +170,7 @@ func (h *FavoriteHandler) ListByUserID(c *echo.Context) error {
 // @Failure     400 {object} response.Response "请求参数错误或作品不存在"
 // @Failure     409 {object} response.Response "已经收藏过该作品"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /favorites [post]
+// @Router      /api/v1/favorites [post]
 func (h *FavoriteHandler) CreateFavorite(c *echo.Context) error {
 	userID := middleware.GetUserID(c)
 
@@ -205,7 +205,7 @@ func (h *FavoriteHandler) CreateFavorite(c *echo.Context) error {
 // @Failure     400 {object} response.Response "无效的收藏ID"
 // @Failure     404 {object} response.Response "收藏不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /favorites/{id} [delete]
+// @Router      /api/v1/favorites/{id} [delete]
 func (h *FavoriteHandler) DeleteFavorite(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -235,7 +235,7 @@ func (h *FavoriteHandler) DeleteFavorite(c *echo.Context) error {
 // @Failure     400 {object} response.Response "无效的作品ID"
 // @Failure     404 {object} response.Response "收藏不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /favorites/work/{work_id} [delete]
+// @Router      /api/v1/favorites/work/{work_id} [delete]
 func (h *FavoriteHandler) DeleteByWork(c *echo.Context) error {
 	workIDStr := c.Param("work_id")
 	workID, err := strconv.ParseUint(workIDStr, 10, 32)
@@ -268,7 +268,7 @@ func (h *FavoriteHandler) DeleteByWork(c *echo.Context) error {
 // @Failure     400 {object} response.Response "请求参数错误"
 // @Failure     404 {object} response.Response "收藏不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /favorites/{id}/folder [put]
+// @Router      /api/v1/favorites/{id}/folder [put]
 func (h *FavoriteHandler) UpdateFolder(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)

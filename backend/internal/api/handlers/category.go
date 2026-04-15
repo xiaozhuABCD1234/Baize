@@ -48,7 +48,7 @@ func (h *CategoryHandler) RegisterRoutes(g *echo.Group) {
 // @Param       order_by query string false "排序字段"
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /categories [get]
+// @Router      /api/v1/categories [get]
 func (h *CategoryHandler) ListCategories(c *echo.Context) error {
 	orderBy := c.QueryParam("order_by")
 
@@ -68,7 +68,7 @@ func (h *CategoryHandler) ListCategories(c *echo.Context) error {
 // @Produce     application/json
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /categories/root [get]
+// @Router      /api/v1/categories/root [get]
 func (h *CategoryHandler) ListRoot(c *echo.Context) error {
 	categories, err := h.svc.ListRoot(c.Request().Context())
 	if err != nil {
@@ -88,7 +88,7 @@ func (h *CategoryHandler) ListRoot(c *echo.Context) error {
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     400 {object} response.Response "无效的分类ID"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /categories/parent/{parent_id} [get]
+// @Router      /api/v1/categories/parent/{parent_id} [get]
 func (h *CategoryHandler) ListByParentID(c *echo.Context) error {
 	parentIDStr := c.Param("parent_id")
 	parentID, err := strconv.ParseUint(parentIDStr, 10, 32)
@@ -113,7 +113,7 @@ func (h *CategoryHandler) ListByParentID(c *echo.Context) error {
 // @Param       region_code path string true "地区编码"
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /categories/region/{region_code} [get]
+// @Router      /api/v1/categories/region/{region_code} [get]
 func (h *CategoryHandler) ListByRegionCode(c *echo.Context) error {
 	regionCode := c.Param("region_code")
 
@@ -133,7 +133,7 @@ func (h *CategoryHandler) ListByRegionCode(c *echo.Context) error {
 // @Produce     application/json
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /categories/active [get]
+// @Router      /api/v1/categories/active [get]
 func (h *CategoryHandler) ListActive(c *echo.Context) error {
 	categories, err := h.svc.ListActive(c.Request().Context())
 	if err != nil {
@@ -154,7 +154,7 @@ func (h *CategoryHandler) ListActive(c *echo.Context) error {
 // @Failure     400 {object} response.Response "无效的分类ID"
 // @Failure     404 {object} response.Response "分类不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /categories/{id} [get]
+// @Router      /api/v1/categories/{id} [get]
 func (h *CategoryHandler) GetCategory(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -184,7 +184,7 @@ func (h *CategoryHandler) GetCategory(c *echo.Context) error {
 // @Failure     400 {object} response.Response "无效的分类ID"
 // @Failure     404 {object} response.Response "分类不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /categories/{id}/with-children [get]
+// @Router      /api/v1/categories/{id}/with-children [get]
 func (h *CategoryHandler) GetCategoryWithChildren(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -213,7 +213,7 @@ func (h *CategoryHandler) GetCategoryWithChildren(c *echo.Context) error {
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     404 {object} response.Response "分类不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /categories/name/{name} [get]
+// @Router      /api/v1/categories/name/{name} [get]
 func (h *CategoryHandler) GetCategoryByName(c *echo.Context) error {
 	name := c.Param("name")
 
@@ -240,7 +240,7 @@ func (h *CategoryHandler) GetCategoryByName(c *echo.Context) error {
 // @Failure     400 {object} response.Response "请求参数错误或无效的分类级别"
 // @Failure     409 {object} response.Response "分类名称已存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /categories [post]
+// @Router      /api/v1/categories [post]
 func (h *CategoryHandler) CreateCategory(c *echo.Context) error {
 	var category models.ICHCategory
 	if err := c.Bind(&category); err != nil {
@@ -275,7 +275,7 @@ func (h *CategoryHandler) CreateCategory(c *echo.Context) error {
 // @Failure     404 {object} response.Response "分类不存在"
 // @Failure     409 {object} response.Response "分类名称已存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /categories/{id} [put]
+// @Router      /api/v1/categories/{id} [put]
 func (h *CategoryHandler) UpdateCategory(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -314,7 +314,7 @@ func (h *CategoryHandler) UpdateCategory(c *echo.Context) error {
 // @Failure     400 {object} response.Response "请求参数错误或无法删除有子节点的分类"
 // @Failure     404 {object} response.Response "分类不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /categories/{id} [delete]
+// @Router      /api/v1/categories/{id} [delete]
 func (h *CategoryHandler) DeleteCategory(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)

@@ -45,7 +45,7 @@ func (h *FollowHandler) RegisterRoutes(g *echo.Group) {
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     400 {object} response.Response "无效的用户ID"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /follows/check/{user_id} [get]
+// @Router      /api/v1/follows/check/{user_id} [get]
 func (h *FollowHandler) IsFollowing(c *echo.Context) error {
 	userIDStr := c.Param("user_id")
 	userID, err := strconv.ParseUint(userIDStr, 10, 32)
@@ -73,7 +73,7 @@ func (h *FollowHandler) IsFollowing(c *echo.Context) error {
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     400 {object} response.Response "无效的用户ID"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /follows/following/{user_id} [get]
+// @Router      /api/v1/follows/following/{user_id} [get]
 func (h *FollowHandler) GetFollowingList(c *echo.Context) error {
 	userIDStr := c.Param("user_id")
 	userID, err := strconv.ParseUint(userIDStr, 10, 32)
@@ -99,7 +99,7 @@ func (h *FollowHandler) GetFollowingList(c *echo.Context) error {
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     400 {object} response.Response "无效的用户ID"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /follows/followers/{user_id} [get]
+// @Router      /api/v1/follows/followers/{user_id} [get]
 func (h *FollowHandler) GetFollowerList(c *echo.Context) error {
 	userIDStr := c.Param("user_id")
 	userID, err := strconv.ParseUint(userIDStr, 10, 32)
@@ -125,7 +125,7 @@ func (h *FollowHandler) GetFollowerList(c *echo.Context) error {
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     400 {object} response.Response "无效的用户ID"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /follows/following/{user_id}/count [get]
+// @Router      /api/v1/follows/following/{user_id}/count [get]
 func (h *FollowHandler) GetFollowingCount(c *echo.Context) error {
 	userIDStr := c.Param("user_id")
 	userID, err := strconv.ParseUint(userIDStr, 10, 32)
@@ -151,7 +151,7 @@ func (h *FollowHandler) GetFollowingCount(c *echo.Context) error {
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     400 {object} response.Response "无效的用户ID"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /follows/followers/{user_id}/count [get]
+// @Router      /api/v1/follows/followers/{user_id}/count [get]
 func (h *FollowHandler) GetFollowerCount(c *echo.Context) error {
 	userIDStr := c.Param("user_id")
 	userID, err := strconv.ParseUint(userIDStr, 10, 32)
@@ -179,7 +179,7 @@ func (h *FollowHandler) GetFollowerCount(c *echo.Context) error {
 // @Failure     400 {object} response.Response "请求参数错误、不能关注自己或用户不存在"
 // @Failure     409 {object} response.Response "已经关注过该用户"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /follows [post]
+// @Router      /api/v1/follows [post]
 func (h *FollowHandler) CreateFollow(c *echo.Context) error {
 	followerID := middleware.GetUserID(c)
 
@@ -219,7 +219,7 @@ func (h *FollowHandler) CreateFollow(c *echo.Context) error {
 // @Failure     400 {object} response.Response "无效的用户ID"
 // @Failure     404 {object} response.Response "未关注该用户"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /follows/{user_id} [delete]
+// @Router      /api/v1/follows/{user_id} [delete]
 func (h *FollowHandler) DeleteFollow(c *echo.Context) error {
 	userIDStr := c.Param("user_id")
 	followingID, err := strconv.ParseUint(userIDStr, 10, 32)

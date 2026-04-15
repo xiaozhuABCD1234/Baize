@@ -31,7 +31,7 @@ func (h *AuthHandler) RegisterRoutes(g *echo.Group) {
 // @Failure     400 {object} response.Response "请求参数错误"
 // @Failure     401 {object} response.Response "无效的Refresh Token"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /auth/refresh [post]
+// @Router      /api/v1/auth/refresh [post]
 func (h *AuthHandler) RefreshToken(c *echo.Context) error {
 	var req struct {
 		RefreshToken string `json:"refresh_token"`

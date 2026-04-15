@@ -67,7 +67,7 @@ type RegisterResponse struct {
 
 func (s *UserService) Register(ctx context.Context, req RegisterRequest) (*RegisterResponse, error) {
 	existingUser, err := s.repo.GetByUsername(ctx, req.Username)
-	if err != nil {
+	if err != nil && !errors.Is(err, repository.ErrUserNotFound) {
 		return nil, fmt.Errorf("查询用户失败: %w", err)
 	}
 	if existingUser != nil {
@@ -75,7 +75,7 @@ func (s *UserService) Register(ctx context.Context, req RegisterRequest) (*Regis
 	}
 
 	existingUser, err = s.repo.GetByEmail(ctx, req.Email)
-	if err != nil {
+	if err != nil && !errors.Is(err, repository.ErrUserNotFound) {
 		return nil, fmt.Errorf("查询用户失败: %w", err)
 	}
 	if existingUser != nil {

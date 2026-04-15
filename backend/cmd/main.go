@@ -35,7 +35,8 @@ func main() {
 	if err != nil {
 		panic(fmt.Sprintf("failed to connect to database: %v", err))
 	}
-	db.AutoMigrate(&models.User{})
+	// db.AutoMigrate(&models.User{})
+	models.AutoMigrate(db)
 
 	userRepo := repository.NewUserRepository(db)
 	userSvc := svc.NewUserService(userRepo)

@@ -315,7 +315,7 @@ definitions:
 info:
   contact: {}
 paths:
-  /auth/refresh:
+  /api/v1/auth/refresh:
     post:
       consumes:
       - application/json
@@ -351,7 +351,7 @@ paths:
       summary: 刷新Access Token
       tags:
       - auth
-  /categories:
+  /api/v1/categories:
     get:
       consumes:
       - application/json
@@ -410,7 +410,7 @@ paths:
       summary: 创建分类
       tags:
       - categories
-  /categories/{id}:
+  /api/v1/categories/{id}:
     delete:
       consumes:
       - application/json
@@ -521,7 +521,7 @@ paths:
       summary: 更新分类
       tags:
       - categories
-  /categories/{id}/with-children:
+  /api/v1/categories/{id}/with-children:
     get:
       consumes:
       - application/json
@@ -554,7 +554,7 @@ paths:
       summary: 获取分类及子分类
       tags:
       - categories
-  /categories/active:
+  /api/v1/categories/active:
     get:
       consumes:
       - application/json
@@ -573,7 +573,7 @@ paths:
       summary: 获取启用分类
       tags:
       - categories
-  /categories/name/{name}:
+  /api/v1/categories/name/{name}:
     get:
       consumes:
       - application/json
@@ -602,7 +602,7 @@ paths:
       summary: 根据名称获取分类
       tags:
       - categories
-  /categories/parent/{parent_id}:
+  /api/v1/categories/parent/{parent_id}:
     get:
       consumes:
       - application/json
@@ -631,7 +631,7 @@ paths:
       summary: 获取子分类
       tags:
       - categories
-  /categories/region/{region_code}:
+  /api/v1/categories/region/{region_code}:
     get:
       consumes:
       - application/json
@@ -656,7 +656,7 @@ paths:
       summary: 获取地区分类
       tags:
       - categories
-  /categories/root:
+  /api/v1/categories/root:
     get:
       consumes:
       - application/json
@@ -675,7 +675,7 @@ paths:
       summary: 获取根分类
       tags:
       - categories
-  /comments:
+  /api/v1/comments:
     post:
       consumes:
       - application/json
@@ -707,7 +707,7 @@ paths:
       summary: 发表评论
       tags:
       - comments
-  /comments/{id}:
+  /api/v1/comments/{id}:
     delete:
       consumes:
       - application/json
@@ -816,7 +816,7 @@ paths:
       summary: 更新评论
       tags:
       - comments
-  /comments/{id}/like:
+  /api/v1/comments/{id}/like:
     put:
       consumes:
       - application/json
@@ -858,7 +858,7 @@ paths:
       summary: 更新评论点赞数
       tags:
       - comments
-  /comments/{id}/status:
+  /api/v1/comments/{id}/status:
     put:
       consumes:
       - application/json
@@ -900,7 +900,7 @@ paths:
       summary: 更新评论状态
       tags:
       - comments
-  /comments/user/{user_id}:
+  /api/v1/comments/user/{user_id}:
     get:
       consumes:
       - application/json
@@ -929,7 +929,7 @@ paths:
       summary: 获取用户评论
       tags:
       - comments
-  /comments/work/{work_id}:
+  /api/v1/comments/work/{work_id}:
     get:
       consumes:
       - application/json
@@ -968,7 +968,7 @@ paths:
       summary: 获取作品评论列表
       tags:
       - comments
-  /comments/work/{work_id}/root:
+  /api/v1/comments/work/{work_id}/root:
     get:
       consumes:
       - application/json
@@ -997,7 +997,7 @@ paths:
       summary: 获取作品根评论
       tags:
       - comments
-  /crafts:
+  /api/v1/crafts:
     get:
       consumes:
       - application/json
@@ -1052,7 +1052,7 @@ paths:
       summary: 创建技艺
       tags:
       - crafts
-  /crafts/{id}:
+  /api/v1/crafts/{id}:
     delete:
       consumes:
       - application/json
@@ -1163,7 +1163,7 @@ paths:
       summary: 更新技艺
       tags:
       - crafts
-  /crafts/{id}/with-category:
+  /api/v1/crafts/{id}/with-category:
     get:
       consumes:
       - application/json
@@ -1196,7 +1196,7 @@ paths:
       summary: 获取技艺及分类
       tags:
       - crafts
-  /crafts/category/{category_id}:
+  /api/v1/crafts/category/{category_id}:
     get:
       consumes:
       - application/json
@@ -1225,7 +1225,7 @@ paths:
       summary: 获取分类下的技艺
       tags:
       - crafts
-  /crafts/difficulty/{level}:
+  /api/v1/crafts/difficulty/{level}:
     get:
       consumes:
       - application/json
@@ -1254,7 +1254,7 @@ paths:
       summary: 获取指定难度技艺
       tags:
       - crafts
-  /favorites:
+  /api/v1/favorites:
     post:
       consumes:
       - application/json
@@ -1290,7 +1290,7 @@ paths:
       summary: 收藏作品
       tags:
       - favorites
-  /favorites/{id}:
+  /api/v1/favorites/{id}:
     delete:
       consumes:
       - application/json
@@ -1357,7 +1357,7 @@ paths:
       summary: 获取收藏
       tags:
       - favorites
-  /favorites/{id}/folder:
+  /api/v1/favorites/{id}/folder:
     put:
       consumes:
       - application/json
@@ -1399,7 +1399,7 @@ paths:
       summary: 移动收藏
       tags:
       - favorites
-  /favorites/check/{work_id}:
+  /api/v1/favorites/check/{work_id}:
     get:
       consumes:
       - application/json
@@ -1430,7 +1430,7 @@ paths:
       summary: 检查收藏状态
       tags:
       - favorites
-  /favorites/user/{user_id}:
+  /api/v1/favorites/user/{user_id}:
     get:
       consumes:
       - application/json
@@ -1469,7 +1469,7 @@ paths:
       summary: 获取用户收藏列表
       tags:
       - favorites
-  /favorites/work/{work_id}:
+  /api/v1/favorites/work/{work_id}:
     delete:
       consumes:
       - application/json
@@ -1532,7 +1532,7 @@ paths:
       summary: 获取作品收藏列表
       tags:
       - favorites
-  /follows:
+  /api/v1/follows:
     post:
       consumes:
       - application/json
@@ -1569,7 +1569,7 @@ paths:
       summary: 关注用户
       tags:
       - follows
-  /follows/{user_id}:
+  /api/v1/follows/{user_id}:
     delete:
       consumes:
       - application/json
@@ -1604,7 +1604,7 @@ paths:
       summary: 取消关注
       tags:
       - follows
-  /follows/check/{user_id}:
+  /api/v1/follows/check/{user_id}:
     get:
       consumes:
       - application/json
@@ -1635,7 +1635,7 @@ paths:
       summary: 检查是否关注
       tags:
       - follows
-  /follows/followers/{user_id}:
+  /api/v1/follows/followers/{user_id}:
     get:
       consumes:
       - application/json
@@ -1664,7 +1664,7 @@ paths:
       summary: 获取粉丝列表
       tags:
       - follows
-  /follows/followers/{user_id}/count:
+  /api/v1/follows/followers/{user_id}/count:
     get:
       consumes:
       - application/json
@@ -1693,7 +1693,7 @@ paths:
       summary: 获取粉丝数
       tags:
       - follows
-  /follows/following/{user_id}:
+  /api/v1/follows/following/{user_id}:
     get:
       consumes:
       - application/json
@@ -1722,7 +1722,7 @@ paths:
       summary: 获取关注列表
       tags:
       - follows
-  /follows/following/{user_id}/count:
+  /api/v1/follows/following/{user_id}/count:
     get:
       consumes:
       - application/json
@@ -1751,7 +1751,7 @@ paths:
       summary: 获取关注数
       tags:
       - follows
-  /regions:
+  /api/v1/regions:
     get:
       consumes:
       - application/json
@@ -1810,7 +1810,7 @@ paths:
       summary: 创建地区
       tags:
       - regions
-  /regions/{id}:
+  /api/v1/regions/{id}:
     delete:
       consumes:
       - application/json
@@ -1921,7 +1921,7 @@ paths:
       summary: 更新地区
       tags:
       - regions
-  /regions/{id}/with-children:
+  /api/v1/regions/{id}/with-children:
     get:
       consumes:
       - application/json
@@ -1954,7 +1954,7 @@ paths:
       summary: 获取地区及子地区
       tags:
       - regions
-  /regions/code/{code}:
+  /api/v1/regions/code/{code}:
     get:
       consumes:
       - application/json
@@ -1983,7 +1983,7 @@ paths:
       summary: 根据编码获取地区
       tags:
       - regions
-  /regions/heritage-centers:
+  /api/v1/regions/heritage-centers:
     get:
       consumes:
       - application/json
@@ -2002,7 +2002,7 @@ paths:
       summary: 获取非遗保护中心
       tags:
       - regions
-  /regions/level/{level}:
+  /api/v1/regions/level/{level}:
     get:
       consumes:
       - application/json
@@ -2031,7 +2031,7 @@ paths:
       summary: 获取指定级别地区
       tags:
       - regions
-  /regions/parent/{parent_id}:
+  /api/v1/regions/parent/{parent_id}:
     get:
       consumes:
       - application/json
@@ -2060,7 +2060,7 @@ paths:
       summary: 获取子地区
       tags:
       - regions
-  /regions/root:
+  /api/v1/regions/root:
     get:
       consumes:
       - application/json
@@ -2079,7 +2079,7 @@ paths:
       summary: 获取根地区
       tags:
       - regions
-  /users:
+  /api/v1/users:
     get:
       consumes:
       - application/json
@@ -2109,7 +2109,7 @@ paths:
       summary: 获取用户列表
       tags:
       - users
-  /users/{id}:
+  /api/v1/users/{id}:
     delete:
       consumes:
       - application/json
@@ -2228,7 +2228,7 @@ paths:
       summary: 更新用户
       tags:
       - users
-  /users/{id}/force:
+  /api/v1/users/{id}/force:
     delete:
       consumes:
       - application/json
@@ -2267,7 +2267,7 @@ paths:
       summary: 永久删除用户
       tags:
       - users
-  /users/{id}/password:
+  /api/v1/users/{id}/password:
     put:
       consumes:
       - application/json
@@ -2316,7 +2316,7 @@ paths:
       summary: 修改密码
       tags:
       - users
-  /users/login:
+  /api/v1/users/login:
     post:
       consumes:
       - application/json
@@ -2350,7 +2350,7 @@ paths:
       summary: 用户登录
       tags:
       - users
-  /users/register:
+  /api/v1/users/register:
     post:
       consumes:
       - application/json
@@ -2384,7 +2384,7 @@ paths:
       summary: 用户注册
       tags:
       - users
-  /works:
+  /api/v1/works:
     get:
       consumes:
       - application/json
@@ -2470,7 +2470,7 @@ paths:
       summary: 创建作品
       tags:
       - works
-  /works/{id}:
+  /api/v1/works/{id}:
     delete:
       consumes:
       - application/json
@@ -2577,7 +2577,7 @@ paths:
       summary: 更新作品
       tags:
       - works
-  /works/{id}/count:
+  /api/v1/works/{id}/count:
     put:
       consumes:
       - application/json
@@ -2619,7 +2619,7 @@ paths:
       summary: 更新作品计数
       tags:
       - works
-  /works/{id}/detailed:
+  /api/v1/works/{id}/detailed:
     get:
       consumes:
       - application/json
@@ -2652,7 +2652,7 @@ paths:
       summary: 获取作品详情
       tags:
       - works
-  /works/{id}/status:
+  /api/v1/works/{id}/status:
     put:
       consumes:
       - application/json
@@ -2694,7 +2694,7 @@ paths:
       summary: 更新作品状态
       tags:
       - works
-  /works/recommended:
+  /api/v1/works/recommended:
     get:
       consumes:
       - application/json
@@ -2721,7 +2721,7 @@ paths:
       summary: 获取推荐作品
       tags:
       - works
-  /works/top:
+  /api/v1/works/top:
     get:
       consumes:
       - application/json

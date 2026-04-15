@@ -49,7 +49,7 @@ func (h *CommentHandler) RegisterRoutes(g *echo.Group) {
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     400 {object} response.Response "无效的作品ID"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /comments/work/{work_id} [get]
+// @Router      /api/v1/comments/work/{work_id} [get]
 func (h *CommentHandler) ListByWorkID(c *echo.Context) error {
 	workIDStr := c.Param("work_id")
 	workID, err := strconv.ParseUint(workIDStr, 10, 32)
@@ -84,7 +84,7 @@ func (h *CommentHandler) ListByWorkID(c *echo.Context) error {
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     400 {object} response.Response "无效的作品ID"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /comments/work/{work_id}/root [get]
+// @Router      /api/v1/comments/work/{work_id}/root [get]
 func (h *CommentHandler) ListRootByWorkID(c *echo.Context) error {
 	workIDStr := c.Param("work_id")
 	workID, err := strconv.ParseUint(workIDStr, 10, 32)
@@ -110,7 +110,7 @@ func (h *CommentHandler) ListRootByWorkID(c *echo.Context) error {
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     400 {object} response.Response "无效的用户ID"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /comments/user/{user_id} [get]
+// @Router      /api/v1/comments/user/{user_id} [get]
 func (h *CommentHandler) ListByUserID(c *echo.Context) error {
 	userIDStr := c.Param("user_id")
 	userID, err := strconv.ParseUint(userIDStr, 10, 32)
@@ -137,7 +137,7 @@ func (h *CommentHandler) ListByUserID(c *echo.Context) error {
 // @Failure     400 {object} response.Response "无效的评论ID"
 // @Failure     404 {object} response.Response "评论不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /comments/{id} [get]
+// @Router      /api/v1/comments/{id} [get]
 func (h *CommentHandler) GetComment(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -167,7 +167,7 @@ func (h *CommentHandler) GetComment(c *echo.Context) error {
 // @Success     201 {object} response.Response "评论成功"
 // @Failure     400 {object} response.Response "请求参数错误、作品不存在、父评论不存在或不能回复二级及以下的评论"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /comments [post]
+// @Router      /api/v1/comments [post]
 func (h *CommentHandler) CreateComment(c *echo.Context) error {
 	userID := middleware.GetUserID(c)
 
@@ -206,7 +206,7 @@ func (h *CommentHandler) CreateComment(c *echo.Context) error {
 // @Failure     400 {object} response.Response "请求参数错误"
 // @Failure     404 {object} response.Response "评论不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /comments/{id} [put]
+// @Router      /api/v1/comments/{id} [put]
 func (h *CommentHandler) UpdateComment(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -244,7 +244,7 @@ func (h *CommentHandler) UpdateComment(c *echo.Context) error {
 // @Failure     400 {object} response.Response "无效的评论ID"
 // @Failure     404 {object} response.Response "评论不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /comments/{id} [delete]
+// @Router      /api/v1/comments/{id} [delete]
 func (h *CommentHandler) DeleteComment(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -275,7 +275,7 @@ func (h *CommentHandler) DeleteComment(c *echo.Context) error {
 // @Failure     400 {object} response.Response "请求参数错误或无效的评论状态"
 // @Failure     404 {object} response.Response "评论不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /comments/{id}/status [put]
+// @Router      /api/v1/comments/{id}/status [put]
 func (h *CommentHandler) UpdateStatus(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -316,7 +316,7 @@ func (h *CommentHandler) UpdateStatus(c *echo.Context) error {
 // @Failure     400 {object} response.Response "请求参数错误"
 // @Failure     404 {object} response.Response "评论不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /comments/{id}/like [put]
+// @Router      /api/v1/comments/{id}/like [put]
 func (h *CommentHandler) IncrementLikeCount(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)

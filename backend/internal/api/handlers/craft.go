@@ -45,7 +45,7 @@ func (h *CraftHandler) RegisterRoutes(g *echo.Group) {
 // @Param       order_by query string false "排序字段"
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /crafts [get]
+// @Router      /api/v1/crafts [get]
 func (h *CraftHandler) ListCrafts(c *echo.Context) error {
 	orderBy := c.QueryParam("order_by")
 
@@ -67,7 +67,7 @@ func (h *CraftHandler) ListCrafts(c *echo.Context) error {
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     400 {object} response.Response "无效的分类ID"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /crafts/category/{category_id} [get]
+// @Router      /api/v1/crafts/category/{category_id} [get]
 func (h *CraftHandler) ListByCategory(c *echo.Context) error {
 	categoryIDStr := c.Param("category_id")
 	categoryID, err := strconv.ParseUint(categoryIDStr, 10, 32)
@@ -93,7 +93,7 @@ func (h *CraftHandler) ListByCategory(c *echo.Context) error {
 // @Success     200 {object} response.Response "获取成功"
 // @Failure     400 {object} response.Response "无效的难度等级"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /crafts/difficulty/{level} [get]
+// @Router      /api/v1/crafts/difficulty/{level} [get]
 func (h *CraftHandler) ListByDifficulty(c *echo.Context) error {
 	levelStr := c.Param("level")
 	level, err := strconv.ParseInt(levelStr, 10, 8)
@@ -123,7 +123,7 @@ func (h *CraftHandler) ListByDifficulty(c *echo.Context) error {
 // @Failure     400 {object} response.Response "无效的技艺ID"
 // @Failure     404 {object} response.Response "技艺不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /crafts/{id} [get]
+// @Router      /api/v1/crafts/{id} [get]
 func (h *CraftHandler) GetCraft(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -153,7 +153,7 @@ func (h *CraftHandler) GetCraft(c *echo.Context) error {
 // @Failure     400 {object} response.Response "无效的技艺ID"
 // @Failure     404 {object} response.Response "技艺不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /crafts/{id}/with-category [get]
+// @Router      /api/v1/crafts/{id}/with-category [get]
 func (h *CraftHandler) GetCraftWithCategory(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -183,7 +183,7 @@ func (h *CraftHandler) GetCraftWithCategory(c *echo.Context) error {
 // @Success     201 {object} response.Response "创建成功"
 // @Failure     400 {object} response.Response "请求参数错误、技艺名称已存在、分类不存在或无效的难度等级"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /crafts [post]
+// @Router      /api/v1/crafts [post]
 func (h *CraftHandler) CreateCraft(c *echo.Context) error {
 	var craft models.Craft
 	if err := c.Bind(&craft); err != nil {
@@ -221,7 +221,7 @@ func (h *CraftHandler) CreateCraft(c *echo.Context) error {
 // @Failure     404 {object} response.Response "技艺不存在"
 // @Failure     409 {object} response.Response "技艺名称已存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /crafts/{id} [put]
+// @Router      /api/v1/crafts/{id} [put]
 func (h *CraftHandler) UpdateCraft(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
@@ -260,7 +260,7 @@ func (h *CraftHandler) UpdateCraft(c *echo.Context) error {
 // @Failure     400 {object} response.Response "无效的技艺ID"
 // @Failure     404 {object} response.Response "技艺不存在"
 // @Failure     500 {object} response.Response "服务器内部错误"
-// @Router      /crafts/{id} [delete]
+// @Router      /api/v1/crafts/{id} [delete]
 func (h *CraftHandler) DeleteCraft(c *echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 32)
