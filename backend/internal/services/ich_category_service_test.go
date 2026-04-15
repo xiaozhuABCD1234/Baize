@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"testing"
 
+	apperrs "backend/internal/errors"
 	"backend/internal/models"
 	"backend/internal/repository"
 
@@ -54,7 +55,7 @@ func (m *mockICHCategoryRepository) GetByID(ctx context.Context, id uint) (*mode
 	if category, ok := m.categories[id]; ok {
 		return category, nil
 	}
-	return nil, repository.ErrICHCategoryNotFound
+	return nil, apperrs.ErrICHCategoryNotFound
 }
 
 func (m *mockICHCategoryRepository) GetByName(ctx context.Context, name string) (*models.ICHCategory, error) {
@@ -64,7 +65,7 @@ func (m *mockICHCategoryRepository) GetByName(ctx context.Context, name string) 
 	if category, ok := m.categoriesByName[name]; ok {
 		return category, nil
 	}
-	return nil, repository.ErrICHCategoryNotFound
+	return nil, apperrs.ErrICHCategoryNotFound
 }
 
 func (m *mockICHCategoryRepository) GetByIDWithChildren(ctx context.Context, id uint) (*models.ICHCategory, error) {
@@ -139,7 +140,7 @@ func (m *mockICHCategoryRepository) Update(ctx context.Context, category *models
 		return m.updateErr
 	}
 	if _, ok := m.categories[category.ID]; !ok {
-		return repository.ErrICHCategoryNotFound
+		return apperrs.ErrICHCategoryNotFound
 	}
 	m.categories[category.ID] = category
 	return nil
@@ -154,7 +155,7 @@ func (m *mockICHCategoryRepository) Delete(ctx context.Context, id uint) error {
 		return m.deleteErr
 	}
 	if _, ok := m.categories[id]; !ok {
-		return repository.ErrICHCategoryNotFound
+		return apperrs.ErrICHCategoryNotFound
 	}
 	delete(m.categories, id)
 	return nil

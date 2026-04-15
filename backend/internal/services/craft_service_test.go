@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"testing"
 
+	apperrs "backend/internal/errors"
 	"backend/internal/models"
 	"backend/internal/repository"
 
@@ -52,7 +53,7 @@ func (m *mockCraftRepository) GetByID(ctx context.Context, id uint) (*models.Cra
 	if craft, ok := m.crafts[id]; ok {
 		return craft, nil
 	}
-	return nil, repository.ErrCraftNotFound
+	return nil, apperrs.ErrCraftNotFound
 }
 
 func (m *mockCraftRepository) GetByIDWithCategory(ctx context.Context, id uint) (*models.Craft, error) {
@@ -66,7 +67,7 @@ func (m *mockCraftRepository) GetByName(ctx context.Context, name string) (*mode
 	if craft, ok := m.craftsByName[name]; ok {
 		return craft, nil
 	}
-	return nil, repository.ErrCraftNotFound
+	return nil, apperrs.ErrCraftNotFound
 }
 
 func (m *mockCraftRepository) List(ctx context.Context, orderBy string) ([]models.Craft, error) {
@@ -115,7 +116,7 @@ func (m *mockCraftRepository) Update(ctx context.Context, craft *models.Craft) e
 		return m.updateErr
 	}
 	if _, ok := m.crafts[craft.ID]; !ok {
-		return repository.ErrCraftNotFound
+		return apperrs.ErrCraftNotFound
 	}
 	m.crafts[craft.ID] = craft
 	return nil
@@ -130,7 +131,7 @@ func (m *mockCraftRepository) Delete(ctx context.Context, id uint) error {
 		return m.deleteErr
 	}
 	if _, ok := m.crafts[id]; !ok {
-		return repository.ErrCraftNotFound
+		return apperrs.ErrCraftNotFound
 	}
 	delete(m.crafts, id)
 	return nil
@@ -179,7 +180,7 @@ func (m *mockICHCategoryRepositoryForCraft) GetByID(ctx context.Context, id uint
 	if category, ok := m.categories[id]; ok {
 		return category, nil
 	}
-	return nil, repository.ErrICHCategoryNotFound
+	return nil, apperrs.ErrICHCategoryNotFound
 }
 
 func (m *mockICHCategoryRepositoryForCraft) Create(ctx context.Context, category *models.ICHCategory) error {

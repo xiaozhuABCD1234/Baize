@@ -2,9 +2,9 @@ package repository
 
 import (
 	"context"
-	"errors"
 	"time"
 
+	apperrs "backend/internal/errors"
 	model "backend/internal/models"
 
 	"gorm.io/gorm"
@@ -34,8 +34,6 @@ func (r *followRepo) WithTransaction(tx *gorm.DB) FollowRepository {
 	return &followRepo{db: tx}
 }
 
-var ErrFollowNotFound = errors.New("follow relationship not found")
-
 func (r *followRepo) logSlow(ctx context.Context, op string, start time.Time) {
 	elapsed := time.Since(start)
 	if elapsed > SlowThreshold {
@@ -59,7 +57,7 @@ func (r *followRepo) Delete(ctx context.Context, followerID, followingID uint) e
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrFollowNotFound
+		return apperrs.ErrFollowNotFound
 	}
 	return nil
 }

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"time"
 
+	apperrs "backend/internal/errors"
 	model "backend/internal/models"
 
 	"gorm.io/gorm"
@@ -41,8 +42,6 @@ func (r *craftRepo) WithTransaction(tx *gorm.DB) CraftRepository {
 	return &craftRepo{db: tx}
 }
 
-var ErrCraftNotFound = errors.New("craft not found")
-
 func (r *craftRepo) logSlow(ctx context.Context, op string, start time.Time) {
 	elapsed := time.Since(start)
 	if elapsed > SlowThreshold {
@@ -63,7 +62,7 @@ func (r *craftRepo) GetByID(ctx context.Context, id uint) (*model.Craft, error) 
 	err := r.db.WithContext(ctx).First(&craft, id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrCraftNotFound
+			return nil, apperrs.ErrCraftNotFound
 		}
 		return nil, err
 	}
@@ -77,7 +76,7 @@ func (r *craftRepo) GetByIDWithCategory(ctx context.Context, id uint) (*model.Cr
 	err := r.db.WithContext(ctx).Preload("Category").First(&craft, id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrCraftNotFound
+			return nil, apperrs.ErrCraftNotFound
 		}
 		return nil, err
 	}
@@ -91,7 +90,7 @@ func (r *craftRepo) GetByName(ctx context.Context, name string) (*model.Craft, e
 	err := r.db.WithContext(ctx).Where("name = ?", name).First(&craft).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrCraftNotFound
+			return nil, apperrs.ErrCraftNotFound
 		}
 		return nil, err
 	}
@@ -156,7 +155,7 @@ func (r *craftRepo) Update(ctx context.Context, craft *model.Craft) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrCraftNotFound
+		return apperrs.ErrCraftNotFound
 	}
 	return nil
 }
@@ -172,7 +171,7 @@ func (r *craftRepo) UpdateFields(ctx context.Context, id uint, fields map[string
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrCraftNotFound
+		return apperrs.ErrCraftNotFound
 	}
 	return nil
 }
@@ -185,7 +184,7 @@ func (r *craftRepo) Delete(ctx context.Context, id uint) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrCraftNotFound
+		return apperrs.ErrCraftNotFound
 	}
 	return nil
 }
@@ -198,7 +197,7 @@ func (r *craftRepo) ForceDelete(ctx context.Context, id uint) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrCraftNotFound
+		return apperrs.ErrCraftNotFound
 	}
 	return nil
 }

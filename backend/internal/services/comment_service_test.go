@@ -6,6 +6,7 @@ import (
 	"testing"
 	"time"
 
+	apperrs "backend/internal/errors"
 	"backend/internal/models"
 	"backend/internal/repository"
 
@@ -60,7 +61,7 @@ func (m *mockCommentRepository) GetByID(ctx context.Context, id uint) (*models.C
 	if comment, ok := m.comments[id]; ok {
 		return comment, nil
 	}
-	return nil, repository.ErrCommentNotFound
+	return nil, apperrs.ErrCommentNotFound
 }
 
 func (m *mockCommentRepository) GetByIDWithUser(ctx context.Context, id uint) (*models.Comment, error) {
@@ -164,7 +165,7 @@ func (m *mockCommentRepository) Update(ctx context.Context, comment *models.Comm
 		return m.updateErr
 	}
 	if _, ok := m.comments[comment.ID]; !ok {
-		return repository.ErrCommentNotFound
+		return apperrs.ErrCommentNotFound
 	}
 	m.comments[comment.ID] = comment
 	return nil
@@ -179,7 +180,7 @@ func (m *mockCommentRepository) UpdateStatus(ctx context.Context, id uint, statu
 		return m.updateStatusErr
 	}
 	if _, ok := m.comments[id]; !ok {
-		return repository.ErrCommentNotFound
+		return apperrs.ErrCommentNotFound
 	}
 	m.comments[id].Status = status
 	return nil
@@ -190,7 +191,7 @@ func (m *mockCommentRepository) IncrementLikeCount(ctx context.Context, id uint,
 		return m.incrementLikeErr
 	}
 	if _, ok := m.comments[id]; !ok {
-		return repository.ErrCommentNotFound
+		return apperrs.ErrCommentNotFound
 	}
 	m.comments[id].LikeCount = uint(int(m.comments[id].LikeCount) + delta)
 	return nil
@@ -201,7 +202,7 @@ func (m *mockCommentRepository) Delete(ctx context.Context, id uint) error {
 		return m.deleteErr
 	}
 	if _, ok := m.comments[id]; !ok {
-		return repository.ErrCommentNotFound
+		return apperrs.ErrCommentNotFound
 	}
 	delete(m.comments, id)
 	return nil

@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	apperrs "backend/internal/errors"
 	"backend/internal/models"
 	"backend/internal/repository"
 
@@ -111,7 +112,7 @@ func (m *mockUserRepositoryForUser) Update(ctx context.Context, user *models.Use
 		return m.updateErr
 	}
 	if _, ok := m.users[user.ID]; !ok {
-		return repository.ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 	m.users[user.ID] = user
 	return nil
@@ -122,7 +123,7 @@ func (m *mockUserRepositoryForUser) UpdatePassword(ctx context.Context, id uint,
 		return m.updatePassErr
 	}
 	if _, ok := m.users[id]; !ok {
-		return repository.ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 	m.users[id].Password = hashedPassword
 	return nil
@@ -133,7 +134,7 @@ func (m *mockUserRepositoryForUser) UpdateEmail(ctx context.Context, id uint, em
 		return m.updateEmailErr
 	}
 	if _, ok := m.users[id]; !ok {
-		return repository.ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 	oldEmail := m.users[id].Email
 	delete(m.usersByEmail, oldEmail)
@@ -147,7 +148,7 @@ func (m *mockUserRepositoryForUser) Delete(ctx context.Context, id uint) error {
 		return m.deleteErr
 	}
 	if _, ok := m.users[id]; !ok {
-		return repository.ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 	delete(m.users, id)
 	return nil
@@ -158,7 +159,7 @@ func (m *mockUserRepositoryForUser) ForceDelete(ctx context.Context, id uint) er
 		return m.forceDeleteErr
 	}
 	if _, ok := m.users[id]; !ok {
-		return repository.ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 	delete(m.users, id)
 	return nil
@@ -241,7 +242,7 @@ func TestUserService_Register_DuplicateUsername(t *testing.T) {
 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
-	assert.Equal(t, ErrUsernameExists, err)
+	assert.Equal(t, apperrs.ErrUsernameExists, err)
 }
 
 func TestUserService_Register_DuplicateEmail(t *testing.T) {
@@ -258,7 +259,7 @@ func TestUserService_Register_DuplicateEmail(t *testing.T) {
 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
-	assert.Equal(t, ErrEmailExists, err)
+	assert.Equal(t, apperrs.ErrEmailExists, err)
 }
 
 func TestUserService_Register_InvalidRole(t *testing.T) {
@@ -275,7 +276,7 @@ func TestUserService_Register_InvalidRole(t *testing.T) {
 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
-	assert.Equal(t, ErrInvalidRole, err)
+	assert.Equal(t, apperrs.ErrInvalidRole, err)
 }
 
 func TestUserService_Login_Success(t *testing.T) {
@@ -307,7 +308,7 @@ func TestUserService_Login_UserNotFound(t *testing.T) {
 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
-	assert.Equal(t, ErrUserNotFound, err)
+	assert.Equal(t, apperrs.ErrUserNotFound, err)
 }
 
 func TestUserService_Login_InvalidPassword(t *testing.T) {
@@ -323,7 +324,7 @@ func TestUserService_Login_InvalidPassword(t *testing.T) {
 
 	assert.Error(t, err)
 	assert.Nil(t, resp)
-	assert.Equal(t, ErrInvalidPassword, err)
+	assert.Equal(t, apperrs.ErrInvalidPassword, err)
 }
 
 func TestUserService_GetUserByID_Success(t *testing.T) {
@@ -347,7 +348,7 @@ func TestUserService_GetUserByID_NotFound(t *testing.T) {
 
 	assert.Error(t, err)
 	assert.Nil(t, user)
-	assert.Equal(t, ErrUserNotFound, err)
+	assert.Equal(t, apperrs.ErrUserNotFound, err)
 }
 
 func TestUserService_ListUsers_Success(t *testing.T) {
@@ -403,7 +404,7 @@ func TestUserService_ChangePassword_WrongPassword(t *testing.T) {
 	err := svc.ChangePassword(context.Background(), req)
 
 	assert.Error(t, err)
-	assert.Equal(t, ErrInvalidPassword, err)
+	assert.Equal(t, apperrs.ErrInvalidPassword, err)
 }
 
 func TestUserService_ChangePassword_SamePassword(t *testing.T) {
@@ -419,7 +420,7 @@ func TestUserService_ChangePassword_SamePassword(t *testing.T) {
 	err := svc.ChangePassword(context.Background(), req)
 
 	assert.Error(t, err)
-	assert.Equal(t, ErrSamePassword, err)
+	assert.Equal(t, apperrs.ErrSamePassword, err)
 }
 
 func TestUserService_UpdateEmail_Success(t *testing.T) {
@@ -440,7 +441,7 @@ func TestUserService_UpdateEmail_SameEmail(t *testing.T) {
 	err := svc.UpdateEmail(context.Background(), 1, "same@example.com")
 
 	assert.Error(t, err)
-	assert.Equal(t, ErrEmailNotChanged, err)
+	assert.Equal(t, apperrs.ErrEmailNotChanged, err)
 }
 
 func TestUserService_UpdateEmail_DuplicateEmail(t *testing.T) {
@@ -452,7 +453,7 @@ func TestUserService_UpdateEmail_DuplicateEmail(t *testing.T) {
 	err := svc.UpdateEmail(context.Background(), 1, "user2@example.com")
 
 	assert.Error(t, err)
-	assert.Equal(t, ErrEmailExists, err)
+	assert.Equal(t, apperrs.ErrEmailExists, err)
 }
 
 func TestUserService_DeleteUser_Success(t *testing.T) {
@@ -472,7 +473,7 @@ func TestUserService_DeleteUser_NotFound(t *testing.T) {
 	err := svc.DeleteUser(context.Background(), 999)
 
 	assert.Error(t, err)
-	assert.Equal(t, ErrUserNotFound, err)
+	assert.Equal(t, apperrs.ErrUserNotFound, err)
 }
 
 func TestUserService_ForceDeleteUser_Success(t *testing.T) {
@@ -519,7 +520,7 @@ func TestUserService_UpdateUser_NotFound(t *testing.T) {
 	err := svc.UpdateUser(context.Background(), req)
 
 	assert.Error(t, err)
-	assert.Equal(t, ErrUserNotFound, err)
+	assert.Equal(t, apperrs.ErrUserNotFound, err)
 }
 
 func TestUserService_UpdateUser_InvalidRole(t *testing.T) {
@@ -534,7 +535,7 @@ func TestUserService_UpdateUser_InvalidRole(t *testing.T) {
 	err := svc.UpdateUser(context.Background(), req)
 
 	assert.Error(t, err)
-	assert.Equal(t, ErrInvalidRole, err)
+	assert.Equal(t, apperrs.ErrInvalidRole, err)
 }
 
 func TestUserService_ResetPassword_Success(t *testing.T) {
@@ -554,5 +555,5 @@ func TestUserService_ResetPassword_NotFound(t *testing.T) {
 	err := svc.ResetPassword(context.Background(), 999, "newpassword123")
 
 	assert.Error(t, err)
-	assert.Equal(t, ErrUserNotFound, err)
+	assert.Equal(t, apperrs.ErrUserNotFound, err)
 }

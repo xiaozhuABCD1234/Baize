@@ -5,6 +5,7 @@ import (
 	"errors"
 	"time"
 
+	apperrs "backend/internal/errors"
 	model "backend/internal/models"
 
 	"gorm.io/gorm"
@@ -39,8 +40,6 @@ func (r *userProfileRepo) WithTransaction(tx *gorm.DB) UserProfileRepository {
 	return &userProfileRepo{db: tx}
 }
 
-var ErrUserProfileNotFound = errors.New("user profile not found")
-
 func (r *userProfileRepo) logSlow(ctx context.Context, op string, start time.Time) {
 	elapsed := time.Since(start)
 	if elapsed > SlowThreshold {
@@ -61,7 +60,7 @@ func (r *userProfileRepo) GetByID(ctx context.Context, id uint) (*model.UserProf
 	err := r.db.WithContext(ctx).First(&profile, id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserProfileNotFound
+			return nil, apperrs.ErrUserProfileNotFound
 		}
 		return nil, err
 	}
@@ -75,7 +74,7 @@ func (r *userProfileRepo) GetByUserID(ctx context.Context, userID uint) (*model.
 	err := r.db.WithContext(ctx).Where("user_id = ?", userID).First(&profile).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserProfileNotFound
+			return nil, apperrs.ErrUserProfileNotFound
 		}
 		return nil, err
 	}
@@ -93,7 +92,7 @@ func (r *userProfileRepo) GetByUserIDWithSelect(ctx context.Context, userID uint
 	err := query.First(&profile).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserProfileNotFound
+			return nil, apperrs.ErrUserProfileNotFound
 		}
 		return nil, err
 	}
@@ -144,7 +143,7 @@ func (r *userProfileRepo) Update(ctx context.Context, profile *model.UserProfile
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrUserProfileNotFound
+		return apperrs.ErrUserProfileNotFound
 	}
 	return nil
 }
@@ -160,7 +159,7 @@ func (r *userProfileRepo) UpdateByUserID(ctx context.Context, userID uint, field
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrUserProfileNotFound
+		return apperrs.ErrUserProfileNotFound
 	}
 	return nil
 }
@@ -173,7 +172,7 @@ func (r *userProfileRepo) Delete(ctx context.Context, id uint) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrUserProfileNotFound
+		return apperrs.ErrUserProfileNotFound
 	}
 	return nil
 }
@@ -188,7 +187,7 @@ func (r *userProfileRepo) DeleteByUserID(ctx context.Context, userID uint) error
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrUserProfileNotFound
+		return apperrs.ErrUserProfileNotFound
 	}
 	return nil
 }

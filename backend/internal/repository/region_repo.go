@@ -5,6 +5,7 @@ import (
 	"errors"
 	"time"
 
+	apperrs "backend/internal/errors"
 	model "backend/internal/models"
 
 	"gorm.io/gorm"
@@ -42,8 +43,6 @@ func (r *regionRepo) WithTransaction(tx *gorm.DB) RegionRepository {
 	return &regionRepo{db: tx}
 }
 
-var ErrRegionNotFound = errors.New("region not found")
-
 func (r *regionRepo) logSlow(ctx context.Context, op string, start time.Time) {
 	elapsed := time.Since(start)
 	if elapsed > SlowThreshold {
@@ -64,7 +63,7 @@ func (r *regionRepo) GetByID(ctx context.Context, id uint) (*model.Region, error
 	err := r.db.WithContext(ctx).First(&region, id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrRegionNotFound
+			return nil, apperrs.ErrRegionNotFound
 		}
 		return nil, err
 	}
@@ -78,7 +77,7 @@ func (r *regionRepo) GetByCode(ctx context.Context, code string) (*model.Region,
 	err := r.db.WithContext(ctx).Where("code = ?", code).First(&region).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrRegionNotFound
+			return nil, apperrs.ErrRegionNotFound
 		}
 		return nil, err
 	}
@@ -94,7 +93,7 @@ func (r *regionRepo) GetByIDWithChildren(ctx context.Context, id uint) (*model.R
 	}).First(&region, id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrRegionNotFound
+			return nil, apperrs.ErrRegionNotFound
 		}
 		return nil, err
 	}
@@ -167,7 +166,7 @@ func (r *regionRepo) Update(ctx context.Context, region *model.Region) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrRegionNotFound
+		return apperrs.ErrRegionNotFound
 	}
 	return nil
 }
@@ -183,7 +182,7 @@ func (r *regionRepo) UpdateFields(ctx context.Context, id uint, fields map[strin
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrRegionNotFound
+		return apperrs.ErrRegionNotFound
 	}
 	return nil
 }
@@ -196,7 +195,7 @@ func (r *regionRepo) Delete(ctx context.Context, id uint) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrRegionNotFound
+		return apperrs.ErrRegionNotFound
 	}
 	return nil
 }
@@ -209,7 +208,7 @@ func (r *regionRepo) ForceDelete(ctx context.Context, id uint) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrRegionNotFound
+		return apperrs.ErrRegionNotFound
 	}
 	return nil
 }

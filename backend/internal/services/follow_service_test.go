@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	apperrs "backend/internal/errors"
 	"backend/internal/models"
 	"backend/internal/repository"
 
@@ -61,7 +62,7 @@ func (m *mockFollowRepository) Delete(ctx context.Context, followerID, following
 			return nil
 		}
 	}
-	return repository.ErrFollowNotFound
+	return apperrs.ErrFollowNotFound
 }
 
 func (m *mockFollowRepository) Exists(ctx context.Context, followerID, followingID uint) (bool, error) {
@@ -147,7 +148,7 @@ func (m *mockUserRepository) GetByID(ctx context.Context, id uint) (*models.User
 	if user, ok := m.users[id]; ok {
 		return user, nil
 	}
-	return nil, repository.ErrUserNotFound
+	return nil, apperrs.ErrUserNotFound
 }
 
 func (m *mockUserRepository) Create(ctx context.Context, user *models.User) error {

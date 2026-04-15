@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"testing"
 
+	apperrs "backend/internal/errors"
 	"backend/internal/models"
 	"backend/internal/repository"
 
@@ -54,7 +55,7 @@ func (m *mockRegionRepository) GetByID(ctx context.Context, id uint) (*models.Re
 	if region, ok := m.regions[id]; ok {
 		return region, nil
 	}
-	return nil, repository.ErrRegionNotFound
+	return nil, apperrs.ErrRegionNotFound
 }
 
 func (m *mockRegionRepository) GetByCode(ctx context.Context, code string) (*models.Region, error) {
@@ -64,7 +65,7 @@ func (m *mockRegionRepository) GetByCode(ctx context.Context, code string) (*mod
 	if region, ok := m.regionsByCode[code]; ok {
 		return region, nil
 	}
-	return nil, repository.ErrRegionNotFound
+	return nil, apperrs.ErrRegionNotFound
 }
 
 func (m *mockRegionRepository) GetByIDWithChildren(ctx context.Context, id uint) (*models.Region, error) {
@@ -139,7 +140,7 @@ func (m *mockRegionRepository) Update(ctx context.Context, region *models.Region
 		return m.updateErr
 	}
 	if _, ok := m.regions[region.ID]; !ok {
-		return repository.ErrRegionNotFound
+		return apperrs.ErrRegionNotFound
 	}
 	m.regions[region.ID] = region
 	return nil
@@ -154,7 +155,7 @@ func (m *mockRegionRepository) Delete(ctx context.Context, id uint) error {
 		return m.deleteErr
 	}
 	if _, ok := m.regions[id]; !ok {
-		return repository.ErrRegionNotFound
+		return apperrs.ErrRegionNotFound
 	}
 	delete(m.regions, id)
 	return nil

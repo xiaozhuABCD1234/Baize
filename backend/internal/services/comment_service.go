@@ -7,15 +7,16 @@ import (
 	"log/slog"
 	"time"
 
+	apperrs "backend/internal/errors"
 	model "backend/internal/models"
 	"backend/internal/repository"
 	"backend/pkg/response"
 )
 
 var (
-	ErrCommentNotFound  = errors.New("评论不存在")
-	ErrCannotReplyChild = errors.New("不能回复二级及以下的评论")
-	ErrInvalidStatus    = errors.New("无效的评论状态")
+	ErrCommentNotFound  = apperrs.ErrCommentNotFound
+	ErrCannotReplyChild = apperrs.ErrCannotReplyChild
+	ErrInvalidStatus    = apperrs.ErrInvalidStatus
 )
 
 type CommentService interface {
@@ -63,14 +64,14 @@ func (s *commentService) Create(ctx context.Context, req *model.CreateCommentReq
 	if req.ParentID != 0 {
 		parentComment, err := s.commentRepo.GetByID(ctx, req.ParentID)
 		if err != nil {
-			if errors.Is(err, repository.ErrCommentNotFound) {
-				return nil, fmt.Errorf("%s: %w", response.BadRequest, ErrCommentNotFound)
+			if errors.Is(err, apperrs.ErrCommentNotFound) {
+				return nil, fmt.Errorf("%s: %w", response.BadRequest, apperrs.ErrCommentNotFound)
 			}
 			return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 		}
 
 		if parentComment.RootID != 0 {
-			return nil, fmt.Errorf("%s: %w", response.BadRequest, ErrCannotReplyChild)
+			return nil, fmt.Errorf("%s: %w", response.BadRequest, apperrs.ErrCannotReplyChild)
 		}
 
 		if req.RootID == 0 {
@@ -112,8 +113,8 @@ func (s *commentService) Update(ctx context.Context, id uint, content string) (*
 
 	comment, err := s.commentRepo.GetByID(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrCommentNotFound) {
-			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrCommentNotFound)
+		if errors.Is(err, apperrs.ErrCommentNotFound) {
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, apperrs.ErrCommentNotFound)
 		}
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -144,8 +145,8 @@ func (s *commentService) Delete(ctx context.Context, id uint) error {
 
 	comment, err := s.commentRepo.GetByID(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrCommentNotFound) {
-			return fmt.Errorf("%s: %w", response.UserNotFound, ErrCommentNotFound)
+		if errors.Is(err, apperrs.ErrCommentNotFound) {
+			return fmt.Errorf("%s: %w", response.UserNotFound, apperrs.ErrCommentNotFound)
 		}
 		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -168,8 +169,8 @@ func (s *commentService) GetByID(ctx context.Context, id uint) (*model.CommentRe
 
 	comment, err := s.commentRepo.GetByID(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrCommentNotFound) {
-			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrCommentNotFound)
+		if errors.Is(err, apperrs.ErrCommentNotFound) {
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, apperrs.ErrCommentNotFound)
 		}
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -185,8 +186,8 @@ func (s *commentService) GetByIDWithUser(ctx context.Context, id uint) (*model.C
 
 	comment, err := s.commentRepo.GetByIDWithUser(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrCommentNotFound) {
-			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrCommentNotFound)
+		if errors.Is(err, apperrs.ErrCommentNotFound) {
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, apperrs.ErrCommentNotFound)
 		}
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -287,13 +288,13 @@ func (s *commentService) UpdateStatus(ctx context.Context, id uint, status model
 	s.logger.Info("CommentService.UpdateStatus", "comment_id", id, "status", status)
 
 	if !s.isValidStatus(status) {
-		return fmt.Errorf("%s: %w", response.BadRequest, ErrInvalidStatus)
+		return fmt.Errorf("%s: %w", response.BadRequest, apperrs.ErrInvalidStatus)
 	}
 
 	_, err := s.commentRepo.GetByID(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrCommentNotFound) {
-			return fmt.Errorf("%s: %w", response.UserNotFound, ErrCommentNotFound)
+		if errors.Is(err, apperrs.ErrCommentNotFound) {
+			return fmt.Errorf("%s: %w", response.UserNotFound, apperrs.ErrCommentNotFound)
 		}
 		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -313,8 +314,8 @@ func (s *commentService) IncrementLikeCount(ctx context.Context, id uint, delta 
 
 	_, err := s.commentRepo.GetByID(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrCommentNotFound) {
-			return fmt.Errorf("%s: %w", response.UserNotFound, ErrCommentNotFound)
+		if errors.Is(err, apperrs.ErrCommentNotFound) {
+			return fmt.Errorf("%s: %w", response.UserNotFound, apperrs.ErrCommentNotFound)
 		}
 		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -331,8 +332,8 @@ func (s *commentService) IncrementLikeCount(ctx context.Context, id uint, delta 
 func (s *commentService) validateWorkExists(ctx context.Context, workID uint) error {
 	_, err := s.workRepo.GetByID(ctx, workID)
 	if err != nil {
-		if errors.Is(err, repository.ErrWorkNotFound) {
-			return fmt.Errorf("%s: %w", response.BadRequest, ErrWorkNotFound)
+		if errors.Is(err, apperrs.ErrWorkNotFound) {
+			return fmt.Errorf("%s: %w", response.BadRequest, apperrs.ErrWorkNotFound)
 		}
 		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}

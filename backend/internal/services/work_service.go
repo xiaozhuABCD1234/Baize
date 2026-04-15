@@ -10,19 +10,20 @@ import (
 
 	"gorm.io/datatypes"
 
+	apperrs "backend/internal/errors"
 	model "backend/internal/models"
 	"backend/internal/repository"
 	"backend/pkg/response"
 )
 
 var (
-	ErrWorkNotFound      = errors.New("作品不存在")
-	ErrWorkMediaNotFound = errors.New("作品媒体不存在")
-	ErrInvalidWorkStatus = errors.New("无效的作品状态")
-	ErrCannotDeleteWork  = errors.New("无法删除已发布的作品")
-	ErrCraftNotFound     = errors.New("技艺不存在")
-	ErrCategoryNotFound  = errors.New("分类不存在")
-	ErrRegionNotFound    = errors.New("地区不存在")
+	ErrWorkNotFound      = apperrs.ErrWorkNotFound
+	ErrWorkMediaNotFound = apperrs.ErrWorkMediaNotFound
+	ErrInvalidWorkStatus = apperrs.ErrInvalidWorkStatus
+	ErrCannotDeleteWork  = apperrs.ErrCannotDeleteWork
+	ErrCraftNotFound     = apperrs.ErrCraftNotFound
+	ErrCategoryNotFound  = apperrs.ErrCategoryNotFound
+	ErrRegionNotFound    = apperrs.ErrRegionNotFound
 )
 
 type WorkService interface {
@@ -128,8 +129,8 @@ func (s *workService) Update(ctx context.Context, id uint, req *model.CreateWork
 
 	work, err := s.workRepo.GetByID(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrWorkNotFound) {
-			return nil, fmt.Errorf("%s: %w", response.WorkNotFound, ErrWorkNotFound)
+		if errors.Is(err, apperrs.ErrWorkNotFound) {
+			return nil, fmt.Errorf("%s: %w", response.WorkNotFound, apperrs.ErrWorkNotFound)
 		}
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -202,14 +203,14 @@ func (s *workService) Delete(ctx context.Context, id uint) error {
 
 	work, err := s.workRepo.GetByID(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrWorkNotFound) {
-			return fmt.Errorf("%s: %w", response.WorkNotFound, ErrWorkNotFound)
+		if errors.Is(err, apperrs.ErrWorkNotFound) {
+			return fmt.Errorf("%s: %w", response.WorkNotFound, apperrs.ErrWorkNotFound)
 		}
 		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if work.Status == model.WorkStatusPublished {
-		return fmt.Errorf("%s: %w", response.BadRequest, ErrCannotDeleteWork)
+		return fmt.Errorf("%s: %w", response.BadRequest, apperrs.ErrCannotDeleteWork)
 	}
 
 	if err := s.mediaRepo.DeleteByWorkID(ctx, id); err != nil {
@@ -231,8 +232,8 @@ func (s *workService) GetByID(ctx context.Context, id uint) (*model.WorkResponse
 
 	work, err := s.workRepo.GetByIDWithSelect(ctx, id, "User", "Craft")
 	if err != nil {
-		if errors.Is(err, repository.ErrWorkNotFound) {
-			return nil, fmt.Errorf("%s: %w", response.WorkNotFound, ErrWorkNotFound)
+		if errors.Is(err, apperrs.ErrWorkNotFound) {
+			return nil, fmt.Errorf("%s: %w", response.WorkNotFound, apperrs.ErrWorkNotFound)
 		}
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -248,8 +249,8 @@ func (s *workService) GetByIDDetailed(ctx context.Context, id uint) (*model.Work
 
 	work, err := s.workRepo.GetByIDWithAll(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrWorkNotFound) {
-			return nil, fmt.Errorf("%s: %w", response.WorkNotFound, ErrWorkNotFound)
+		if errors.Is(err, apperrs.ErrWorkNotFound) {
+			return nil, fmt.Errorf("%s: %w", response.WorkNotFound, apperrs.ErrWorkNotFound)
 		}
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -360,13 +361,13 @@ func (s *workService) UpdateStatus(ctx context.Context, id uint, status model.Wo
 	s.logger.Info("WorkService.UpdateStatus", "work_id", id, "status", status)
 
 	if !s.isValidWorkStatus(status) {
-		return fmt.Errorf("%s: %w", response.BadRequest, ErrInvalidWorkStatus)
+		return fmt.Errorf("%s: %w", response.BadRequest, apperrs.ErrInvalidWorkStatus)
 	}
 
 	_, err := s.workRepo.GetByID(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrWorkNotFound) {
-			return fmt.Errorf("%s: %w", response.WorkNotFound, ErrWorkNotFound)
+		if errors.Is(err, apperrs.ErrWorkNotFound) {
+			return fmt.Errorf("%s: %w", response.WorkNotFound, apperrs.ErrWorkNotFound)
 		}
 		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -386,8 +387,8 @@ func (s *workService) IncrementCount(ctx context.Context, id uint, field string,
 
 	_, err := s.workRepo.GetByID(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrWorkNotFound) {
-			return fmt.Errorf("%s: %w", response.WorkNotFound, ErrWorkNotFound)
+		if errors.Is(err, apperrs.ErrWorkNotFound) {
+			return fmt.Errorf("%s: %w", response.WorkNotFound, apperrs.ErrWorkNotFound)
 		}
 		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -443,8 +444,8 @@ func (s *workService) validateCraftExists(ctx context.Context, craftID uint) err
 	}
 	_, err := s.craftRepo.GetByID(ctx, craftID)
 	if err != nil {
-		if errors.Is(err, repository.ErrCraftNotFound) {
-			return fmt.Errorf("%s: %w", response.BadRequest, ErrCraftNotFound)
+		if errors.Is(err, apperrs.ErrCraftNotFound) {
+			return fmt.Errorf("%s: %w", response.BadRequest, apperrs.ErrCraftNotFound)
 		}
 		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}

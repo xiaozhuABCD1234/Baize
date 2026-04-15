@@ -8,19 +8,20 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
+	apperrs "backend/internal/errors"
 	"backend/internal/models"
 	"backend/internal/repository"
 	"backend/pkg/utils"
 )
 
 var (
-	ErrEmailExists     = errors.New("邮箱已被注册")
-	ErrUsernameExists  = errors.New("用户名已被使用")
-	ErrUserNotFound    = errors.New("用户不存在")
-	ErrInvalidPassword = errors.New("密码错误")
-	ErrEmailNotChanged = errors.New("新邮箱与当前邮箱相同")
-	ErrSamePassword    = errors.New("新密码不能与旧密码相同")
-	ErrInvalidRole     = errors.New("无效的 UserType")
+	ErrEmailExists     = apperrs.ErrEmailExists
+	ErrUsernameExists  = apperrs.ErrUsernameExists
+	ErrUserNotFound    = apperrs.ErrUserNotFound
+	ErrInvalidPassword = apperrs.ErrInvalidPassword
+	ErrEmailNotChanged = apperrs.ErrEmailNotChanged
+	ErrSamePassword    = apperrs.ErrSamePassword
+	ErrInvalidRole     = apperrs.ErrInvalidRole
 )
 
 type UserServiceInterface interface {
@@ -67,19 +68,19 @@ type RegisterResponse struct {
 
 func (s *UserService) Register(ctx context.Context, req RegisterRequest) (*RegisterResponse, error) {
 	existingUser, err := s.repo.GetByUsername(ctx, req.Username)
-	if err != nil && !errors.Is(err, repository.ErrUserNotFound) {
+	if err != nil && !errors.Is(err, apperrs.ErrUserNotFound) {
 		return nil, fmt.Errorf("查询用户失败: %w", err)
 	}
 	if existingUser != nil {
-		return nil, ErrUsernameExists
+		return nil, apperrs.ErrUsernameExists
 	}
 
 	existingUser, err = s.repo.GetByEmail(ctx, req.Email)
-	if err != nil && !errors.Is(err, repository.ErrUserNotFound) {
+	if err != nil && !errors.Is(err, apperrs.ErrUserNotFound) {
 		return nil, fmt.Errorf("查询用户失败: %w", err)
 	}
 	if existingUser != nil {
-		return nil, ErrEmailExists
+		return nil, apperrs.ErrEmailExists
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
@@ -92,7 +93,7 @@ func (s *UserService) Register(ctx context.Context, req RegisterRequest) (*Regis
 		userType = string(models.UserTypeUser)
 	}
 	if !isValidUserType(userType) {
-		return nil, ErrInvalidRole
+		return nil, apperrs.ErrInvalidRole
 	}
 
 	user := &models.User{
@@ -145,17 +146,17 @@ type LoginResponse struct {
 func (s *UserService) Login(ctx context.Context, req LoginRequest) (*LoginResponse, error) {
 	user, err := s.repo.GetByEmail(ctx, req.Email)
 	if err != nil {
-		if errors.Is(err, repository.ErrUserNotFound) {
-			return nil, ErrUserNotFound
+		if errors.Is(err, apperrs.ErrUserNotFound) {
+			return nil, apperrs.ErrUserNotFound
 		}
 		return nil, fmt.Errorf("查询用户失败: %w", err)
 	}
 	if user == nil {
-		return nil, ErrUserNotFound
+		return nil, apperrs.ErrUserNotFound
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
-		return nil, ErrInvalidPassword
+		return nil, apperrs.ErrInvalidPassword
 	}
 
 	tokenPair, err := utils.GenerateTokenPair(user.ID, user.Email, string(user.UserType))
@@ -179,7 +180,7 @@ func (s *UserService) GetUserByID(ctx context.Context, id uint) (*models.User, e
 		return nil, fmt.Errorf("查询用户失败: %w", err)
 	}
 	if user == nil {
-		return nil, ErrUserNotFound
+		return nil, apperrs.ErrUserNotFound
 	}
 	user.Password = ""
 	return user, nil
@@ -233,7 +234,7 @@ func (s *UserService) UpdateUser(ctx context.Context, req UpdateUserRequest) err
 		return fmt.Errorf("查询用户失败: %w", err)
 	}
 	if existing == nil {
-		return ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 
 	if req.Email != "" && req.Email != existing.Email {
@@ -242,14 +243,14 @@ func (s *UserService) UpdateUser(ctx context.Context, req UpdateUserRequest) err
 			return fmt.Errorf("检查邮箱失败: %w", err)
 		}
 		if emailUser != nil {
-			return ErrEmailExists
+			return apperrs.ErrEmailExists
 		}
 		existing.Email = req.Email
 	}
 
 	if req.UserType != "" {
 		if !isValidUserType(req.UserType) {
-			return ErrInvalidRole
+			return apperrs.ErrInvalidRole
 		}
 		existing.UserType = models.UserType(req.UserType)
 	}
@@ -281,15 +282,15 @@ func (s *UserService) ChangePassword(ctx context.Context, req ChangePasswordRequ
 		return fmt.Errorf("查询用户失败: %w", err)
 	}
 	if user == nil {
-		return ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.OldPassword)); err != nil {
-		return ErrInvalidPassword
+		return apperrs.ErrInvalidPassword
 	}
 
 	if req.OldPassword == req.NewPassword {
-		return ErrSamePassword
+		return apperrs.ErrSamePassword
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.NewPassword), bcrypt.DefaultCost)
@@ -310,7 +311,7 @@ func (s *UserService) ResetPassword(ctx context.Context, userID uint, newPasswor
 		return fmt.Errorf("查询用户失败: %w", err)
 	}
 	if user == nil {
-		return ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
@@ -331,11 +332,11 @@ func (s *UserService) UpdateEmail(ctx context.Context, userID uint, newEmail str
 		return fmt.Errorf("查询用户失败: %w", err)
 	}
 	if user == nil {
-		return ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 
 	if user.Email == newEmail {
-		return ErrEmailNotChanged
+		return apperrs.ErrEmailNotChanged
 	}
 
 	existing, err := s.repo.GetByEmail(ctx, newEmail)
@@ -343,7 +344,7 @@ func (s *UserService) UpdateEmail(ctx context.Context, userID uint, newEmail str
 		return fmt.Errorf("检查邮箱失败: %w", err)
 	}
 	if existing != nil {
-		return ErrEmailExists
+		return apperrs.ErrEmailExists
 	}
 
 	if err := s.repo.UpdateEmail(ctx, userID, newEmail); err != nil {
@@ -359,7 +360,7 @@ func (s *UserService) DeleteUser(ctx context.Context, id uint) error {
 		return fmt.Errorf("查询用户失败: %w", err)
 	}
 	if user == nil {
-		return ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 
 	if err := s.repo.Delete(ctx, id); err != nil {

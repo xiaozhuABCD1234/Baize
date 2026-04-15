@@ -5,6 +5,7 @@ import (
 	"errors"
 	"time"
 
+	apperrs "backend/internal/errors"
 	model "backend/internal/models"
 
 	"gorm.io/gorm"
@@ -42,8 +43,6 @@ func (r *ichCategoryRepo) WithTransaction(tx *gorm.DB) ICHCategoryRepository {
 	return &ichCategoryRepo{db: tx}
 }
 
-var ErrICHCategoryNotFound = errors.New("ICH category not found")
-
 func (r *ichCategoryRepo) logSlow(ctx context.Context, op string, start time.Time) {
 	elapsed := time.Since(start)
 	if elapsed > SlowThreshold {
@@ -64,7 +63,7 @@ func (r *ichCategoryRepo) GetByID(ctx context.Context, id uint) (*model.ICHCateg
 	err := r.db.WithContext(ctx).First(&category, id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrICHCategoryNotFound
+			return nil, apperrs.ErrICHCategoryNotFound
 		}
 		return nil, err
 	}
@@ -82,7 +81,7 @@ func (r *ichCategoryRepo) GetByIDWithChildren(ctx context.Context, id uint) (*mo
 		First(&category, id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrICHCategoryNotFound
+			return nil, apperrs.ErrICHCategoryNotFound
 		}
 		return nil, err
 	}
@@ -96,7 +95,7 @@ func (r *ichCategoryRepo) GetByName(ctx context.Context, name string) (*model.IC
 	err := r.db.WithContext(ctx).Where("name = ?", name).First(&category).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrICHCategoryNotFound
+			return nil, apperrs.ErrICHCategoryNotFound
 		}
 		return nil, err
 	}
@@ -169,7 +168,7 @@ func (r *ichCategoryRepo) Update(ctx context.Context, category *model.ICHCategor
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrICHCategoryNotFound
+		return apperrs.ErrICHCategoryNotFound
 	}
 	return nil
 }
@@ -185,7 +184,7 @@ func (r *ichCategoryRepo) UpdateFields(ctx context.Context, id uint, fields map[
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrICHCategoryNotFound
+		return apperrs.ErrICHCategoryNotFound
 	}
 	return nil
 }
@@ -198,7 +197,7 @@ func (r *ichCategoryRepo) Delete(ctx context.Context, id uint) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrICHCategoryNotFound
+		return apperrs.ErrICHCategoryNotFound
 	}
 	return nil
 }
@@ -211,7 +210,7 @@ func (r *ichCategoryRepo) ForceDelete(ctx context.Context, id uint) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrICHCategoryNotFound
+		return apperrs.ErrICHCategoryNotFound
 	}
 	return nil
 }

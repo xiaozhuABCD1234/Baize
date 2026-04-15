@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"testing"
 
+	apperrs "backend/internal/errors"
 	"backend/internal/models"
 	"backend/internal/repository"
 
@@ -34,7 +35,7 @@ func (m *mockWorkRepositoryForWork) GetByID(ctx context.Context, id uint) (*mode
 		work.ID = id
 		return work, nil
 	}
-	return nil, repository.ErrWorkNotFound
+	return nil, apperrs.ErrWorkNotFound
 }
 
 func (m *mockWorkRepositoryForWork) GetByIDWithAll(ctx context.Context, id uint) (*models.Work, error) {
@@ -94,7 +95,7 @@ func (m *mockWorkRepositoryForWork) ListRecommended(ctx context.Context, limit i
 
 func (m *mockWorkRepositoryForWork) Update(ctx context.Context, work *models.Work) error {
 	if _, ok := m.works[work.ID]; !ok {
-		return repository.ErrWorkNotFound
+		return apperrs.ErrWorkNotFound
 	}
 	m.works[work.ID] = work
 	return nil
@@ -224,7 +225,7 @@ func (m *mockCraftRepositoryForWork) GetByID(ctx context.Context, id uint) (*mod
 	if craft, ok := m.crafts[id]; ok {
 		return craft, nil
 	}
-	return nil, repository.ErrCraftNotFound
+	return nil, apperrs.ErrCraftNotFound
 }
 
 func (m *mockCraftRepositoryForWork) Create(ctx context.Context, craft *models.Craft) error {
@@ -307,7 +308,7 @@ func (m *mockUserRepositoryForWork) GetByID(ctx context.Context, id uint) (*mode
 	if user, ok := m.users[id]; ok {
 		return user, nil
 	}
-	return nil, repository.ErrUserNotFound
+	return nil, apperrs.ErrUserNotFound
 }
 
 func (m *mockUserRepositoryForWork) Create(ctx context.Context, user *models.User) error {

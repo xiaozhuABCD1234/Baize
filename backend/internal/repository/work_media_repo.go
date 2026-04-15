@@ -5,6 +5,7 @@ import (
 	"errors"
 	"time"
 
+	apperrs "backend/internal/errors"
 	model "backend/internal/models"
 
 	"gorm.io/gorm"
@@ -40,8 +41,6 @@ func (r *workMediaRepo) WithTransaction(tx *gorm.DB) WorkMediaRepository {
 	return &workMediaRepo{db: tx}
 }
 
-var ErrWorkMediaNotFound = errors.New("work media not found")
-
 func (r *workMediaRepo) logSlow(ctx context.Context, op string, start time.Time) {
 	elapsed := time.Since(start)
 	if elapsed > SlowThreshold {
@@ -71,7 +70,7 @@ func (r *workMediaRepo) GetByID(ctx context.Context, id uint) (*model.WorkMedia,
 	err := r.db.WithContext(ctx).First(&media, id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrWorkMediaNotFound
+			return nil, apperrs.ErrWorkMediaNotFound
 		}
 		return nil, err
 	}
@@ -119,7 +118,7 @@ func (r *workMediaRepo) Update(ctx context.Context, media *model.WorkMedia) erro
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrWorkMediaNotFound
+		return apperrs.ErrWorkMediaNotFound
 	}
 	return nil
 }
@@ -135,7 +134,7 @@ func (r *workMediaRepo) UpdateFields(ctx context.Context, id uint, fields map[st
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrWorkMediaNotFound
+		return apperrs.ErrWorkMediaNotFound
 	}
 	return nil
 }
@@ -148,7 +147,7 @@ func (r *workMediaRepo) Delete(ctx context.Context, id uint) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrWorkMediaNotFound
+		return apperrs.ErrWorkMediaNotFound
 	}
 	return nil
 }

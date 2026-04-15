@@ -6,6 +6,7 @@ import (
 	"testing"
 	"time"
 
+	apperrs "backend/internal/errors"
 	"backend/internal/models"
 	"backend/internal/repository"
 
@@ -62,7 +63,7 @@ func (m *mockFavoriteRepository) GetByID(ctx context.Context, id uint) (*models.
 	if favorite, ok := m.favorites[id]; ok {
 		return favorite, nil
 	}
-	return nil, repository.ErrFavoriteNotFound
+	return nil, apperrs.ErrFavoriteNotFound
 }
 
 func (m *mockFavoriteRepository) GetByUserAndWork(ctx context.Context, userID, workID uint) (*models.Favorite, error) {
@@ -74,7 +75,7 @@ func (m *mockFavoriteRepository) GetByUserAndWork(ctx context.Context, userID, w
 			return fav, nil
 		}
 	}
-	return nil, repository.ErrFavoriteNotFound
+	return nil, apperrs.ErrFavoriteNotFound
 }
 
 func (m *mockFavoriteRepository) List(ctx context.Context, orderBy string) ([]models.Favorite, error) {
@@ -134,7 +135,7 @@ func (m *mockFavoriteRepository) Update(ctx context.Context, favorite *models.Fa
 		return m.updateErr
 	}
 	if _, ok := m.favorites[favorite.ID]; !ok {
-		return repository.ErrFavoriteNotFound
+		return apperrs.ErrFavoriteNotFound
 	}
 	m.favorites[favorite.ID] = favorite
 	return nil
@@ -145,7 +146,7 @@ func (m *mockFavoriteRepository) UpdateFolder(ctx context.Context, id uint, fold
 		return m.updateFolderErr
 	}
 	if _, ok := m.favorites[id]; !ok {
-		return repository.ErrFavoriteNotFound
+		return apperrs.ErrFavoriteNotFound
 	}
 	m.favorites[id].FolderID = folderID
 	return nil
@@ -156,7 +157,7 @@ func (m *mockFavoriteRepository) Delete(ctx context.Context, id uint) error {
 		return m.deleteErr
 	}
 	if _, ok := m.favorites[id]; !ok {
-		return repository.ErrFavoriteNotFound
+		return apperrs.ErrFavoriteNotFound
 	}
 	delete(m.favorites, id)
 	return nil
@@ -173,7 +174,7 @@ func (m *mockFavoriteRepository) DeleteByUserAndWork(ctx context.Context, userID
 			return nil
 		}
 	}
-	return repository.ErrFavoriteNotFound
+	return apperrs.ErrFavoriteNotFound
 }
 
 func (m *mockFavoriteRepository) DeleteByWorkID(ctx context.Context, workID uint) error {
@@ -229,7 +230,7 @@ func (m *mockWorkRepository) GetByID(ctx context.Context, id uint) (*models.Work
 	if work, ok := m.works[id]; ok {
 		return work, nil
 	}
-	return nil, repository.ErrWorkNotFound
+	return nil, apperrs.ErrWorkNotFound
 }
 
 func (m *mockWorkRepository) GetByIDWithAll(ctx context.Context, id uint) (*models.Work, error) {
@@ -345,7 +346,7 @@ func (m *mockUserRepositoryForFavorite) GetByID(ctx context.Context, id uint) (*
 	if user, ok := m.users[id]; ok {
 		return user, nil
 	}
-	return nil, repository.ErrUserNotFound
+	return nil, apperrs.ErrUserNotFound
 }
 
 func (m *mockUserRepositoryForFavorite) Create(ctx context.Context, user *models.User) error {

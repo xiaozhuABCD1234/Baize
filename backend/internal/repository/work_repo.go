@@ -5,6 +5,7 @@ import (
 	"errors"
 	"time"
 
+	apperrs "backend/internal/errors"
 	model "backend/internal/models"
 
 	"gorm.io/gorm"
@@ -49,8 +50,6 @@ func (r *workRepo) WithTransaction(tx *gorm.DB) WorkRepository {
 	return &workRepo{db: tx}
 }
 
-var ErrWorkNotFound = errors.New("work not found")
-
 func (r *workRepo) logSlow(ctx context.Context, op string, start time.Time) {
 	elapsed := time.Since(start)
 	if elapsed > SlowThreshold {
@@ -71,7 +70,7 @@ func (r *workRepo) GetByID(ctx context.Context, id uint) (*model.Work, error) {
 	err := r.db.WithContext(ctx).First(&work, id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrWorkNotFound
+			return nil, apperrs.ErrWorkNotFound
 		}
 		return nil, err
 	}
@@ -93,7 +92,7 @@ func (r *workRepo) GetByIDWithSelect(ctx context.Context, id uint, preloads ...s
 	err := query.First(&work).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrWorkNotFound
+			return nil, apperrs.ErrWorkNotFound
 		}
 		return nil, err
 	}
@@ -242,7 +241,7 @@ func (r *workRepo) Update(ctx context.Context, work *model.Work) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrWorkNotFound
+		return apperrs.ErrWorkNotFound
 	}
 	return nil
 }
@@ -258,7 +257,7 @@ func (r *workRepo) UpdateFields(ctx context.Context, id uint, fields map[string]
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrWorkNotFound
+		return apperrs.ErrWorkNotFound
 	}
 	return nil
 }
@@ -274,7 +273,7 @@ func (r *workRepo) UpdateStatus(ctx context.Context, id uint, status model.WorkS
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrWorkNotFound
+		return apperrs.ErrWorkNotFound
 	}
 	return nil
 }
@@ -297,7 +296,7 @@ func (r *workRepo) IncrementCount(ctx context.Context, id uint, field string, de
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrWorkNotFound
+		return apperrs.ErrWorkNotFound
 	}
 	return nil
 }
@@ -310,7 +309,7 @@ func (r *workRepo) Delete(ctx context.Context, id uint) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrWorkNotFound
+		return apperrs.ErrWorkNotFound
 	}
 	return nil
 }
@@ -323,7 +322,7 @@ func (r *workRepo) ForceDelete(ctx context.Context, id uint) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrWorkNotFound
+		return apperrs.ErrWorkNotFound
 	}
 	return nil
 }

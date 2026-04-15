@@ -5,6 +5,7 @@ import (
 	"errors"
 	"time"
 
+	apperrs "backend/internal/errors"
 	model "backend/internal/models"
 
 	"gorm.io/gorm"
@@ -43,8 +44,6 @@ func (r *favoriteRepo) WithTransaction(tx *gorm.DB) FavoriteRepository {
 	return &favoriteRepo{db: tx}
 }
 
-var ErrFavoriteNotFound = errors.New("favorite not found")
-
 func (r *favoriteRepo) logSlow(ctx context.Context, op string, start time.Time) {
 	elapsed := time.Since(start)
 	if elapsed > SlowThreshold {
@@ -65,7 +64,7 @@ func (r *favoriteRepo) GetByID(ctx context.Context, id uint) (*model.Favorite, e
 	err := r.db.WithContext(ctx).First(&favorite, id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrFavoriteNotFound
+			return nil, apperrs.ErrFavoriteNotFound
 		}
 		return nil, err
 	}
@@ -81,7 +80,7 @@ func (r *favoriteRepo) GetByUserAndWork(ctx context.Context, userID, workID uint
 		First(&favorite).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrFavoriteNotFound
+			return nil, apperrs.ErrFavoriteNotFound
 		}
 		return nil, err
 	}
@@ -176,7 +175,7 @@ func (r *favoriteRepo) Update(ctx context.Context, favorite *model.Favorite) err
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrFavoriteNotFound
+		return apperrs.ErrFavoriteNotFound
 	}
 	return nil
 }
@@ -192,7 +191,7 @@ func (r *favoriteRepo) UpdateFolder(ctx context.Context, id uint, folderID uint)
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrFavoriteNotFound
+		return apperrs.ErrFavoriteNotFound
 	}
 	return nil
 }
@@ -205,7 +204,7 @@ func (r *favoriteRepo) Delete(ctx context.Context, id uint) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrFavoriteNotFound
+		return apperrs.ErrFavoriteNotFound
 	}
 	return nil
 }
@@ -220,7 +219,7 @@ func (r *favoriteRepo) DeleteByUserAndWork(ctx context.Context, userID, workID u
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrFavoriteNotFound
+		return apperrs.ErrFavoriteNotFound
 	}
 	return nil
 }

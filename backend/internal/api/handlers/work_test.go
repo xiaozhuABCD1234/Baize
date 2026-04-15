@@ -12,6 +12,7 @@ import (
 	"testing"
 
 	"backend/internal/api/middleware"
+	apperrs "backend/internal/errors"
 	"backend/internal/models"
 	"backend/internal/repository"
 	svc "backend/internal/services"
@@ -84,7 +85,7 @@ func (m *mockWorkRepository) GetByID(ctx context.Context, id uint) (*models.Work
 	if work, ok := m.works[id]; ok {
 		return work, nil
 	}
-	return nil, repository.ErrWorkNotFound
+	return nil, apperrs.ErrWorkNotFound
 }
 
 func (m *mockWorkRepository) GetByIDWithAll(ctx context.Context, id uint) (*models.Work, error) {
@@ -94,7 +95,7 @@ func (m *mockWorkRepository) GetByIDWithAll(ctx context.Context, id uint) (*mode
 	if work, ok := m.works[id]; ok {
 		return work, nil
 	}
-	return nil, repository.ErrWorkNotFound
+	return nil, apperrs.ErrWorkNotFound
 }
 
 func (m *mockWorkRepository) GetByIDWithSelect(ctx context.Context, id uint, preloads ...string) (*models.Work, error) {
@@ -104,7 +105,7 @@ func (m *mockWorkRepository) GetByIDWithSelect(ctx context.Context, id uint, pre
 	if work, ok := m.works[id]; ok {
 		return work, nil
 	}
-	return nil, repository.ErrWorkNotFound
+	return nil, apperrs.ErrWorkNotFound
 }
 
 func (m *mockWorkRepository) List(ctx context.Context, orderBy string) ([]models.Work, error) {
@@ -206,7 +207,7 @@ func (m *mockWorkRepository) Update(ctx context.Context, work *models.Work) erro
 		return m.updateErr
 	}
 	if _, ok := m.works[work.ID]; !ok {
-		return repository.ErrWorkNotFound
+		return apperrs.ErrWorkNotFound
 	}
 	m.works[work.ID] = work
 	return nil
@@ -217,7 +218,7 @@ func (m *mockWorkRepository) UpdateFields(ctx context.Context, id uint, fields m
 		return m.updateErr
 	}
 	if _, ok := m.works[id]; !ok {
-		return repository.ErrWorkNotFound
+		return apperrs.ErrWorkNotFound
 	}
 	return nil
 }
@@ -227,7 +228,7 @@ func (m *mockWorkRepository) UpdateStatus(ctx context.Context, id uint, status m
 		return m.updateStatusErr
 	}
 	if _, ok := m.works[id]; !ok {
-		return repository.ErrWorkNotFound
+		return apperrs.ErrWorkNotFound
 	}
 	m.works[id].Status = status
 	return nil
@@ -238,7 +239,7 @@ func (m *mockWorkRepository) IncrementCount(ctx context.Context, id uint, field 
 		return m.incrementCountErr
 	}
 	if _, ok := m.works[id]; !ok {
-		return repository.ErrWorkNotFound
+		return apperrs.ErrWorkNotFound
 	}
 	return nil
 }
@@ -248,7 +249,7 @@ func (m *mockWorkRepository) Delete(ctx context.Context, id uint) error {
 		return m.deleteErr
 	}
 	if _, ok := m.works[id]; !ok {
-		return repository.ErrWorkNotFound
+		return apperrs.ErrWorkNotFound
 	}
 	delete(m.works, id)
 	return nil
@@ -405,7 +406,7 @@ func (m *mockCraftRepository) GetByID(ctx context.Context, id uint) (*models.Cra
 	if craft, ok := m.crafts[id]; ok {
 		return craft, nil
 	}
-	return nil, repository.ErrCraftNotFound
+	return nil, apperrs.ErrCraftNotFound
 }
 
 func (m *mockCraftRepository) GetByIDWithCategory(ctx context.Context, id uint) (*models.Craft, error) {
@@ -418,7 +419,7 @@ func (m *mockCraftRepository) GetByName(ctx context.Context, name string) (*mode
 			return craft, nil
 		}
 	}
-	return nil, repository.ErrCraftNotFound
+	return nil, apperrs.ErrCraftNotFound
 }
 
 func (m *mockCraftRepository) List(ctx context.Context, orderBy string) ([]models.Craft, error) {

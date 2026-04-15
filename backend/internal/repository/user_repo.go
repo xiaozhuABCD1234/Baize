@@ -5,6 +5,7 @@ import (
 	"errors"
 	"time"
 
+	apperrs "backend/internal/errors"
 	model "backend/internal/models"
 
 	"gorm.io/gorm"
@@ -45,8 +46,6 @@ func (r *userRepo) WithTransaction(tx *gorm.DB) UserRepository {
 	return &userRepo{db: tx}
 }
 
-var ErrUserNotFound = errors.New("user not found or has been deleted")
-
 func (r *userRepo) logSlow(ctx context.Context, op string, start time.Time) {
 	elapsed := time.Since(start)
 	if elapsed > SlowThreshold {
@@ -82,7 +81,7 @@ func (r *userRepo) GetByID(ctx context.Context, id uint) (*model.User, error) {
 	err := r.db.WithContext(ctx).Preload("Profile").First(&user, id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, apperrs.ErrUserNotFound
 		}
 		return nil, err
 	}
@@ -104,7 +103,7 @@ func (r *userRepo) GetByIDWithSelect(ctx context.Context, id uint, preloads ...s
 	err := query.First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, apperrs.ErrUserNotFound
 		}
 		return nil, err
 	}
@@ -118,7 +117,7 @@ func (r *userRepo) GetByEmail(ctx context.Context, email string) (*model.User, e
 	err := r.db.WithContext(ctx).Where("email = ?", email).First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, apperrs.ErrUserNotFound
 		}
 		return nil, err
 	}
@@ -132,7 +131,7 @@ func (r *userRepo) GetByUsername(ctx context.Context, username string) (*model.U
 	err := r.db.WithContext(ctx).Where("username = ?", username).First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, apperrs.ErrUserNotFound
 		}
 		return nil, err
 	}
@@ -146,7 +145,7 @@ func (r *userRepo) GetByPhone(ctx context.Context, phone string) (*model.User, e
 	err := r.db.WithContext(ctx).Where("phone = ?", phone).First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrUserNotFound
+			return nil, apperrs.ErrUserNotFound
 		}
 		return nil, err
 	}
@@ -206,7 +205,7 @@ func (r *userRepo) Update(ctx context.Context, user *model.User) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 	return nil
 }
@@ -222,7 +221,7 @@ func (r *userRepo) UpdatePassword(ctx context.Context, id uint, hashedPassword s
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 	return nil
 }
@@ -238,7 +237,7 @@ func (r *userRepo) UpdateEmail(ctx context.Context, id uint, email string) error
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 	return nil
 }
@@ -254,7 +253,7 @@ func (r *userRepo) UpdateStatus(ctx context.Context, id uint, status model.UserS
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 	return nil
 }
@@ -267,7 +266,7 @@ func (r *userRepo) Delete(ctx context.Context, id uint) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 	return nil
 }
@@ -280,7 +279,7 @@ func (r *userRepo) ForceDelete(ctx context.Context, id uint) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 	return nil
 }

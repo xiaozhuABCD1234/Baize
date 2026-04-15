@@ -7,16 +7,17 @@ import (
 	"log/slog"
 	"time"
 
+	apperrs "backend/internal/errors"
 	model "backend/internal/models"
 	"backend/internal/repository"
 	"backend/pkg/response"
 )
 
 var (
-	ErrICHCategoryNotFound  = errors.New("非遗分类不存在")
-	ErrCategoryNameExists   = errors.New("分类名称已存在")
-	ErrInvalidCategoryLevel = errors.New("无效的分类级别")
-	ErrCannotDeleteCategory = errors.New("无法删除有子节点的分类")
+	ErrICHCategoryNotFound  = apperrs.ErrICHCategoryNotFound
+	ErrCategoryNameExists   = apperrs.ErrCategoryNameExists
+	ErrInvalidCategoryLevel = apperrs.ErrInvalidCategoryLevel
+	ErrCannotDeleteCategory = apperrs.ErrCannotDeleteCategory
 )
 
 type ICHCategoryService interface {
@@ -57,17 +58,17 @@ func (s *ichCategoryService) Create(ctx context.Context, category *model.ICHCate
 	}
 
 	existing, err := s.categoryRepo.GetByName(ctx, category.Name)
-	if err != nil && !errors.Is(err, repository.ErrICHCategoryNotFound) {
+	if err != nil && !errors.Is(err, apperrs.ErrICHCategoryNotFound) {
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 	if existing != nil {
-		return nil, fmt.Errorf("%s: %w", response.ResourceConflict, ErrCategoryNameExists)
+		return nil, fmt.Errorf("%s: %w", response.ResourceConflict, apperrs.ErrCategoryNameExists)
 	}
 
 	if category.ParentID != 0 {
 		parent, err := s.categoryRepo.GetByID(ctx, category.ParentID)
 		if err != nil {
-			if errors.Is(err, repository.ErrICHCategoryNotFound) {
+			if errors.Is(err, apperrs.ErrICHCategoryNotFound) {
 				return nil, fmt.Errorf("%s: 上级分类不存在", response.BadRequest)
 			}
 			return nil, fmt.Errorf("%s: %w", response.InternalError, err)
@@ -97,19 +98,19 @@ func (s *ichCategoryService) Update(ctx context.Context, id uint, category *mode
 
 	existing, err := s.categoryRepo.GetByID(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrICHCategoryNotFound) {
-			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrICHCategoryNotFound)
+		if errors.Is(err, apperrs.ErrICHCategoryNotFound) {
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, apperrs.ErrICHCategoryNotFound)
 		}
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if category.Name != "" && category.Name != existing.Name {
 		nameExists, err := s.categoryRepo.GetByName(ctx, category.Name)
-		if err != nil && !errors.Is(err, repository.ErrICHCategoryNotFound) {
+		if err != nil && !errors.Is(err, apperrs.ErrICHCategoryNotFound) {
 			return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 		}
 		if nameExists != nil && nameExists.ID != id {
-			return nil, fmt.Errorf("%s: %w", response.ResourceConflict, ErrCategoryNameExists)
+			return nil, fmt.Errorf("%s: %w", response.ResourceConflict, apperrs.ErrCategoryNameExists)
 		}
 	}
 
@@ -143,7 +144,7 @@ func (s *ichCategoryService) Delete(ctx context.Context, id uint) error {
 		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 	if len(children) > 0 {
-		return fmt.Errorf("%s: %w", response.BadRequest, ErrCannotDeleteCategory)
+		return fmt.Errorf("%s: %w", response.BadRequest, apperrs.ErrCannotDeleteCategory)
 	}
 
 	if err := s.categoryRepo.Delete(ctx, id); err != nil {
@@ -160,8 +161,8 @@ func (s *ichCategoryService) GetByID(ctx context.Context, id uint) (*model.ICHCa
 
 	category, err := s.categoryRepo.GetByID(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrICHCategoryNotFound) {
-			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrICHCategoryNotFound)
+		if errors.Is(err, apperrs.ErrICHCategoryNotFound) {
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, apperrs.ErrICHCategoryNotFound)
 		}
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -177,8 +178,8 @@ func (s *ichCategoryService) GetByName(ctx context.Context, name string) (*model
 
 	category, err := s.categoryRepo.GetByName(ctx, name)
 	if err != nil {
-		if errors.Is(err, repository.ErrICHCategoryNotFound) {
-			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrICHCategoryNotFound)
+		if errors.Is(err, apperrs.ErrICHCategoryNotFound) {
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, apperrs.ErrICHCategoryNotFound)
 		}
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -194,8 +195,8 @@ func (s *ichCategoryService) GetByIDWithChildren(ctx context.Context, id uint) (
 
 	category, err := s.categoryRepo.GetByIDWithChildren(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrICHCategoryNotFound) {
-			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrICHCategoryNotFound)
+		if errors.Is(err, apperrs.ErrICHCategoryNotFound) {
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, apperrs.ErrICHCategoryNotFound)
 		}
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -298,7 +299,7 @@ func (s *ichCategoryService) ListActive(ctx context.Context) ([]model.ICHCategor
 
 func (s *ichCategoryService) validateLevel(level int8) error {
 	if level < 1 || level > 5 {
-		return fmt.Errorf("%s: %w", response.BadRequest, ErrInvalidCategoryLevel)
+		return fmt.Errorf("%s: %w", response.BadRequest, apperrs.ErrInvalidCategoryLevel)
 	}
 	return nil
 }

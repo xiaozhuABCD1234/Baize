@@ -7,16 +7,17 @@ import (
 	"log/slog"
 	"time"
 
+	apperrs "backend/internal/errors"
 	model "backend/internal/models"
 	"backend/internal/repository"
 	"backend/pkg/response"
 )
 
 var (
-	ErrFollowNotFound   = errors.New("关注关系不存在")
-	ErrCannotFollowSelf = errors.New("不能关注自己")
-	ErrAlreadyFollowing = errors.New("已经关注过该用户")
-	ErrNotFollowing     = errors.New("未关注该用户")
+	ErrFollowNotFound   = apperrs.ErrFollowNotFound
+	ErrCannotFollowSelf = apperrs.ErrCannotFollowSelf
+	ErrAlreadyFollowing = apperrs.ErrAlreadyFollowing
+	ErrNotFollowing     = apperrs.ErrNotFollowing
 )
 
 type FollowService interface {
@@ -52,7 +53,7 @@ func (s *followService) Create(ctx context.Context, followerID, followingID uint
 	s.logger.Info("FollowService.Create", "follower_id", followerID, "following_id", followingID)
 
 	if followerID == followingID {
-		return nil, fmt.Errorf("%s: %w", response.BadRequest, ErrCannotFollowSelf)
+		return nil, fmt.Errorf("%s: %w", response.BadRequest, apperrs.ErrCannotFollowSelf)
 	}
 
 	if err := s.validateUserExists(ctx, followerID); err != nil {
@@ -67,7 +68,7 @@ func (s *followService) Create(ctx context.Context, followerID, followingID uint
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 	if exists {
-		return nil, fmt.Errorf("%s: %w", response.ResourceConflict, ErrAlreadyFollowing)
+		return nil, fmt.Errorf("%s: %w", response.ResourceConflict, apperrs.ErrAlreadyFollowing)
 	}
 
 	follow := &model.Follow{
@@ -99,7 +100,7 @@ func (s *followService) Delete(ctx context.Context, followerID, followingID uint
 		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 	if !exists {
-		return fmt.Errorf("%s: %w", response.UserNotFound, ErrNotFollowing)
+		return fmt.Errorf("%s: %w", response.UserNotFound, apperrs.ErrNotFollowing)
 	}
 
 	if err := s.followRepo.Delete(ctx, followerID, followingID); err != nil {
@@ -197,8 +198,8 @@ func (s *followService) GetFollowerCount(ctx context.Context, userID uint) (int6
 func (s *followService) validateUserExists(ctx context.Context, userID uint) error {
 	_, err := s.userRepo.GetByID(ctx, userID)
 	if err != nil {
-		if errors.Is(err, repository.ErrUserNotFound) {
-			return fmt.Errorf("%s: %w", response.BadRequest, ErrUserNotFound)
+		if errors.Is(err, apperrs.ErrUserNotFound) {
+			return fmt.Errorf("%s: %w", response.BadRequest, apperrs.ErrUserNotFound)
 		}
 		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}

@@ -7,15 +7,16 @@ import (
 	"log/slog"
 	"time"
 
+	apperrs "backend/internal/errors"
 	model "backend/internal/models"
 	"backend/internal/repository"
 	"backend/pkg/response"
 )
 
 var (
-	ErrFavoriteNotFound = errors.New("收藏不存在")
-	ErrAlreadyFavorited = errors.New("已经收藏过该作品")
-	ErrNotFavorited     = errors.New("未收藏该作品")
+	ErrFavoriteNotFound = apperrs.ErrFavoriteNotFound
+	ErrAlreadyFavorited = apperrs.ErrAlreadyFavorited
+	ErrNotFavorited     = apperrs.ErrNotFavorited
 )
 
 type FavoriteService interface {
@@ -60,13 +61,13 @@ func (s *favoriteService) Create(ctx context.Context, req *model.FavoriteRequest
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 	if exists {
-		return nil, fmt.Errorf("%s: %w", response.ResourceConflict, ErrAlreadyFavorited)
+		return nil, fmt.Errorf("%s: %w", response.ResourceConflict, apperrs.ErrAlreadyFavorited)
 	}
 
 	_, err = s.workRepo.GetByID(ctx, req.WorkID)
 	if err != nil {
-		if errors.Is(err, repository.ErrWorkNotFound) {
-			return nil, fmt.Errorf("%s: %w", response.BadRequest, ErrWorkNotFound)
+		if errors.Is(err, apperrs.ErrWorkNotFound) {
+			return nil, fmt.Errorf("%s: %w", response.BadRequest, apperrs.ErrWorkNotFound)
 		}
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -102,8 +103,8 @@ func (s *favoriteService) Delete(ctx context.Context, id uint) error {
 
 	favorite, err := s.favoriteRepo.GetByID(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrFavoriteNotFound) {
-			return fmt.Errorf("%s: %w", response.UserNotFound, ErrFavoriteNotFound)
+		if errors.Is(err, apperrs.ErrFavoriteNotFound) {
+			return fmt.Errorf("%s: %w", response.UserNotFound, apperrs.ErrFavoriteNotFound)
 		}
 		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -127,8 +128,8 @@ func (s *favoriteService) DeleteByUserAndWork(ctx context.Context, userID, workI
 
 	favorite, err := s.favoriteRepo.GetByUserAndWork(ctx, userID, workID)
 	if err != nil {
-		if errors.Is(err, repository.ErrFavoriteNotFound) {
-			return fmt.Errorf("%s: %w", response.UserNotFound, ErrFavoriteNotFound)
+		if errors.Is(err, apperrs.ErrFavoriteNotFound) {
+			return fmt.Errorf("%s: %w", response.UserNotFound, apperrs.ErrFavoriteNotFound)
 		}
 		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -151,8 +152,8 @@ func (s *favoriteService) GetByID(ctx context.Context, id uint) (*model.Favorite
 
 	favorite, err := s.favoriteRepo.GetByID(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrFavoriteNotFound) {
-			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrFavoriteNotFound)
+		if errors.Is(err, apperrs.ErrFavoriteNotFound) {
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, apperrs.ErrFavoriteNotFound)
 		}
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -222,8 +223,8 @@ func (s *favoriteService) UpdateFolder(ctx context.Context, id uint, folderID ui
 
 	_, err := s.favoriteRepo.GetByID(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrFavoriteNotFound) {
-			return fmt.Errorf("%s: %w", response.UserNotFound, ErrFavoriteNotFound)
+		if errors.Is(err, apperrs.ErrFavoriteNotFound) {
+			return fmt.Errorf("%s: %w", response.UserNotFound, apperrs.ErrFavoriteNotFound)
 		}
 		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}

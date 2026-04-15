@@ -11,6 +11,7 @@ import (
 	"testing"
 
 	"backend/internal/api/middleware"
+	apperrs "backend/internal/errors"
 	"backend/internal/models"
 	"backend/internal/repository"
 	svc "backend/internal/services"
@@ -128,7 +129,7 @@ func (m *mockUserRepository) Update(ctx context.Context, user *models.User) erro
 		return m.updateErr
 	}
 	if _, ok := m.users[user.ID]; !ok {
-		return repository.ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 	oldEmail := m.users[user.ID].Email
 	delete(m.usersByEmail, oldEmail)
@@ -142,7 +143,7 @@ func (m *mockUserRepository) UpdatePassword(ctx context.Context, id uint, hashed
 		return m.updatePassErr
 	}
 	if _, ok := m.users[id]; !ok {
-		return repository.ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 	m.users[id].Password = hashedPassword
 	return nil
@@ -153,7 +154,7 @@ func (m *mockUserRepository) UpdateEmail(ctx context.Context, id uint, email str
 		return m.updateEmailErr
 	}
 	if _, ok := m.users[id]; !ok {
-		return repository.ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 	oldEmail := m.users[id].Email
 	delete(m.usersByEmail, oldEmail)
@@ -167,7 +168,7 @@ func (m *mockUserRepository) Delete(ctx context.Context, id uint) error {
 		return m.deleteErr
 	}
 	if _, ok := m.users[id]; !ok {
-		return repository.ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 	delete(m.users, id)
 	return nil
@@ -178,7 +179,7 @@ func (m *mockUserRepository) ForceDelete(ctx context.Context, id uint) error {
 		return m.forceDeleteErr
 	}
 	if _, ok := m.users[id]; !ok {
-		return repository.ErrUserNotFound
+		return apperrs.ErrUserNotFound
 	}
 	email := m.users[id].Email
 	username := m.users[id].Username

@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"backend/internal/api/middleware"
+	apperrs "backend/internal/errors"
 	"backend/internal/models"
 	"backend/internal/repository"
 	svc "backend/internal/services"
@@ -91,7 +92,7 @@ func (m *mockCommentRepository) GetByID(ctx context.Context, id uint) (*models.C
 	if comment, ok := m.comments[id]; ok {
 		return comment, nil
 	}
-	return nil, repository.ErrCommentNotFound
+	return nil, apperrs.ErrCommentNotFound
 }
 
 func (m *mockCommentRepository) GetByIDWithUser(ctx context.Context, id uint) (*models.Comment, error) {
@@ -101,7 +102,7 @@ func (m *mockCommentRepository) GetByIDWithUser(ctx context.Context, id uint) (*
 	if comment, ok := m.comments[id]; ok {
 		return comment, nil
 	}
-	return nil, repository.ErrCommentNotFound
+	return nil, apperrs.ErrCommentNotFound
 }
 
 func (m *mockCommentRepository) List(ctx context.Context, orderBy string) ([]models.Comment, error) {
@@ -213,7 +214,7 @@ func (m *mockCommentRepository) Update(ctx context.Context, comment *models.Comm
 		return m.updateErr
 	}
 	if _, ok := m.comments[comment.ID]; !ok {
-		return repository.ErrCommentNotFound
+		return apperrs.ErrCommentNotFound
 	}
 	m.comments[comment.ID] = comment
 	return nil
@@ -224,7 +225,7 @@ func (m *mockCommentRepository) UpdateFields(ctx context.Context, id uint, field
 		return m.updateErr
 	}
 	if _, ok := m.comments[id]; !ok {
-		return repository.ErrCommentNotFound
+		return apperrs.ErrCommentNotFound
 	}
 	return nil
 }
@@ -234,7 +235,7 @@ func (m *mockCommentRepository) UpdateStatus(ctx context.Context, id uint, statu
 		return m.updateStatusErr
 	}
 	if _, ok := m.comments[id]; !ok {
-		return repository.ErrCommentNotFound
+		return apperrs.ErrCommentNotFound
 	}
 	m.comments[id].Status = status
 	return nil
@@ -245,7 +246,7 @@ func (m *mockCommentRepository) IncrementLikeCount(ctx context.Context, id uint,
 		return m.incrementLikeCountErr
 	}
 	if _, ok := m.comments[id]; !ok {
-		return repository.ErrCommentNotFound
+		return apperrs.ErrCommentNotFound
 	}
 	return nil
 }
@@ -255,7 +256,7 @@ func (m *mockCommentRepository) Delete(ctx context.Context, id uint) error {
 		return m.deleteErr
 	}
 	if _, ok := m.comments[id]; !ok {
-		return repository.ErrCommentNotFound
+		return apperrs.ErrCommentNotFound
 	}
 	delete(m.comments, id)
 	return nil
@@ -328,7 +329,7 @@ func (m *mockWorkRepositoryForComment) GetByID(ctx context.Context, id uint) (*m
 	if work, ok := m.works[id]; ok {
 		return work, nil
 	}
-	return nil, repository.ErrWorkNotFound
+	return nil, apperrs.ErrWorkNotFound
 }
 
 func (m *mockWorkRepositoryForComment) GetByIDWithAll(ctx context.Context, id uint) (*models.Work, error) {
@@ -464,7 +465,7 @@ func (m *mockUserRepositoryForComment) GetByID(ctx context.Context, id uint) (*m
 	if user, ok := m.users[id]; ok {
 		return user, nil
 	}
-	return nil, repository.ErrUserNotFound
+	return nil, apperrs.ErrUserNotFound
 }
 
 func (m *mockUserRepositoryForComment) GetByIDWithProfile(ctx context.Context, id uint) (*models.User, error) {
@@ -476,15 +477,15 @@ func (m *mockUserRepositoryForComment) GetByIDWithSelect(ctx context.Context, id
 }
 
 func (m *mockUserRepositoryForComment) GetByEmail(ctx context.Context, email string) (*models.User, error) {
-	return nil, repository.ErrUserNotFound
+	return nil, apperrs.ErrUserNotFound
 }
 
 func (m *mockUserRepositoryForComment) GetByUsername(ctx context.Context, username string) (*models.User, error) {
-	return nil, repository.ErrUserNotFound
+	return nil, apperrs.ErrUserNotFound
 }
 
 func (m *mockUserRepositoryForComment) GetByPhone(ctx context.Context, phone string) (*models.User, error) {
-	return nil, repository.ErrUserNotFound
+	return nil, apperrs.ErrUserNotFound
 }
 
 func (m *mockUserRepositoryForComment) List(ctx context.Context, orderBy string) ([]models.User, error) {

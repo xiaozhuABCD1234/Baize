@@ -10,14 +10,15 @@ import (
 
 	"gorm.io/datatypes"
 
+	apperrs "backend/internal/errors"
 	model "backend/internal/models"
 	"backend/internal/repository"
 	"backend/pkg/response"
 )
 
 var (
-	ErrCraftNameExists   = errors.New("技艺名称已存在")
-	ErrInvalidDifficulty = errors.New("无效的难度等级")
+	ErrCraftNameExists   = apperrs.ErrCraftNameExists
+	ErrInvalidDifficulty = apperrs.ErrInvalidDifficulty
 )
 
 type CraftService interface {
@@ -62,11 +63,11 @@ func (s *craftService) Create(ctx context.Context, craft *model.Craft) (*model.C
 	}
 
 	existing, err := s.craftRepo.GetByName(ctx, craft.Name)
-	if err != nil && !errors.Is(err, repository.ErrCraftNotFound) {
+	if err != nil && !errors.Is(err, apperrs.ErrCraftNotFound) {
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 	if existing != nil {
-		return nil, fmt.Errorf("%s: %w", response.ResourceConflict, ErrCraftNameExists)
+		return nil, fmt.Errorf("%s: %w", response.ResourceConflict, apperrs.ErrCraftNameExists)
 	}
 
 	if err := s.craftRepo.Create(ctx, craft); err != nil {
@@ -89,8 +90,8 @@ func (s *craftService) Update(ctx context.Context, id uint, craft *model.Craft) 
 
 	existing, err := s.craftRepo.GetByID(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrCraftNotFound) {
-			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrCraftNotFound)
+		if errors.Is(err, apperrs.ErrCraftNotFound) {
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, apperrs.ErrCraftNotFound)
 		}
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -107,11 +108,11 @@ func (s *craftService) Update(ctx context.Context, id uint, craft *model.Craft) 
 
 	if craft.Name != "" && craft.Name != existing.Name {
 		duplicate, err := s.craftRepo.GetByName(ctx, craft.Name)
-		if err != nil && !errors.Is(err, repository.ErrCraftNotFound) {
+		if err != nil && !errors.Is(err, apperrs.ErrCraftNotFound) {
 			return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 		}
 		if duplicate != nil && duplicate.ID != id {
-			return nil, fmt.Errorf("%s: %w", response.ResourceConflict, ErrCraftNameExists)
+			return nil, fmt.Errorf("%s: %w", response.ResourceConflict, apperrs.ErrCraftNameExists)
 		}
 	}
 
@@ -136,8 +137,8 @@ func (s *craftService) Delete(ctx context.Context, id uint) error {
 
 	_, err := s.craftRepo.GetByID(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrCraftNotFound) {
-			return fmt.Errorf("%s: %w", response.UserNotFound, ErrCraftNotFound)
+		if errors.Is(err, apperrs.ErrCraftNotFound) {
+			return fmt.Errorf("%s: %w", response.UserNotFound, apperrs.ErrCraftNotFound)
 		}
 		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -156,8 +157,8 @@ func (s *craftService) GetByID(ctx context.Context, id uint) (*model.CraftRespon
 
 	craft, err := s.craftRepo.GetByID(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrCraftNotFound) {
-			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrCraftNotFound)
+		if errors.Is(err, apperrs.ErrCraftNotFound) {
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, apperrs.ErrCraftNotFound)
 		}
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -173,8 +174,8 @@ func (s *craftService) GetByIDWithCategory(ctx context.Context, id uint) (*model
 
 	craft, err := s.craftRepo.GetByIDWithCategory(ctx, id)
 	if err != nil {
-		if errors.Is(err, repository.ErrCraftNotFound) {
-			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrCraftNotFound)
+		if errors.Is(err, apperrs.ErrCraftNotFound) {
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, apperrs.ErrCraftNotFound)
 		}
 		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -256,8 +257,8 @@ func (s *craftService) validateCategoryExists(ctx context.Context, categoryID ui
 	}
 	_, err := s.categoryRepo.GetByID(ctx, categoryID)
 	if err != nil {
-		if errors.Is(err, repository.ErrICHCategoryNotFound) {
-			return fmt.Errorf("%s: %w", response.BadRequest, ErrCategoryNotFound)
+		if errors.Is(err, apperrs.ErrICHCategoryNotFound) {
+			return fmt.Errorf("%s: %w", response.BadRequest, apperrs.ErrCategoryNotFound)
 		}
 		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
@@ -266,7 +267,7 @@ func (s *craftService) validateCategoryExists(ctx context.Context, categoryID ui
 
 func (s *craftService) validateDifficulty(difficulty int8) error {
 	if difficulty < 0 || difficulty > 5 {
-		return fmt.Errorf("%s: %w", response.BadRequest, ErrInvalidDifficulty)
+		return fmt.Errorf("%s: %w", response.BadRequest, apperrs.ErrInvalidDifficulty)
 	}
 	return nil
 }

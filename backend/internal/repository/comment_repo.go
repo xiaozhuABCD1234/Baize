@@ -5,6 +5,7 @@ import (
 	"errors"
 	"time"
 
+	apperrs "backend/internal/errors"
 	model "backend/internal/models"
 
 	"gorm.io/gorm"
@@ -46,8 +47,6 @@ func (r *commentRepo) WithTransaction(tx *gorm.DB) CommentRepository {
 	return &commentRepo{db: tx}
 }
 
-var ErrCommentNotFound = errors.New("comment not found")
-
 func (r *commentRepo) logSlow(ctx context.Context, op string, start time.Time) {
 	elapsed := time.Since(start)
 	if elapsed > SlowThreshold {
@@ -68,7 +67,7 @@ func (r *commentRepo) GetByID(ctx context.Context, id uint) (*model.Comment, err
 	err := r.db.WithContext(ctx).First(&comment, id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrCommentNotFound
+			return nil, apperrs.ErrCommentNotFound
 		}
 		return nil, err
 	}
@@ -82,7 +81,7 @@ func (r *commentRepo) GetByIDWithUser(ctx context.Context, id uint) (*model.Comm
 	err := r.db.WithContext(ctx).Preload("User").First(&comment, id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrCommentNotFound
+			return nil, apperrs.ErrCommentNotFound
 		}
 		return nil, err
 	}
@@ -201,7 +200,7 @@ func (r *commentRepo) Update(ctx context.Context, comment *model.Comment) error 
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrCommentNotFound
+		return apperrs.ErrCommentNotFound
 	}
 	return nil
 }
@@ -217,7 +216,7 @@ func (r *commentRepo) UpdateFields(ctx context.Context, id uint, fields map[stri
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrCommentNotFound
+		return apperrs.ErrCommentNotFound
 	}
 	return nil
 }
@@ -233,7 +232,7 @@ func (r *commentRepo) UpdateStatus(ctx context.Context, id uint, status model.Co
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrCommentNotFound
+		return apperrs.ErrCommentNotFound
 	}
 	return nil
 }
@@ -249,7 +248,7 @@ func (r *commentRepo) IncrementLikeCount(ctx context.Context, id uint, delta int
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrCommentNotFound
+		return apperrs.ErrCommentNotFound
 	}
 	return nil
 }
@@ -262,7 +261,7 @@ func (r *commentRepo) Delete(ctx context.Context, id uint) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrCommentNotFound
+		return apperrs.ErrCommentNotFound
 	}
 	return nil
 }
@@ -275,7 +274,7 @@ func (r *commentRepo) ForceDelete(ctx context.Context, id uint) error {
 		return result.Error
 	}
 	if result.RowsAffected == 0 {
-		return ErrCommentNotFound
+		return apperrs.ErrCommentNotFound
 	}
 	return nil
 }
