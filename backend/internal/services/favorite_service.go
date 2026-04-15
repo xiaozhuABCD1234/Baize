@@ -57,18 +57,18 @@ func (s *favoriteService) Create(ctx context.Context, req *model.FavoriteRequest
 
 	exists, err := s.favoriteRepo.Exists(ctx, userID, req.WorkID)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 	if exists {
-		return nil, fmt.Errorf("%w: %w", response.ResourceConflict, ErrAlreadyFavorited)
+		return nil, fmt.Errorf("%s: %w", response.ResourceConflict, ErrAlreadyFavorited)
 	}
 
 	_, err = s.workRepo.GetByID(ctx, req.WorkID)
 	if err != nil {
 		if errors.Is(err, repository.ErrWorkNotFound) {
-			return nil, fmt.Errorf("%w: %w", response.BadRequest, ErrWorkNotFound)
+			return nil, fmt.Errorf("%s: %w", response.BadRequest, ErrWorkNotFound)
 		}
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	favorite := &model.Favorite{
@@ -80,7 +80,7 @@ func (s *favoriteService) Create(ctx context.Context, req *model.FavoriteRequest
 
 	if err := s.favoriteRepo.Create(ctx, favorite); err != nil {
 		s.logger.Error("Failed to create favorite", "error", err, "duration", time.Since(start))
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if err := s.workRepo.IncrementCount(ctx, req.WorkID, "favorite_count", 1); err != nil {
@@ -103,14 +103,14 @@ func (s *favoriteService) Delete(ctx context.Context, id uint) error {
 	favorite, err := s.favoriteRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrFavoriteNotFound) {
-			return fmt.Errorf("%w: %w", response.UserNotFound, ErrFavoriteNotFound)
+			return fmt.Errorf("%s: %w", response.UserNotFound, ErrFavoriteNotFound)
 		}
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if err := s.favoriteRepo.Delete(ctx, id); err != nil {
 		s.logger.Error("Failed to delete favorite", "error", err, "favorite_id", id, "duration", time.Since(start))
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if err := s.workRepo.IncrementCount(ctx, favorite.WorkID, "favorite_count", -1); err != nil {
@@ -128,14 +128,14 @@ func (s *favoriteService) DeleteByUserAndWork(ctx context.Context, userID, workI
 	favorite, err := s.favoriteRepo.GetByUserAndWork(ctx, userID, workID)
 	if err != nil {
 		if errors.Is(err, repository.ErrFavoriteNotFound) {
-			return fmt.Errorf("%w: %w", response.UserNotFound, ErrFavoriteNotFound)
+			return fmt.Errorf("%s: %w", response.UserNotFound, ErrFavoriteNotFound)
 		}
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if err := s.favoriteRepo.DeleteByUserAndWork(ctx, userID, workID); err != nil {
 		s.logger.Error("Failed to delete favorite", "error", err, "duration", time.Since(start))
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if err := s.workRepo.IncrementCount(ctx, favorite.WorkID, "favorite_count", -1); err != nil {
@@ -152,9 +152,9 @@ func (s *favoriteService) GetByID(ctx context.Context, id uint) (*model.Favorite
 	favorite, err := s.favoriteRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrFavoriteNotFound) {
-			return nil, fmt.Errorf("%w: %w", response.UserNotFound, ErrFavoriteNotFound)
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrFavoriteNotFound)
 		}
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	resp := s.toFavoriteResponse(favorite)
@@ -182,7 +182,7 @@ func (s *favoriteService) ListByUserID(ctx context.Context, userID uint, page, p
 
 	favorites, total, err := s.favoriteRepo.ListWithPagination(ctx, userID, page, pageSize)
 	if err != nil {
-		return nil, 0, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, 0, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	var responses []model.FavoriteResponse
@@ -204,7 +204,7 @@ func (s *favoriteService) ListByWorkID(ctx context.Context, workID uint) ([]mode
 
 	favorites, err := s.favoriteRepo.ListByWorkID(ctx, workID)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	var responses []model.FavoriteResponse
@@ -223,14 +223,14 @@ func (s *favoriteService) UpdateFolder(ctx context.Context, id uint, folderID ui
 	_, err := s.favoriteRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrFavoriteNotFound) {
-			return fmt.Errorf("%w: %w", response.UserNotFound, ErrFavoriteNotFound)
+			return fmt.Errorf("%s: %w", response.UserNotFound, ErrFavoriteNotFound)
 		}
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if err := s.favoriteRepo.UpdateFolder(ctx, id, folderID); err != nil {
 		s.logger.Error("Failed to update favorite folder", "error", err, "favorite_id", id, "duration", time.Since(start))
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	s.logger.Info("FavoriteService.UpdateFolder success", "favorite_id", id, "duration", time.Since(start))
@@ -243,7 +243,7 @@ func (s *favoriteService) Exists(ctx context.Context, userID, workID uint) (bool
 	exists, err := s.favoriteRepo.Exists(ctx, userID, workID)
 	if err != nil {
 		s.logger.Error("Failed to check favorite exists", "error", err, "duration", time.Since(start))
-		return false, fmt.Errorf("%w: %w", response.InternalError, err)
+		return false, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	s.logger.Info("FavoriteService.Exists success", "exists", exists, "duration", time.Since(start))
@@ -256,7 +256,7 @@ func (s *favoriteService) CountByWorkID(ctx context.Context, workID uint) (int64
 	count, err := s.favoriteRepo.CountByWorkID(ctx, workID)
 	if err != nil {
 		s.logger.Error("Failed to count favorites", "error", err, "duration", time.Since(start))
-		return 0, fmt.Errorf("%w: %w", response.InternalError, err)
+		return 0, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	s.logger.Info("FavoriteService.CountByWorkID success", "count", count, "duration", time.Since(start))

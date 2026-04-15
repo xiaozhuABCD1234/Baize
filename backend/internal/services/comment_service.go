@@ -64,13 +64,13 @@ func (s *commentService) Create(ctx context.Context, req *model.CreateCommentReq
 		parentComment, err := s.commentRepo.GetByID(ctx, req.ParentID)
 		if err != nil {
 			if errors.Is(err, repository.ErrCommentNotFound) {
-				return nil, fmt.Errorf("%w: %w", response.BadRequest, ErrCommentNotFound)
+				return nil, fmt.Errorf("%s: %w", response.BadRequest, ErrCommentNotFound)
 			}
-			return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+			return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 		}
 
 		if parentComment.RootID != 0 {
-			return nil, fmt.Errorf("%w: %w", response.BadRequest, ErrCannotReplyChild)
+			return nil, fmt.Errorf("%s: %w", response.BadRequest, ErrCannotReplyChild)
 		}
 
 		if req.RootID == 0 {
@@ -90,7 +90,7 @@ func (s *commentService) Create(ctx context.Context, req *model.CreateCommentReq
 
 	if err := s.commentRepo.Create(ctx, comment); err != nil {
 		s.logger.Error("Failed to create comment", "error", err, "duration", time.Since(start))
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if err := s.workRepo.IncrementCount(ctx, req.WorkID, "comment_count", 1); err != nil {
@@ -113,20 +113,20 @@ func (s *commentService) Update(ctx context.Context, id uint, content string) (*
 	comment, err := s.commentRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrCommentNotFound) {
-			return nil, fmt.Errorf("%w: %w", response.UserNotFound, ErrCommentNotFound)
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrCommentNotFound)
 		}
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if comment.Status == model.CommentStatusDeleted {
-		return nil, fmt.Errorf("%w: 评论已被删除", response.BadRequest)
+		return nil, fmt.Errorf("%s: 评论已被删除", response.BadRequest)
 	}
 
 	comment.Content = content
 
 	if err := s.commentRepo.Update(ctx, comment); err != nil {
 		s.logger.Error("Failed to update comment", "error", err, "comment_id", id, "duration", time.Since(start))
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	resp, err := s.GetByIDWithUser(ctx, id)
@@ -145,14 +145,14 @@ func (s *commentService) Delete(ctx context.Context, id uint) error {
 	comment, err := s.commentRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrCommentNotFound) {
-			return fmt.Errorf("%w: %w", response.UserNotFound, ErrCommentNotFound)
+			return fmt.Errorf("%s: %w", response.UserNotFound, ErrCommentNotFound)
 		}
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if err := s.commentRepo.Delete(ctx, id); err != nil {
 		s.logger.Error("Failed to delete comment", "error", err, "comment_id", id, "duration", time.Since(start))
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if err := s.workRepo.IncrementCount(ctx, comment.WorkID, "comment_count", -1); err != nil {
@@ -169,9 +169,9 @@ func (s *commentService) GetByID(ctx context.Context, id uint) (*model.CommentRe
 	comment, err := s.commentRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrCommentNotFound) {
-			return nil, fmt.Errorf("%w: %w", response.UserNotFound, ErrCommentNotFound)
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrCommentNotFound)
 		}
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	resp := s.toCommentResponse(comment)
@@ -186,9 +186,9 @@ func (s *commentService) GetByIDWithUser(ctx context.Context, id uint) (*model.C
 	comment, err := s.commentRepo.GetByIDWithUser(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrCommentNotFound) {
-			return nil, fmt.Errorf("%w: %w", response.UserNotFound, ErrCommentNotFound)
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrCommentNotFound)
 		}
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	resp := s.toCommentResponse(comment)
@@ -213,7 +213,7 @@ func (s *commentService) ListByWorkID(ctx context.Context, workID uint, page, pa
 
 	comments, total, err := s.commentRepo.ListWithPagination(ctx, workID, page, pageSize)
 	if err != nil {
-		return nil, 0, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, 0, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	var responses []model.CommentResponse
@@ -235,7 +235,7 @@ func (s *commentService) ListRootByWorkID(ctx context.Context, workID uint) ([]m
 
 	comments, err := s.commentRepo.ListRootByWorkID(ctx, workID)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	var responses []model.CommentResponse
@@ -270,7 +270,7 @@ func (s *commentService) ListByUserID(ctx context.Context, userID uint) ([]model
 
 	comments, err := s.commentRepo.ListByUserID(ctx, userID)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	var responses []model.CommentResponse
@@ -287,20 +287,20 @@ func (s *commentService) UpdateStatus(ctx context.Context, id uint, status model
 	s.logger.Info("CommentService.UpdateStatus", "comment_id", id, "status", status)
 
 	if !s.isValidStatus(status) {
-		return fmt.Errorf("%w: %w", response.BadRequest, ErrInvalidStatus)
+		return fmt.Errorf("%s: %w", response.BadRequest, ErrInvalidStatus)
 	}
 
 	_, err := s.commentRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrCommentNotFound) {
-			return fmt.Errorf("%w: %w", response.UserNotFound, ErrCommentNotFound)
+			return fmt.Errorf("%s: %w", response.UserNotFound, ErrCommentNotFound)
 		}
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if err := s.commentRepo.UpdateStatus(ctx, id, status); err != nil {
 		s.logger.Error("Failed to update comment status", "error", err, "comment_id", id, "duration", time.Since(start))
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	s.logger.Info("CommentService.UpdateStatus success", "comment_id", id, "duration", time.Since(start))
@@ -314,14 +314,14 @@ func (s *commentService) IncrementLikeCount(ctx context.Context, id uint, delta 
 	_, err := s.commentRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrCommentNotFound) {
-			return fmt.Errorf("%w: %w", response.UserNotFound, ErrCommentNotFound)
+			return fmt.Errorf("%s: %w", response.UserNotFound, ErrCommentNotFound)
 		}
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if err := s.commentRepo.IncrementLikeCount(ctx, id, delta); err != nil {
 		s.logger.Error("Failed to increment like count", "error", err, "comment_id", id, "duration", time.Since(start))
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	s.logger.Info("CommentService.IncrementLikeCount success", "comment_id", id, "duration", time.Since(start))
@@ -332,9 +332,9 @@ func (s *commentService) validateWorkExists(ctx context.Context, workID uint) er
 	_, err := s.workRepo.GetByID(ctx, workID)
 	if err != nil {
 		if errors.Is(err, repository.ErrWorkNotFound) {
-			return fmt.Errorf("%w: %w", response.BadRequest, ErrWorkNotFound)
+			return fmt.Errorf("%s: %w", response.BadRequest, ErrWorkNotFound)
 		}
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 	return nil
 }

@@ -57,28 +57,28 @@ func (s *regionService) Create(ctx context.Context, region *model.Region) (*mode
 
 	existing, err := s.regionRepo.GetByCode(ctx, region.Code)
 	if err != nil && !errors.Is(err, repository.ErrRegionNotFound) {
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 	if existing != nil {
-		return nil, fmt.Errorf("%w: %w", response.ResourceConflict, ErrRegionCodeExists)
+		return nil, fmt.Errorf("%s: %w", response.ResourceConflict, ErrRegionCodeExists)
 	}
 
 	if region.ParentID != 0 {
 		parent, err := s.regionRepo.GetByID(ctx, region.ParentID)
 		if err != nil {
 			if errors.Is(err, repository.ErrRegionNotFound) {
-				return nil, fmt.Errorf("%w: 上级地区不存在", response.BadRequest)
+				return nil, fmt.Errorf("%s: 上级地区不存在", response.BadRequest)
 			}
-			return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+			return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 		}
 		if parent.Level >= region.Level {
-			return nil, fmt.Errorf("%w: 下级地区的级别必须大于上级地区", response.BadRequest)
+			return nil, fmt.Errorf("%s: 下级地区的级别必须大于上级地区", response.BadRequest)
 		}
 	}
 
 	if err := s.regionRepo.Create(ctx, region); err != nil {
 		s.logger.Error("Failed to create region", "error", err, "duration", time.Since(start))
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	resp, err := s.GetByID(ctx, region.ID)
@@ -97,18 +97,18 @@ func (s *regionService) Update(ctx context.Context, id uint, region *model.Regio
 	existing, err := s.regionRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrRegionNotFound) {
-			return nil, fmt.Errorf("%w: %w", response.UserNotFound, ErrRegionNotFound)
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrRegionNotFound)
 		}
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if region.Code != "" && region.Code != existing.Code {
 		codeExists, err := s.regionRepo.GetByCode(ctx, region.Code)
 		if err != nil && !errors.Is(err, repository.ErrRegionNotFound) {
-			return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+			return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 		}
 		if codeExists != nil && codeExists.ID != id {
-			return nil, fmt.Errorf("%w: %w", response.ResourceConflict, ErrRegionCodeExists)
+			return nil, fmt.Errorf("%s: %w", response.ResourceConflict, ErrRegionCodeExists)
 		}
 	}
 
@@ -121,7 +121,7 @@ func (s *regionService) Update(ctx context.Context, id uint, region *model.Regio
 	region.ID = id
 	if err := s.regionRepo.Update(ctx, region); err != nil {
 		s.logger.Error("Failed to update region", "error", err, "region_id", id, "duration", time.Since(start))
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	resp, err := s.GetByID(ctx, id)
@@ -139,15 +139,15 @@ func (s *regionService) Delete(ctx context.Context, id uint) error {
 
 	children, err := s.regionRepo.ListByParentID(ctx, id)
 	if err != nil {
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 	if len(children) > 0 {
-		return fmt.Errorf("%w: %w", response.BadRequest, ErrCannotDeleteRegion)
+		return fmt.Errorf("%s: %w", response.BadRequest, ErrCannotDeleteRegion)
 	}
 
 	if err := s.regionRepo.Delete(ctx, id); err != nil {
 		s.logger.Error("Failed to delete region", "error", err, "region_id", id, "duration", time.Since(start))
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	s.logger.Info("RegionService.Delete success", "region_id", id, "duration", time.Since(start))
@@ -160,9 +160,9 @@ func (s *regionService) GetByID(ctx context.Context, id uint) (*model.RegionResp
 	region, err := s.regionRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrRegionNotFound) {
-			return nil, fmt.Errorf("%w: %w", response.UserNotFound, ErrRegionNotFound)
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrRegionNotFound)
 		}
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	resp := s.toRegionResponse(region)
@@ -177,9 +177,9 @@ func (s *regionService) GetByCode(ctx context.Context, code string) (*model.Regi
 	region, err := s.regionRepo.GetByCode(ctx, code)
 	if err != nil {
 		if errors.Is(err, repository.ErrRegionNotFound) {
-			return nil, fmt.Errorf("%w: %w", response.UserNotFound, ErrRegionNotFound)
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrRegionNotFound)
 		}
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	resp := s.toRegionResponse(region)
@@ -194,9 +194,9 @@ func (s *regionService) GetByIDWithChildren(ctx context.Context, id uint) (*mode
 	region, err := s.regionRepo.GetByIDWithChildren(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrRegionNotFound) {
-			return nil, fmt.Errorf("%w: %w", response.UserNotFound, ErrRegionNotFound)
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrRegionNotFound)
 		}
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	resp := s.toRegionResponse(region)
@@ -211,7 +211,7 @@ func (s *regionService) List(ctx context.Context, orderBy string) ([]model.Regio
 
 	regions, err := s.regionRepo.List(ctx, orderBy)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	var responses []model.RegionResponse
@@ -229,7 +229,7 @@ func (s *regionService) ListRoot(ctx context.Context) ([]model.RegionResponse, e
 
 	regions, err := s.regionRepo.ListRoot(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	var responses []model.RegionResponse
@@ -247,7 +247,7 @@ func (s *regionService) ListByParentID(ctx context.Context, parentID uint) ([]mo
 
 	regions, err := s.regionRepo.ListByParentID(ctx, parentID)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	var responses []model.RegionResponse
@@ -269,7 +269,7 @@ func (s *regionService) ListByLevel(ctx context.Context, level int8) ([]model.Re
 
 	regions, err := s.regionRepo.ListByLevel(ctx, level)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	var responses []model.RegionResponse
@@ -287,7 +287,7 @@ func (s *regionService) ListHeritageCenters(ctx context.Context) ([]model.Region
 
 	regions, err := s.regionRepo.ListHeritageCenters(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	var responses []model.RegionResponse
@@ -301,7 +301,7 @@ func (s *regionService) ListHeritageCenters(ctx context.Context) ([]model.Region
 
 func (s *regionService) validateLevel(level int8) error {
 	if level < 1 || level > 5 {
-		return fmt.Errorf("%w: %w", response.BadRequest, ErrInvalidRegionLevel)
+		return fmt.Errorf("%s: %w", response.BadRequest, ErrInvalidRegionLevel)
 	}
 	return nil
 }

@@ -63,15 +63,15 @@ func (s *craftService) Create(ctx context.Context, craft *model.Craft) (*model.C
 
 	existing, err := s.craftRepo.GetByName(ctx, craft.Name)
 	if err != nil && !errors.Is(err, repository.ErrCraftNotFound) {
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 	if existing != nil {
-		return nil, fmt.Errorf("%w: %w", response.ResourceConflict, ErrCraftNameExists)
+		return nil, fmt.Errorf("%s: %w", response.ResourceConflict, ErrCraftNameExists)
 	}
 
 	if err := s.craftRepo.Create(ctx, craft); err != nil {
 		s.logger.Error("Failed to create craft", "error", err, "duration", time.Since(start))
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	resp, err := s.GetByIDWithCategory(ctx, craft.ID)
@@ -90,9 +90,9 @@ func (s *craftService) Update(ctx context.Context, id uint, craft *model.Craft) 
 	existing, err := s.craftRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrCraftNotFound) {
-			return nil, fmt.Errorf("%w: %w", response.UserNotFound, ErrCraftNotFound)
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrCraftNotFound)
 		}
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if craft.CategoryID != 0 && craft.CategoryID != existing.CategoryID {
@@ -108,17 +108,17 @@ func (s *craftService) Update(ctx context.Context, id uint, craft *model.Craft) 
 	if craft.Name != "" && craft.Name != existing.Name {
 		duplicate, err := s.craftRepo.GetByName(ctx, craft.Name)
 		if err != nil && !errors.Is(err, repository.ErrCraftNotFound) {
-			return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+			return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 		}
 		if duplicate != nil && duplicate.ID != id {
-			return nil, fmt.Errorf("%w: %w", response.ResourceConflict, ErrCraftNameExists)
+			return nil, fmt.Errorf("%s: %w", response.ResourceConflict, ErrCraftNameExists)
 		}
 	}
 
 	craft.ID = id
 	if err := s.craftRepo.Update(ctx, craft); err != nil {
 		s.logger.Error("Failed to update craft", "error", err, "craft_id", id, "duration", time.Since(start))
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	resp, err := s.GetByIDWithCategory(ctx, id)
@@ -137,14 +137,14 @@ func (s *craftService) Delete(ctx context.Context, id uint) error {
 	_, err := s.craftRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrCraftNotFound) {
-			return fmt.Errorf("%w: %w", response.UserNotFound, ErrCraftNotFound)
+			return fmt.Errorf("%s: %w", response.UserNotFound, ErrCraftNotFound)
 		}
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if err := s.craftRepo.Delete(ctx, id); err != nil {
 		s.logger.Error("Failed to delete craft", "error", err, "craft_id", id, "duration", time.Since(start))
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	s.logger.Info("CraftService.Delete success", "craft_id", id, "duration", time.Since(start))
@@ -157,9 +157,9 @@ func (s *craftService) GetByID(ctx context.Context, id uint) (*model.CraftRespon
 	craft, err := s.craftRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrCraftNotFound) {
-			return nil, fmt.Errorf("%w: %w", response.UserNotFound, ErrCraftNotFound)
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrCraftNotFound)
 		}
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	resp := s.toCraftResponse(craft)
@@ -174,9 +174,9 @@ func (s *craftService) GetByIDWithCategory(ctx context.Context, id uint) (*model
 	craft, err := s.craftRepo.GetByIDWithCategory(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrCraftNotFound) {
-			return nil, fmt.Errorf("%w: %w", response.UserNotFound, ErrCraftNotFound)
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrCraftNotFound)
 		}
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	resp := s.toCraftResponse(craft)
@@ -194,7 +194,7 @@ func (s *craftService) List(ctx context.Context, orderBy string) ([]model.CraftR
 
 	crafts, err := s.craftRepo.ListWithCategory(ctx, orderBy)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	var responses []model.CraftResponse
@@ -216,7 +216,7 @@ func (s *craftService) ListByCategory(ctx context.Context, categoryID uint) ([]m
 
 	crafts, err := s.craftRepo.ListByCategoryID(ctx, categoryID)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	var responses []model.CraftResponse
@@ -238,7 +238,7 @@ func (s *craftService) ListByDifficulty(ctx context.Context, difficulty int8) ([
 
 	crafts, err := s.craftRepo.ListByDifficulty(ctx, difficulty)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	var responses []model.CraftResponse
@@ -257,16 +257,16 @@ func (s *craftService) validateCategoryExists(ctx context.Context, categoryID ui
 	_, err := s.categoryRepo.GetByID(ctx, categoryID)
 	if err != nil {
 		if errors.Is(err, repository.ErrICHCategoryNotFound) {
-			return fmt.Errorf("%w: %w", response.BadRequest, ErrCategoryNotFound)
+			return fmt.Errorf("%s: %w", response.BadRequest, ErrCategoryNotFound)
 		}
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 	return nil
 }
 
 func (s *craftService) validateDifficulty(difficulty int8) error {
 	if difficulty < 0 || difficulty > 5 {
-		return fmt.Errorf("%w: %w", response.BadRequest, ErrInvalidDifficulty)
+		return fmt.Errorf("%s: %w", response.BadRequest, ErrInvalidDifficulty)
 	}
 	return nil
 }

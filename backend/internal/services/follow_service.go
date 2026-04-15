@@ -52,7 +52,7 @@ func (s *followService) Create(ctx context.Context, followerID, followingID uint
 	s.logger.Info("FollowService.Create", "follower_id", followerID, "following_id", followingID)
 
 	if followerID == followingID {
-		return nil, fmt.Errorf("%w: %w", response.BadRequest, ErrCannotFollowSelf)
+		return nil, fmt.Errorf("%s: %w", response.BadRequest, ErrCannotFollowSelf)
 	}
 
 	if err := s.validateUserExists(ctx, followerID); err != nil {
@@ -64,10 +64,10 @@ func (s *followService) Create(ctx context.Context, followerID, followingID uint
 
 	exists, err := s.followRepo.Exists(ctx, followerID, followingID)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 	if exists {
-		return nil, fmt.Errorf("%w: %w", response.ResourceConflict, ErrAlreadyFollowing)
+		return nil, fmt.Errorf("%s: %w", response.ResourceConflict, ErrAlreadyFollowing)
 	}
 
 	follow := &model.Follow{
@@ -77,7 +77,7 @@ func (s *followService) Create(ctx context.Context, followerID, followingID uint
 
 	if err := s.followRepo.Create(ctx, follow); err != nil {
 		s.logger.Error("Failed to create follow", "error", err, "duration", time.Since(start))
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	resp := &model.FollowResponse{
@@ -96,15 +96,15 @@ func (s *followService) Delete(ctx context.Context, followerID, followingID uint
 
 	exists, err := s.followRepo.Exists(ctx, followerID, followingID)
 	if err != nil {
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 	if !exists {
-		return fmt.Errorf("%w: %w", response.UserNotFound, ErrNotFollowing)
+		return fmt.Errorf("%s: %w", response.UserNotFound, ErrNotFollowing)
 	}
 
 	if err := s.followRepo.Delete(ctx, followerID, followingID); err != nil {
 		s.logger.Error("Failed to delete follow", "error", err, "duration", time.Since(start))
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	s.logger.Info("FollowService.Delete success", "duration", time.Since(start))
@@ -117,7 +117,7 @@ func (s *followService) IsFollowing(ctx context.Context, followerID, followingID
 	isFollowing, err := s.followRepo.IsFollowing(ctx, followerID, followingID)
 	if err != nil {
 		s.logger.Error("Failed to check follow status", "error", err, "duration", time.Since(start))
-		return false, fmt.Errorf("%w: %w", response.InternalError, err)
+		return false, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	s.logger.Info("FollowService.IsFollowing success", "is_following", isFollowing, "duration", time.Since(start))
@@ -130,7 +130,7 @@ func (s *followService) GetFollowingList(ctx context.Context, userID uint) ([]mo
 
 	follows, err := s.followRepo.GetFollowingList(ctx, userID, "created_at desc")
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	var responses []model.FollowResponse
@@ -152,7 +152,7 @@ func (s *followService) GetFollowerList(ctx context.Context, userID uint) ([]mod
 
 	follows, err := s.followRepo.GetFollowerList(ctx, userID, "created_at desc")
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	var responses []model.FollowResponse
@@ -174,7 +174,7 @@ func (s *followService) GetFollowingCount(ctx context.Context, userID uint) (int
 	count, err := s.followRepo.CountFollowing(ctx, userID)
 	if err != nil {
 		s.logger.Error("Failed to count following", "error", err, "duration", time.Since(start))
-		return 0, fmt.Errorf("%w: %w", response.InternalError, err)
+		return 0, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	s.logger.Info("FollowService.GetFollowingCount success", "count", count, "duration", time.Since(start))
@@ -187,7 +187,7 @@ func (s *followService) GetFollowerCount(ctx context.Context, userID uint) (int6
 	count, err := s.followRepo.CountFollowers(ctx, userID)
 	if err != nil {
 		s.logger.Error("Failed to count followers", "error", err, "duration", time.Since(start))
-		return 0, fmt.Errorf("%w: %w", response.InternalError, err)
+		return 0, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	s.logger.Info("FollowService.GetFollowerCount success", "count", count, "duration", time.Since(start))
@@ -198,9 +198,9 @@ func (s *followService) validateUserExists(ctx context.Context, userID uint) err
 	_, err := s.userRepo.GetByID(ctx, userID)
 	if err != nil {
 		if errors.Is(err, repository.ErrUserNotFound) {
-			return fmt.Errorf("%w: %w", response.BadRequest, ErrUserNotFound)
+			return fmt.Errorf("%s: %w", response.BadRequest, ErrUserNotFound)
 		}
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 	return nil
 }

@@ -78,12 +78,12 @@ func (s *workService) Create(ctx context.Context, req *model.CreateWorkRequest, 
 
 	techniqueTags, err := s.convertToJSON(req.TechniqueTags)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", response.BadRequest, err)
+		return nil, fmt.Errorf("%s: %w", response.BadRequest, err)
 	}
 
 	materials, err := s.convertToJSON(req.Materials)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", response.BadRequest, err)
+		return nil, fmt.Errorf("%s: %w", response.BadRequest, err)
 	}
 
 	work := &model.Work{
@@ -104,7 +104,7 @@ func (s *workService) Create(ctx context.Context, req *model.CreateWorkRequest, 
 
 	if err := s.workRepo.Create(ctx, work); err != nil {
 		s.logger.Error("Failed to create work", "error", err, "duration", time.Since(start))
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if err := s.createMedia(ctx, work.ID, req.Media); err != nil {
@@ -129,9 +129,9 @@ func (s *workService) Update(ctx context.Context, id uint, req *model.CreateWork
 	work, err := s.workRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrWorkNotFound) {
-			return nil, fmt.Errorf("%w: %w", response.UserNotFound, ErrWorkNotFound)
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrWorkNotFound)
 		}
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if req.CraftID != 0 {
@@ -160,7 +160,7 @@ func (s *workService) Update(ctx context.Context, id uint, req *model.CreateWork
 	if req.TechniqueTags != nil {
 		techniqueTags, err := s.convertToJSON(req.TechniqueTags)
 		if err != nil {
-			return nil, fmt.Errorf("%w: %w", response.BadRequest, err)
+			return nil, fmt.Errorf("%s: %w", response.BadRequest, err)
 		}
 		work.TechniqueTags = techniqueTags
 	}
@@ -168,7 +168,7 @@ func (s *workService) Update(ctx context.Context, id uint, req *model.CreateWork
 	if req.Materials != nil {
 		materials, err := s.convertToJSON(req.Materials)
 		if err != nil {
-			return nil, fmt.Errorf("%w: %w", response.BadRequest, err)
+			return nil, fmt.Errorf("%s: %w", response.BadRequest, err)
 		}
 		work.Materials = materials
 	}
@@ -179,7 +179,7 @@ func (s *workService) Update(ctx context.Context, id uint, req *model.CreateWork
 
 	if err := s.workRepo.Update(ctx, work); err != nil {
 		s.logger.Error("Failed to update work", "error", err, "work_id", id, "duration", time.Since(start))
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if err := s.updateMedia(ctx, id, req.Media); err != nil {
@@ -203,23 +203,23 @@ func (s *workService) Delete(ctx context.Context, id uint) error {
 	work, err := s.workRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrWorkNotFound) {
-			return fmt.Errorf("%w: %w", response.UserNotFound, ErrWorkNotFound)
+			return fmt.Errorf("%s: %w", response.UserNotFound, ErrWorkNotFound)
 		}
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if work.Status == model.WorkStatusPublished {
-		return fmt.Errorf("%w: %w", response.BadRequest, ErrCannotDeleteWork)
+		return fmt.Errorf("%s: %w", response.BadRequest, ErrCannotDeleteWork)
 	}
 
 	if err := s.mediaRepo.DeleteByWorkID(ctx, id); err != nil {
 		s.logger.Error("Failed to delete work media", "error", err, "work_id", id)
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if err := s.workRepo.Delete(ctx, id); err != nil {
 		s.logger.Error("Failed to delete work", "error", err, "work_id", id, "duration", time.Since(start))
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	s.logger.Info("WorkService.Delete success", "work_id", id, "duration", time.Since(start))
@@ -232,9 +232,9 @@ func (s *workService) GetByID(ctx context.Context, id uint) (*model.WorkResponse
 	work, err := s.workRepo.GetByIDWithSelect(ctx, id, "User", "Craft")
 	if err != nil {
 		if errors.Is(err, repository.ErrWorkNotFound) {
-			return nil, fmt.Errorf("%w: %w", response.UserNotFound, ErrWorkNotFound)
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrWorkNotFound)
 		}
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	resp := s.toWorkResponse(work)
@@ -249,9 +249,9 @@ func (s *workService) GetByIDDetailed(ctx context.Context, id uint) (*model.Work
 	work, err := s.workRepo.GetByIDWithAll(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrWorkNotFound) {
-			return nil, fmt.Errorf("%w: %w", response.UserNotFound, ErrWorkNotFound)
+			return nil, fmt.Errorf("%s: %w", response.UserNotFound, ErrWorkNotFound)
 		}
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	resp := s.toWorkResponse(work)
@@ -281,13 +281,13 @@ func (s *workService) List(ctx context.Context, req *model.WorkListRequest) ([]m
 	case req.UserID != 0:
 		works, err = s.workRepo.ListByUserID(ctx, req.UserID)
 		if err != nil {
-			return nil, 0, fmt.Errorf("%w: %w", response.InternalError, err)
+			return nil, 0, fmt.Errorf("%s: %w", response.InternalError, err)
 		}
 		total = int64(len(works))
 	case req.CraftID != 0:
 		works, err = s.workRepo.ListByCraftID(ctx, req.CraftID)
 		if err != nil {
-			return nil, 0, fmt.Errorf("%w: %w", response.InternalError, err)
+			return nil, 0, fmt.Errorf("%s: %w", response.InternalError, err)
 		}
 		total = int64(len(works))
 	default:
@@ -298,7 +298,7 @@ func (s *workService) List(ctx context.Context, req *model.WorkListRequest) ([]m
 			works, total, err = s.workRepo.ListWithPagination(ctx, req.Page, req.PageSize, orderBy)
 		}
 		if err != nil {
-			return nil, 0, fmt.Errorf("%w: %w", response.InternalError, err)
+			return nil, 0, fmt.Errorf("%s: %w", response.InternalError, err)
 		}
 	}
 
@@ -321,7 +321,7 @@ func (s *workService) ListTop(ctx context.Context, limit int) ([]model.WorkRespo
 
 	works, err := s.workRepo.ListTop(ctx, limit)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	var responses []model.WorkResponse
@@ -343,7 +343,7 @@ func (s *workService) ListRecommended(ctx context.Context, limit int) ([]model.W
 
 	works, err := s.workRepo.ListRecommended(ctx, limit)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", response.InternalError, err)
+		return nil, fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	var responses []model.WorkResponse
@@ -360,20 +360,20 @@ func (s *workService) UpdateStatus(ctx context.Context, id uint, status model.Wo
 	s.logger.Info("WorkService.UpdateStatus", "work_id", id, "status", status)
 
 	if !s.isValidWorkStatus(status) {
-		return fmt.Errorf("%w: %w", response.BadRequest, ErrInvalidWorkStatus)
+		return fmt.Errorf("%s: %w", response.BadRequest, ErrInvalidWorkStatus)
 	}
 
 	_, err := s.workRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrWorkNotFound) {
-			return fmt.Errorf("%w: %w", response.UserNotFound, ErrWorkNotFound)
+			return fmt.Errorf("%s: %w", response.UserNotFound, ErrWorkNotFound)
 		}
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if err := s.workRepo.UpdateStatus(ctx, id, status); err != nil {
 		s.logger.Error("Failed to update work status", "error", err, "work_id", id, "duration", time.Since(start))
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	s.logger.Info("WorkService.UpdateStatus success", "work_id", id, "duration", time.Since(start))
@@ -387,14 +387,14 @@ func (s *workService) IncrementCount(ctx context.Context, id uint, field string,
 	_, err := s.workRepo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrWorkNotFound) {
-			return fmt.Errorf("%w: %w", response.UserNotFound, ErrWorkNotFound)
+			return fmt.Errorf("%s: %w", response.UserNotFound, ErrWorkNotFound)
 		}
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if err := s.workRepo.IncrementCount(ctx, id, field, delta); err != nil {
 		s.logger.Error("Failed to increment count", "error", err, "work_id", id, "duration", time.Since(start))
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	s.logger.Info("WorkService.IncrementCount success", "work_id", id, "duration", time.Since(start))
@@ -419,7 +419,7 @@ func (s *workService) createMedia(ctx context.Context, workID uint, mediaItems [
 	}
 
 	if err := s.mediaRepo.CreateBatch(ctx, mediaList); err != nil {
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	return nil
@@ -427,7 +427,7 @@ func (s *workService) createMedia(ctx context.Context, workID uint, mediaItems [
 
 func (s *workService) updateMedia(ctx context.Context, workID uint, mediaItems []model.MediaItem) error {
 	if err := s.mediaRepo.DeleteByWorkID(ctx, workID); err != nil {
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 
 	if len(mediaItems) == 0 {
@@ -444,9 +444,9 @@ func (s *workService) validateCraftExists(ctx context.Context, craftID uint) err
 	_, err := s.craftRepo.GetByID(ctx, craftID)
 	if err != nil {
 		if errors.Is(err, repository.ErrCraftNotFound) {
-			return fmt.Errorf("%w: %w", response.BadRequest, ErrCraftNotFound)
+			return fmt.Errorf("%s: %w", response.BadRequest, ErrCraftNotFound)
 		}
-		return fmt.Errorf("%w: %w", response.InternalError, err)
+		return fmt.Errorf("%s: %w", response.InternalError, err)
 	}
 	return nil
 }
