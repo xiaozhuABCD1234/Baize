@@ -5,6 +5,21 @@ import Header from "@/components/Header.astro";
 import Sidebar from "@/components/Sidebar.astro";
 import ActivityFeed from "@/components/ActivityFeed.astro";
 import Footer from "@/components/Footer.astro";
+import { craftService, categoryService, regionService } from "../services";
+import type { Craft, Category, Region } from "../services";
+
+let crafts: Craft[] = [];
+let categories: Category[] = [];
+let regions: Region[] = [];
+
+// 获取技艺、分类和地区数据
+try {
+  crafts = await craftService.list();
+  categories = await categoryService.listActive();
+  regions = await regionService.listRoot();
+} catch (error) {
+  console.error('Error fetching data:', error);
+}
 ---
 
 <Layout>
@@ -46,81 +61,359 @@ import Footer from "@/components/Footer.astro";
 				</div>
 
 				<div class="bg-card rounded-2xl shadow-lg border border-border p-8 md:p-10">
-					<form class="space-y-8">
+					<form class="space-y-8" onsubmit="event.preventDefault(); handleSubmit(event)">
 						<!-- 上传区域 -->
-						<div class="border-2 border-dashed border-muted-foreground/20 rounded-xl p-8 text-center">
-							<div class="flex flex-col items-center gap-3">
-								<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground">
-									<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-									<polyline points="17 8 12 3 7 8"></polyline>
-									<line x1="12" y1="3" x2="12" y2="15"></line>
-								</svg>
-								<div>
-									<p class="text-foreground font-medium">点击或拖拽文件至此处</p>
-									<p class="text-sm text-muted-foreground mt-1">支持 JPG、PNG、MP4 格式，单个文件最大 500MB</p>
-								</div>
-								<button type="button" class="mt-2 bg-primary text-primary-foreground px-4 py-2 rounded-md">
-									选择文件
-								</button>
-								<input type="file" class="hidden" />
+					<div class="border-2 border-dashed border-muted-foreground/20 rounded-xl p-8 text-center" id="upload-area">
+						<div class="flex flex-col items-center gap-3">
+							<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground">
+								<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+								<polyline points="17 8 12 3 7 8"></polyline>
+								<line x1="12" y1="3" x2="12" y2="15"></line>
+							</svg>
+							<div>
+								<p class="text-foreground font-medium">点击或拖拽文件至此处</p>
+								<p class="text-sm text-muted-foreground mt-1">支持 JPG、PNG、MP4 格式，单个文件最大 500MB</p>
 							</div>
+							<button type="button" class="mt-2 bg-primary text-primary-foreground px-4 py-2 rounded-md" onclick="document.getElementById('file-input').click()">
+								选择文件
+							</button>
+							<input type="file" id="file-input" class="hidden" multiple accept="image/*,video/mp4" />
+							<div id="file-list" class="mt-4 w-full text-left"></div>
 						</div>
+					</div>
 
 						<!-- 表单 -->
-						<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-							<div class="space-y-2">
-								<label class="text-sm font-medium text-foreground">作品名称 *</label>
-								<input 
-									type="text"
-									placeholder="请输入作品名称"
-									class="w-full px-4 py-2.5 rounded-md border border-input bg-background"
-								/>
-							</div>
-
-							<div class="space-y-2">
-								<label class="text-sm font-medium text-foreground">非遗类别 *</label>
-								<select class="w-full px-4 py-2.5 rounded-md border border-input bg-background">
-									<option value="">请选择类别</option>
-									<option>传统美术</option>
-									<option>传统技艺</option>
-									<option>传统音乐</option>
-									<option>传统舞蹈</option>
-									<option>其他</option>
-								</select>
-							</div>
-						</div>
-
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 						<div class="space-y-2">
-							<label class="text-sm font-medium text-foreground">传承人/作者 *</label>
+							<label class="text-sm font-medium text-foreground">作品名称 *</label>
 							<input 
 								type="text"
-								placeholder="请输入传承人或作者姓名"
+								id="title"
+								placeholder="请输入作品名称"
 								class="w-full px-4 py-2.5 rounded-md border border-input bg-background"
+								required
 							/>
 						</div>
 
 						<div class="space-y-2">
-							<label class="text-sm font-medium text-foreground">作品描述</label>
-							<textarea 
-								rows="4"
-								placeholder="介绍作品背景、制作工艺、文化内涵等"
-								class="w-full px-4 py-2.5 rounded-md border border-input bg-background"
-							></textarea>
+							<label class="text-sm font-medium text-foreground">非遗类别 *</label>
+							<select id="category_id" class="w-full px-4 py-2.5 rounded-md border border-input bg-background" required onchange="toggleOtherInput('category')">
+								<option value="">请选择类别</option>
+								{categories.map(category => (
+									<option value={category.id}>{category.name}</option>
+								))}
+								<option value="other">其他</option>
+							</select>
+							<div id="category_other_container" class="mt-2 hidden">
+								<input 
+									type="text"
+									id="category_other"
+									placeholder="请输入其他类别"
+									class="w-full px-4 py-2.5 rounded-md border border-input bg-background"
+								/>
+							</div>
 						</div>
 
+						<div class="space-y-2">
+							<label class="text-sm font-medium text-foreground">技艺 *</label>
+							<select id="craft_id" class="w-full px-4 py-2.5 rounded-md border border-input bg-background" required onchange="toggleOtherInput('craft')">
+								<option value="">请选择技艺</option>
+								{crafts.map(craft => (
+									<option value={craft.id}>{craft.name}</option>
+								))}
+								<option value="other">其他</option>
+							</select>
+							<div id="craft_other_container" class="mt-2 hidden">
+								<input 
+									type="text"
+									id="craft_other"
+									placeholder="请输入其他技艺"
+									class="w-full px-4 py-2.5 rounded-md border border-input bg-background"
+								/>
+							</div>
+						</div>
+
+						<div class="space-y-2">
+							<label class="text-sm font-medium text-foreground">地区 *</label>
+							<select id="region_id" class="w-full px-4 py-2.5 rounded-md border border-input bg-background" required onchange="toggleOtherInput('region')">
+								<option value="">请选择地区</option>
+								{regions.map(region => (
+									<option value={region.id}>{region.name}</option>
+								))}
+								<option value="other">其他</option>
+							</select>
+							<div id="region_other_container" class="mt-2 hidden">
+								<input 
+									type="text"
+									id="region_other"
+									placeholder="请输入其他地区"
+									class="w-full px-4 py-2.5 rounded-md border border-input bg-background"
+								/>
+							</div>
+						</div>
+					</div>
+
+					<div class="space-y-2">
+						<label class="text-sm font-medium text-foreground">传承人/作者 *</label>
+						<input 
+							type="text"
+							id="author"
+							placeholder="请输入传承人或作者姓名"
+							class="w-full px-4 py-2.5 rounded-md border border-input bg-background"
+							required
+						/>
+					</div>
+
+					<div class="space-y-2">
+						<label class="text-sm font-medium text-foreground">作品描述</label>
+						<textarea 
+							rows="4"
+							id="description"
+							placeholder="介绍作品背景、制作工艺、文化内涵等"
+							class="w-full px-4 py-2.5 rounded-md border border-input bg-background"
+						></textarea>
+					</div>
+
+					<div class="flex items-center gap-2">
+						<input type="checkbox" id="is_master" class="rounded border-input text-primary focus-visible:ring-primary" />
+						<label for="is_master" class="text-sm font-medium text-foreground">标记为大师作品</label>
+					</div>
+
 						<!-- 提交按钮 -->
-						<button type="button" class="w-full py-3 bg-primary text-primary-foreground text-base font-medium rounded-md flex items-center justify-center">
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
-								<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-								<polyline points="7 10 12 5 17 10"></polyline>
-								<line x1="12" y1="5" x2="12" y2="15"></line>
-							</svg>
-							提交上传
-						</button>
+					<button type="submit" class="w-full py-3 bg-primary text-primary-foreground text-base font-medium rounded-md flex items-center justify-center" id="submit-btn">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+							<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+							<polyline points="22 4 12 14.01 9 11.01"></polyline>
+						</svg>
+						提交上传
+					</button>
+
+					<!-- 上传结果提示 -->
+					<div id="upload-result" class="mt-4 hidden"></div>
 					</form>
 				</div>
 			</div>
 		</section>
 	</main>
+
+	<script>
+		// 文件上传处理
+		const fileInput = document.getElementById('file-input') as HTMLInputElement | null;
+		const fileList = document.getElementById('file-list') as HTMLElement | null;
+		const uploadArea = document.getElementById('upload-area') as HTMLElement | null;
+		const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+		const uploadResult = document.getElementById('upload-result') as HTMLElement | null;
+		
+		let selectedFiles: File[] = [];
+
+		// 处理文件选择
+		fileInput?.addEventListener('change', function(e) {
+			const target = e.target as HTMLInputElement;
+			if (target.files && target.files.length > 0) {
+				selectedFiles = Array.from(target.files);
+				updateFileList();
+			}
+		});
+
+		// 处理拖拽上传
+		uploadArea?.addEventListener('dragover', function(e) {
+			e.preventDefault();
+			uploadArea.classList.add('border-primary');
+		});
+
+		uploadArea?.addEventListener('dragleave', function() {
+			uploadArea?.classList.remove('border-primary');
+		});
+
+		uploadArea?.addEventListener('drop', function(e) {
+			e.preventDefault();
+			uploadArea?.classList.remove('border-primary');
+			
+			if (e.dataTransfer && e.dataTransfer.files.length > 0) {
+				selectedFiles = Array.from(e.dataTransfer.files);
+				updateFileList();
+			}
+		});
+
+		// 更新文件列表显示
+		function updateFileList() {
+			if (!fileList) return;
+			fileList.innerHTML = '';
+			selectedFiles.forEach((file, index) => {
+				const fileItem = document.createElement('div');
+				fileItem.className = 'flex items-center justify-between p-2 bg-muted rounded-md mb-1';
+				fileItem.innerHTML = `
+					<span class="text-sm">${file.name}</span>
+					<button type="button" class="text-muted-foreground hover:text-foreground" onclick="removeFile(${index})">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<line x1="18" y1="6" x2="6" y2="18"></line>
+							<line x1="6" y1="6" x2="18" y2="18"></line>
+						</svg>
+					</button>
+				`;
+				fileList.appendChild(fileItem);
+			});
+		}
+
+		// 移除文件
+		function removeFile(index: number) {
+			selectedFiles.splice(index, 1);
+			updateFileList();
+		}
+
+		// 提交表单
+		async function handleSubmit() {
+			// 显示加载状态
+			if (submitBtn) {
+				submitBtn.disabled = true;
+				submitBtn.innerHTML = '<svg class="animate-spin mr-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>上传中...';
+			}
+			if (uploadResult) {
+				uploadResult.className = 'mt-4 hidden';
+			}
+
+			try {
+				// 收集表单数据
+				const titleInput = document.getElementById('title') as HTMLInputElement | null;
+				const craftIdInput = document.getElementById('craft_id') as HTMLSelectElement | null;
+				const craftOtherInput = document.getElementById('craft_other') as HTMLInputElement | null;
+				const categoryIdInput = document.getElementById('category_id') as HTMLSelectElement | null;
+				const categoryOtherInput = document.getElementById('category_other') as HTMLInputElement | null;
+				const regionIdInput = document.getElementById('region_id') as HTMLSelectElement | null;
+				const regionOtherInput = document.getElementById('region_other') as HTMLInputElement | null;
+				const descriptionInput = document.getElementById('description') as HTMLTextAreaElement | null;
+				const isMasterInput = document.getElementById('is_master') as HTMLInputElement | null;
+
+				// 处理“其他”选项
+				const craftId = craftIdInput?.value === 'other' ? 0 : (craftIdInput?.value ? parseInt(craftIdInput.value) : 0);
+				const categoryId = categoryIdInput?.value === 'other' ? 0 : (categoryIdInput?.value ? parseInt(categoryIdInput.value) : 0);
+				const regionId = regionIdInput?.value === 'other' ? 0 : (regionIdInput?.value ? parseInt(regionIdInput.value) : 0);
+
+				const formData = {
+					title: titleInput?.value || '',
+					craft_id: craftId,
+					category_id: categoryId,
+					region_id: regionId,
+					content: descriptionInput?.value || '',
+					content_type: 1, // 1: 作品
+					technique_tags: [] as string[], // 技术标签
+					materials: [] as string[], // 材料
+					media: [] as Array<{ url: string; media_type: number }>
+				};
+
+				// 模拟媒体上传（实际项目中需要先上传文件到服务器）
+				// 这里我们假设文件已经上传，只需要提供URL
+				selectedFiles.forEach((file) => {
+					// 实际项目中，这里应该调用文件上传API
+					// 这里使用模拟URL
+					formData.media.push({
+						media_type: file.type.startsWith('image/') ? 1 : 2, // 1: 图片, 2: 视频
+						url: `https://example.com/uploads/${file.name}`
+					});
+				});
+
+				// 调用创建作品API
+				const result = await fetch('http://localhost:1323/api/v1/works', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': `Bearer ${localStorage.getItem('token')}`
+					},
+					body: JSON.stringify(formData)
+				});
+
+				const data = await result.json();
+
+				if (result.ok && !data.error) {
+					// 上传成功
+					if (uploadResult) {
+						uploadResult.className = 'mt-4 p-4 bg-green-50 text-green-700 rounded-md';
+						uploadResult.innerHTML = `
+							<div class="flex items-center gap-2">
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+									<polyline points="22 4 12 14.01 9 11.01"></polyline>
+								</svg>
+								<span>作品上传成功！</span>
+							</div>
+							<p class="mt-2 text-sm">您的作品已成功上传，正在审核中。</p>
+						`;
+					}
+
+					// 重置表单
+					setTimeout(() => {
+						titleInput && (titleInput.value = '');
+						craftIdInput && (craftIdInput.value = '');
+						categoryIdInput && (categoryIdInput.value = '');
+						regionIdInput && (regionIdInput.value = '');
+						const authorInput = document.getElementById('author') as HTMLInputElement | null;
+						authorInput && (authorInput.value = '');
+						descriptionInput && (descriptionInput.value = '');
+						isMasterInput && (isMasterInput.checked = false);
+						selectedFiles = [];
+						updateFileList();
+						if (submitBtn) {
+							submitBtn.disabled = false;
+							submitBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 5 17 10"></polyline><line x1="12" y1="5" x2="12" y2="15"></line></svg>提交上传';
+						}
+					}, 2000);
+				} else {
+					// 上传失败
+					if (uploadResult) {
+						uploadResult.className = 'mt-4 p-4 bg-red-50 text-red-700 rounded-md';
+						uploadResult.innerHTML = `
+							<div class="flex items-center gap-2">
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<circle cx="12" cy="12" r="10"></circle>
+									<line x1="15" y1="9" x2="9" y2="15"></line>
+									<line x1="9" y1="9" x2="15" y2="15"></line>
+								</svg>
+								<span>上传失败</span>
+							</div>
+							<p class="mt-2 text-sm">${data.error?.message || '请稍后重试'}</p>
+						`;
+					}
+					if (submitBtn) {
+						submitBtn.disabled = false;
+						submitBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 5 17 10"></polyline><line x1="12" y1="5" x2="12" y2="15"></line></svg>提交上传';
+					}
+				}
+			} catch (error) {
+				// 上传失败
+				if (uploadResult) {
+					uploadResult.className = 'mt-4 p-4 bg-red-50 text-red-700 rounded-md';
+					uploadResult.innerHTML = `
+						<div class="flex items-center gap-2">
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<circle cx="12" cy="12" r="10"></circle>
+								<line x1="15" y1="9" x2="9" y2="15"></line>
+								<line x1="9" y1="9" x2="15" y2="15"></line>
+							</svg>
+							<span>上传失败</span>
+						</div>
+						<p class="mt-2 text-sm">网络错误，请稍后重试</p>
+					`;
+				}
+				if (submitBtn) {
+					submitBtn.disabled = false;
+					submitBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 5 17 10"></polyline><line x1="12" y1="5" x2="12" y2="15"></line></svg>提交上传';
+				}
+			}
+		}
+
+		// 切换其他输入框显示
+		function toggleOtherInput(type: string) {
+			const selectElement = document.getElementById(`${type}_id`) as HTMLSelectElement;
+			const containerElement = document.getElementById(`${type}_other_container`);
+			if (selectElement && containerElement) {
+				containerElement.classList.toggle('hidden', selectElement.value !== 'other');
+			}
+		}
+
+		// 暴露函数到全局
+		(window as any).removeFile = removeFile;
+		(window as any).handleSubmit = handleSubmit;
+		(window as any).toggleOtherInput = toggleOtherInput;
+	</script>
 
 </Layout>

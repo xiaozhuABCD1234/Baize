@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.PUBLIC_API_BASE_URL || 'http://localhost:8080'
+const API_BASE = import.meta.env.PUBLIC_API_BASE_URL || 'http://localhost:1323'
 import type { ApiResponse } from './types'
 
 export interface AuthUser {
@@ -19,7 +19,7 @@ export interface LoginResponse {
 }
 
 async function request<T>(url: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(url, {
+  const res = await fetch(`${API_BASE}${url}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',

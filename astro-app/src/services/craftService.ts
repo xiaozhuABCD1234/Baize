@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.PUBLIC_API_BASE_URL || 'http://localhost:8080'
+const API_BASE = import.meta.env.PUBLIC_API_BASE_URL || 'http://localhost:1323'
 import type { ApiResponse, Craft } from './types'
 
 export interface CreateCraftRequest {
