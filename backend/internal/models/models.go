@@ -137,9 +137,9 @@ type Work struct {
 	CategoryID uint `gorm:"index:idx_work_category"`
 	RegionID   uint `gorm:"index:idx_work_region"`
 
-	TechniqueTags datatypes.JSON `gorm:"type:json"`     // 技艺标签（如：苏绣、乱针绣）
-	Materials     datatypes.JSON `gorm:"type:json"`     // 涉及材料（如：蚕丝、丝绒）
-	CreationTime  *time.Time     `gorm:"type:datetime"` // 作品实际创作时间（非发布时间）
+	TechniqueTags datatypes.JSON `gorm:"type:json"`        // 技艺标签（如：苏绣、乱针绣）
+	Materials     datatypes.JSON `gorm:"type:json"`        // 涉及材料（如：蚕丝、丝绒）
+	CreationTime  *time.Time      // 作品实际创作时间（非发布时间）
 
 	// 计数统计：冗余设计以支持高性能列表查询
 	ViewCount     uint `gorm:"default:0"`
@@ -214,7 +214,7 @@ const (
 // 支持两级嵌套（根评论 + 子回复）
 type Comment struct {
 	ID        uint      `gorm:"primarykey"`
-	CreatedAt time.Time `gorm:"type:datetime"`
+	CreatedAt time.Time 
 
 	WorkID    uint          `gorm:"not null;index:idx_comment_work"`
 	UserID    uint          `gorm:"not null;index:idx_comment_user"`
@@ -242,7 +242,7 @@ type Like struct {
 	UserID     uint      `gorm:"primaryKey"`
 	TargetType int8      `gorm:"primaryKey"` // 1:作品, 2:评论
 	TargetID   uint      `gorm:"primaryKey"`
-	CreatedAt  time.Time `gorm:"type:datetime"`
+	CreatedAt  time.Time 
 }
 
 // Favorite 收藏夹
@@ -252,7 +252,7 @@ type Favorite struct {
 	WorkID    uint      `gorm:"not null;uniqueIndex:uk_favorite_user_work"`
 	FolderID  uint      `gorm:"default:0;index:idx_favorite_folder"` // 支持用户分类收藏
 	Remark    string    `gorm:"size:255"`                            // 收藏时的个人备注
-	CreatedAt time.Time `gorm:"type:datetime"`
+	CreatedAt time.Time 
 
 	Work Work `gorm:"foreignKey:WorkID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
@@ -261,7 +261,7 @@ type Favorite struct {
 type Follow struct {
 	FollowerID  uint      `gorm:"primaryKey"` // 发起关注者
 	FollowingID uint      `gorm:"primaryKey"` // 被关注者
-	CreatedAt   time.Time `gorm:"type:datetime"`
+	CreatedAt   time.Time 
 }
 
 // =================================================================
@@ -276,8 +276,8 @@ type Follow struct {
 // 	MasterID       uint          `gorm:"not null;index:idx_lineage_master"` // 师傅 ID (User)
 // 	ApprenticeID   uint          `gorm:"not null;uniqueIndex"`              // 徒弟 ID (User)
 // 	Generation     int8          `gorm:"default:0"`                         // 传承代数（如：第 5 代传人）
-// 	StartDate      *time.Time    `gorm:"type:datetime"`                     // 拜师/入门时间
-// 	EndDate        *time.Time    `gorm:"type:datetime"`                     // 出师时间
+// 	StartDate      *time.Time                         // 拜师/入门时间
+// 	EndDate        *time.Time                         // 出师时间
 // 	CertificateURL string        `gorm:"size:500"`                          // 传承证明/证书
 // 	Status         LineageStatus `gorm:"default:1"`                         // 状态：在教/结业/中止
 
