@@ -6,10 +6,17 @@ import Sidebar from "@/components/Sidebar.astro";
 import ActivityFeed from "@/components/ActivityFeed.astro";
 import Footer from "@/components/Footer.astro";
 import KnowledgeCard from "@/components/KnowledgeCard.astro";
-import { getKnowledgeItems, knowledgeItems } from "@/data/knowledge";
+import { knowledgeService } from "../services";
+import type { KnowledgeItem } from "../services";
 
-// 获取科普数据
-const items = await getKnowledgeItems();
+// 从API获取科普数据
+let items: KnowledgeItem[] = [];
+try {
+  items = await knowledgeService.list();
+} catch (error) {
+  console.error('Error fetching knowledge items:', error);
+  items = [];
+}
 ---
 
 <Layout>
@@ -64,36 +71,53 @@ const items = await getKnowledgeItems();
 				<div id="content-people" class="content-section">
 					<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 						<!-- 提取所有传承人 -->
-						{items
-							.filter(item => item.inheritors && item.inheritors.length > 0)
-							.flatMap(item => item.inheritors!.map(inheritor => ({
-								...inheritor,
-								非遗项目: item.title,
-								非遗项目ID: item.id
-							})))
-							.map((inheritor, index) => (
-								<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border p-6">
-									<h4 class="text-xl font-semibold mb-2 text-primary">{inheritor.name}</h4>
-									<p class="text-sm text-muted-foreground mb-3">{inheritor.title}</p>
-									<p class="text-sm text-muted-foreground mb-3">所属项目：{inheritor.非遗项目}</p>
-									<p class="text-sm text-muted-foreground line-clamp-3 mb-4">{inheritor.bio}</p>
-									<a href={`/people/${inheritor.id}`} class="text-sm text-primary hover:underline">查看详情</a>
-								</div>
-							))}
+						{(() => {
+							const inheritors = items
+								.filter(item => item.inheritors && item.inheritors.length > 0)
+								.flatMap(item => item.inheritors!.map(inheritor => ({
+									...inheritor,
+									非遗项目: item.title,
+									非遗项目ID: item.id
+								})));
+							
+							if (inheritors.length > 0) {
+								return inheritors.map((inheritor, index) => (
+									<div class="bg-card rounded-xl overflow-hidden shadow hover:shadow-md transition-all border border-border p-6">
+										<h4 class="text-xl font-semibold mb-2 text-primary">{inheritor.name}</h4>
+										<p class="text-sm text-muted-foreground mb-3">{inheritor.title}</p>
+										<p class="text-sm text-muted-foreground mb-3">所属项目：{inheritor.非遗项目}</p>
+										<p class="text-sm text-muted-foreground line-clamp-3 mb-4">{inheritor.bio}</p>
+										<a href={`/people/${inheritor.id}`} class="text-sm text-primary hover:underline">查看详情</a>
+									</div>
+								));
+							} else {
+								return (
+									<div class="col-span-full bg-card rounded-xl p-8 text-center">
+										<p class="text-muted-foreground">暂无传承人数据</p>
+									</div>
+								);
+							}
+						})()}
 					</div>
 				</div>
 
 				<!-- 非遗项目介绍区域 -->
 				<div id="content-projects" class="content-section hidden">
 					<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-						{items.map((item) => (
-							<KnowledgeCard
-								id={item.id}
-								title={item.title}
-								description={item.description}
-								icon={item.icon}
-							/>
-						))}
+						{items.length > 0 ? (
+							items.map((item) => (
+								<KnowledgeCard
+									id={item.id}
+									title={item.title}
+									description={item.description}
+									icon={item.icon}
+								/>
+							))
+						) : (
+							<div class="col-span-full bg-card rounded-xl p-8 text-center">
+								<p class="text-muted-foreground">暂无项目数据</p>
+							</div>
+						)}
 					</div>
 				</div>
 

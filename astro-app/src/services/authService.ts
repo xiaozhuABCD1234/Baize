@@ -1,4 +1,5 @@
 const API_BASE = import.meta.env.PUBLIC_API_BASE_URL || 'http://localhost:8080'
+import type { ApiResponse } from './types'
 
 export interface AuthUser {
   id: number
@@ -15,14 +16,6 @@ export interface LoginResponse {
   user_type: string
   status: string
   token: string
-}
-
-interface ApiResponse<T = any> {
-  data: T
-  error?: {
-    code: string
-    message: string
-  }
 }
 
 async function request<T>(url: string, options?: RequestInit): Promise<T> {

@@ -23,6 +23,11 @@ export default defineConfig({
         },
       },
     },
+    resolve: {
+      alias: {
+        '@': './src',
+      },
+    },
   },
 
   integrations: [svelte(), vue(), react(), mdx()],

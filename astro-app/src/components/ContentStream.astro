@@ -1,75 +1,48 @@
 ---
-import ContentCard from "./ContentCard.astro";
+import { craftService } from "../services";
+import type { Craft } from "../services";
 
-const inheritors = [
-  {
-    id: "p1",
-    name: "陈少芳",
-    title: "国家级非物质文化遗产代表性传承人",
-    specialty: "上海剪纸",
-    imageUrl: "https://images.unsplash.com/photo-1604881991720-f91add269bed?w=400&h=300&fit=crop",
-    experience: "60年"
-  },
-  {
-    id: "p2",
-    name: "张灯",
-    title: "上海市非物质文化遗产代表性传承人",
-    specialty: "豫园灯会",
-    imageUrl: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=400&h=300&fit=crop",
-    experience: "50年"
-  },
-  {
-    id: "p3",
-    name: "余红仙",
-    title: "国家级非物质文化遗产代表性传承人",
-    specialty: "上海评弹",
-    imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop",
-    experience: "70年"
-  },
-  {
-    id: "p4",
-    name: "秦建国",
-    title: "上海市非物质文化遗产代表性传承人",
-    specialty: "上海评弹",
-    imageUrl: "https://images.unsplash.com/photo-1558171813-4c088753af8f?w=400&h=300&fit=crop",
-    experience: "50年"
-  }
-];
+// 传承人类型定义
+interface Inheritor {
+  id: string;
+  name: string;
+  title: string;
+  specialty: string;
+  imageUrl: string;
+  experience: string;
+}
 
-const projects = [
-  {
-    id: "1",
-    title: "上海剪纸",
-    category: "传统工艺",
-    summary: "上海剪纸是一种传统民间艺术，以其精细的工艺和独特的风格著称，历史悠久，是上海地区重要的非物质文化遗产。",
-    coverUrl: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?w=400&h=300&fit=crop",
-    likes: 328
-  },
-  {
-    id: "2",
-    title: "上海豫园灯会",
-    category: "民俗活动",
-    summary: "豫园灯会是上海传统的民俗活动，每年元宵节期间举办，以其精美的灯彩和浓郁的节日氛围闻名，是上海的文化名片。",
-    coverUrl: "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=400&h=300&fit=crop",
-    likes: 256
-  },
-  {
-    id: "3",
-    title: "上海评弹",
-    category: "传统曲艺",
-    summary: "上海评弹是一种传统说唱艺术，融合了说、噱、弹、唱等多种表演形式，具有独特的艺术魅力，是江南地区的代表性曲艺形式。",
-    coverUrl: "https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=400&h=300&fit=crop",
-    likes: 189
-  },
-  {
-    id: "4",
-    title: "上海龙华庙会",
-    category: "民俗活动",
-    summary: "龙华庙会是上海历史悠久的传统民俗活动，每年农历三月初三举行，集宗教、文化、商业于一体，是上海地区重要的文化遗产。",
-    coverUrl: "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=traditional%20chinese%20embroidery%20art%20work&image_size=square_hd",
-    likes: 412
-  }
-];
+// 项目类型定义
+interface Project {
+  id: string;
+  title: string;
+  category: string;
+  summary: string;
+  coverUrl: string;
+  likes: number;
+}
+
+// 从API获取技艺数据
+let crafts: Craft[] = [];
+try {
+  crafts = await craftService.list();
+} catch (error) {
+  console.error('Error fetching crafts:', error);
+  crafts = [];
+}
+
+// 模拟传承人数据（暂时使用模拟数据，因为没有专门的传承人API）
+const inheritors: Inheritor[] = [];
+
+// 准备项目数据（使用技艺数据）
+const projects: Project[] = crafts.map(craft => ({
+  id: craft.id.toString(),
+  title: craft.name,
+  category: craft.category?.name || "未知分类",
+  summary: craft.description || "暂无描述",
+  coverUrl: `https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=${encodeURIComponent(craft.name)}%20traditional%20chinese%20craft&image_size=square_hd`,
+  likes: Math.floor(Math.random() * 500) + 100
+}));
 ---
 
 <section id="内容推荐" class="py-16 md:py-24 bg-muted/20">
@@ -88,19 +61,25 @@ const projects = [
           </h3>
         </div>
         <div class="grid grid-cols-2 gap-4">
-          {inheritors.map(inheritor => (
-            <div class="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-              <img src={inheritor.imageUrl} alt={inheritor.name} class="w-full h-32 object-cover">
-              <div class="p-3">
-                <h4 class="text-sm font-medium line-clamp-1">{inheritor.name}</h4>
-                <p class="text-xs text-muted-foreground mb-2">{inheritor.title}</p>
-                <div class="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{inheritor.specialty}</span>
-                  <span>从业{inheritor.experience}</span>
+          {inheritors.length > 0 ? (
+            inheritors.map(inheritor => (
+              <div class="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                <img src={inheritor.imageUrl} alt={inheritor.name} class="w-full h-32 object-cover">
+                <div class="p-3">
+                  <h4 class="text-sm font-medium line-clamp-1">{inheritor.name}</h4>
+                  <p class="text-xs text-muted-foreground mb-2">{inheritor.title}</p>
+                  <div class="flex items-center justify-between text-xs text-muted-foreground">
+                    <span>{inheritor.specialty}</span>
+                    <span>从业{inheritor.experience}</span>
+                  </div>
                 </div>
               </div>
+            ))
+          ) : (
+            <div class="col-span-2 bg-card rounded-lg p-8 text-center">
+              <p class="text-muted-foreground">暂无传承人数据</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
 
@@ -112,18 +91,24 @@ const projects = [
           </h3>
         </div>
         <div class="grid grid-cols-2 gap-4">
-          {projects.map(project => (
-            <div class="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-              <img src={project.coverUrl} alt={project.title} class="w-full h-32 object-cover">
-              <div class="p-3">
-                <h4 class="text-sm font-medium line-clamp-1">{project.title}</h4>
-                <p class="text-xs text-muted-foreground mb-2">{project.category}</p>
-                <div class="flex items-center justify-between text-xs text-muted-foreground">
-                  <span class="flex items-center gap-1">❤️ {project.likes}</span>
+          {projects.length > 0 ? (
+            projects.map(project => (
+              <div class="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                <img src={project.coverUrl} alt={project.title} class="w-full h-32 object-cover">
+                <div class="p-3">
+                  <h4 class="text-sm font-medium line-clamp-1">{project.title}</h4>
+                  <p class="text-xs text-muted-foreground mb-2">{project.category}</p>
+                  <div class="flex items-center justify-between text-xs text-muted-foreground">
+                    <span class="flex items-center gap-1">❤️ {project.likes}</span>
+                  </div>
                 </div>
               </div>
+            ))
+          ) : (
+            <div class="col-span-2 bg-card rounded-lg p-8 text-center">
+              <p class="text-muted-foreground">暂无项目数据</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>
