@@ -15,6 +15,14 @@ import mdx from "@astrojs/mdx";
 export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      proxy: {
+        '/api': {
+          target: 'http://localhost:1323',
+          changeOrigin: true,
+        },
+      },
+    },
   },
 
   integrations: [svelte(), vue(), react(), mdx()],

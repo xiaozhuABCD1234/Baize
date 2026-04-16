@@ -30,9 +30,9 @@ import SidebarMobile from "./SidebarMobile.astro";
       <!-- 电脑端搜索+登录注册 -->
       <div class="hidden md:flex items-center gap-3">
         <div class="relative">
-          <input 
-            type="search" 
-            placeholder="搜索非遗..." 
+          <input
+            type="search"
+            placeholder="搜索非遗..."
             class="w-[200px] lg:w-[280px] h-11 pl-10 rounded-full border border-border focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
             id="desktop-search-input"
           />
@@ -41,8 +41,17 @@ import SidebarMobile from "./SidebarMobile.astro";
             <path d="m21 21-4.3-4.3"></path>
           </svg>
         </div>
-        <a href="/MainLayout"><Button variant="outline" size="lg" className="h-11 px-5 text-base">登录</Button></a>
-        <a href="/register"><Button size="lg" className="h-11 px-5 text-base">注册</Button></a>
+
+        <!-- 未登录状态 -->
+        <div id="auth-buttons" class="flex items-center gap-3">
+          <a href="/login"><Button variant="outline" size="lg" className="h-11 px-5 text-base">登录</Button></a>
+          <a href="/register"><Button size="lg" className="h-11 px-5 text-base">注册</Button></a>
+        </div>
+
+        <!-- 已登录状态 -->
+        <div id="user-menu" class="hidden items-center gap-3">
+          <a href="/profile"><Button size="lg" className="h-11 px-5 text-base">我的</Button></a>
+        </div>
       </div>
 
       <!-- 手机菜单按钮 -->
@@ -309,17 +318,43 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // 热门搜索点击
-    const hotSearches = searchPanel.querySelectorAll('.space-y-2 > div');
-    hotSearches.forEach((item) => {
-      item.addEventListener('click', () => {
-        const searchText = item.querySelector('span.text-sm')?.textContent;
-        if (searchText) {
-          // 跳转到搜索结果页面
-          window.location.href = `/search?q=${encodeURIComponent(searchText.trim())}`;
-        }
-      });
+  // 热门搜索点击
+  const hotSearches = searchPanel.querySelectorAll('.space-y-2 > div');
+  hotSearches.forEach((item) => {
+    item.addEventListener('click', () => {
+      const searchText = item.querySelector('span.text-sm')?.textContent;
+      if (searchText) {
+        // 跳转到搜索结果页面
+        window.location.href = `/search?q=${encodeURIComponent(searchText.trim())}`;
+      }
     });
-  }
+  });
+
+  // 登录状态切换
+  const updateAuthState = () => {
+    const token = localStorage.getItem('token');
+    const authButtons = document.getElementById('auth-buttons');
+    const userMenu = document.getElementById('user-menu');
+
+    if (token) {
+      if (authButtons) authButtons.classList.add('hidden');
+      if (userMenu) userMenu.classList.remove('hidden');
+      if (userMenu) userMenu.classList.add('flex');
+    } else {
+      if (authButtons) authButtons.classList.remove('hidden');
+      if (userMenu) userMenu.classList.add('hidden');
+      if (userMenu) userMenu.classList.remove('flex');
+    }
+  };
+
+  updateAuthState();
+
+  // 监听 storage 变化（多标签页同步）
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'token' || e.key === 'user') {
+      updateAuthState();
+    }
+  });
+};
 });
 </script>

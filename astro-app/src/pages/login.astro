@@ -5,7 +5,7 @@ import Header from "@/components/Header.astro";
 import Sidebar from "@/components/Sidebar.astro";
 import ActivityFeed from "@/components/ActivityFeed.astro";
 import Footer from "@/components/Footer.astro";
-import { RegisterForm } from "@/components/auth/RegisterForm";
+import { LoginForm } from "@/components/auth/LoginForm";
 ---
 
 <MainLayout>
@@ -19,7 +19,6 @@ import { RegisterForm } from "@/components/auth/RegisterForm";
 	</aside>
 
 	<main class="pt-[100px] w-full max-w-[1800px] mx-auto px-4 lg:px-6 relative z-50">
-		<!-- 返回按钮 -->
 		<div class="mb-6 relative z-10">
 			<a href="/#home" class="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-card text-foreground hover:bg-muted border border-border transition-all">
 				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -30,33 +29,22 @@ import { RegisterForm } from "@/components/auth/RegisterForm";
 			</a>
 		</div>
 
-		<!-- 🔥 注册页面主布局（和登录完全同风格） -->
-		<section id="注册" class="py-5 bg-background flex items-center justify-center">
+		<section id="登录" class="py-5 bg-background flex items-center justify-center">
 			<div class="w-full max-w-md px-4">
-				<!-- 注册卡片 -->
 				<div class="bg-card rounded-2xl p-6 shadow-lg border border-border overflow-hidden relative">
-					<!-- 装饰背景 -->
 					<div class="absolute inset-0 opacity-10 bg-gradient-to-br from-primary/40 to-background"></div>
 
 					<div class="relative z-10 space-y-6">
-						<!-- 标题区域 -->
 						<div class="text-center space-y-2">
-							<h1 class="text-2xl font-bold font-heading text-foreground">加入我们</h1>
-							<p class="text-sm text-muted-foreground">创建账号，开启文化传承之旅</p>
+							<h1 class="text-2xl font-bold font-heading text-foreground">欢迎回来</h1>
+							<p class="text-sm text-muted-foreground">登录后即可管理您的苏绣作品与账号</p>
 						</div>
 
-						<!-- 注册表单 -->
-						<RegisterForm client:load />
+						<LoginForm client:load />
 
-						<!-- 返回首页 -->
-							<!-- <div class="flex justify-center">
-								<a href="/" class="text-primary hover:underline transition-all">返回首页</a>
-							</div> -->
-
-						<!-- 登录入口 -->
 						<div class="text-center text-sm text-muted-foreground">
-							已有账号？
-							<a href="/login" class="text-primary font-medium hover:underline transition-all">立即登录</a>
+							还没有账号？
+							<a href="/register" class="text-primary font-medium hover:underline transition-all">立即注册</a>
 						</div>
 					</div>
 				</div>
